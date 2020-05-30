@@ -1,0 +1,1720 @@
+---
+title: "BrICC Data"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    theme: spacelab
+    highlight: tango 
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+```
+
+```{r, overall-plots, include=FALSE}
+library(tidyverse)
+library(here)
+library(janitor)
+library(rio)
+library(colorblindr)
+library(gghighlight)
+library(forcats)
+library(ggrepel)
+library(gt)
+library(knitr)
+library(kableExtra)
+library(reactable)
+library(plotly)
+library(glue)
+library(fs)
+
+theme_set(theme_minimal(20) +
+            theme(legend.position = "bottom",
+                  panel.grid.major.x = element_line(colour = "gray60"),
+                  panel.grid.minor.x = element_blank(),
+                  panel.grid.major.y = element_blank())
+          )
+
+bricc <- import(here("data", "bricc.sav"),
+               setclass = "tbl_df") %>% 
+  characterize() %>% 
+  janitor::clean_names() %>% 
+  rename("Pre-Test Total" = pre_test_total_score,
+         "Post-Test Total" = post_test_total_score,
+         "Pre-Test Knowledge" = pre_test_knowledge_score,
+         "Post-Test Knowledge" = post_test_knowledge_score,
+         "Pre-Test Application" = pre_test_application_score,
+         "Post-Test Application" = post_test_application_score) %>% 
+  pivot_longer(
+    cols = c(`Pre-Test Total`,
+             `Post-Test Total`,
+             `Pre-Test Knowledge`,
+             `Post-Test Knowledge`,
+             `Pre-Test Application`,
+             `Post-Test Application`),
+    names_to = "assessment",
+    values_to = "score")
+
+head(bricc)
+names(bricc)
+
+test_order <- c("Post-Test Total",
+                "Pre-Test Total",
+                "Post-Test Application",
+                "Pre-Test Application",
+                "Post-Test Knowledge",
+                "Pre-Test Knowledge")
+
+nest_practice <- bricc %>% 
+  group_by(student_name, group, term) %>% 
+  nest()
+
+nest_practice[[4]][[1]]
+nest_practice[[1]][[1]]
+nest_practice[[2]][[2]]
+
+quiz_plots <- bricc %>% 
+  group_by(group) %>% 
+  nest() %>% 
+  mutate(plots = pmap(list(group, data),
+  ~ggplot(..2, aes(assessment, score)) +
+  geom_col(fill = "blue", 
+           alpha = 0.7) +
+  scale_x_discrete(limits = test_order) +
+  scale_y_continuous(limits = c(0,10),
+                     breaks = c(0 ,2, 4, 6, 8, 10)) +
+  coord_flip() +
+  geom_text(aes(assessment, score, label = score),
+            nudge_y = -0.5,
+            color = "white") +
+  facet_wrap(~student_name) +
+  theme(panel.grid.major.y = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.major.x = element_line(color = "gray80")) +
+  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
+        axis.text = element_text(size = 10),
+        axis.title=element_text(size=10),
+        strip.text = element_text(size = 10)) +
+  labs(x = "",
+       y = "Score",
+       title = glue("{.x}"))))
+
+quiz_plots$plots[[1]]
+quiz_plots$plots[[2]]
+
+
+fs::dir_create(here::here("plots", "quiz_plots"))
+
+
+files <- quiz_plots$group
+paths <- here::here("plots", "quiz_plots", glue("{files}.png"))
+paths
+
+walk2(paths, quiz_plots$plots, ggsave,
+      width = 9.5, 
+      height = 6.5,
+      dpi = 500)
+```
+
+# BrICC Assessment {.tabset .tabset-fade .tabset-pills}
+
+## Winter 2020
+
+```{r winter 2020 scores, include=TRUE}
+quiz_plots$plots[[1]]
+```
+
+## Spring 2020
+
+```{r spring 2020 scores, include=TRUE}
+quiz_plots$plots[[2]]
+```
+
+# I am confident in my ability to conduct a consultation for the BrICC clinic {.tabset .tabset-fade .tabset-pills}
+
+## Winter 2020
+```{r survey data cleaning, include=FALSE}
+head(bricc)
+names(bricc)
+str(bricc)
+
+bricc_survey <- bricc %>% 
+  pivot_longer(
+    cols = c(25:68), 
+    names_to = "Survey",
+    values_to = "Response")
+
+bricc_survey <- bricc_survey %>% 
+  select(student_id, student_name, group, term, Survey, Response)
+ 
+q1 <- bricc %>% 
+  select(student_id, student_name, group, term, pre_survey_q1, post_survey_q1) %>% 
+  rename("Pre" = pre_survey_q1,
+         "Post" = post_survey_q1) %>% 
+  pivot_longer(
+    cols = c(5:6),
+    names_to = "Survey",
+    values_to = "Response"
+  ) 
+
+survey_resp <- c("Strongly Disagree",
+                 "Disagree",
+                 "Undecided",
+                 "Agree",
+                 "Strongly Agree")
+
+q1$Survey <- factor(q1$Survey, levels = c("Pre", "Post"))
+
+
+q1_plots <- q1 %>% 
+  group_by(group) %>% 
+  nest() %>% 
+  mutate(plots = pmap(list(group, data),
+  ~ggplot(..2, aes(Response, student_name)) +
+  geom_line(aes(group = student_name), color = "gray40") +
+  geom_point(aes(color = Survey)) +
+  scale_x_discrete(limits = survey_resp) +
+  theme(panel.grid.major.y = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.major.x = element_line(color = "gray80")) +
+  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
+        axis.text = element_text(size = 10),
+        axis.title=element_text(size=10),
+        strip.text = element_text(size = 10),
+        plot.caption = element_text(size = 10)) +
+  labs(x = "",
+       y = "",
+    title = glue("{.x}"))))
+
+q1_plots$plots[[1]]
+
+fs::dir_create(here::here("plots", "q1"))
+
+
+files <- q1_plots$group
+paths <- here::here("plots", "q1", glue("{files}.png"))
+paths
+
+walk2(paths, q1_plots$plots, ggsave,
+      width = 9.5, 
+      height = 6.5,
+      dpi = 500)
+```
+
+```{r winter 2020 plot, include=TRUE}
+q1_plots$plots[[1]]
+```
+
+## Spring 2020
+```{r spring 2020 plot, include=TRUE}
+q1_plots$plots[[2]]
+```
+
+# I am confident in my ability to administer standardized cognitive tests {.tabset .tabset-fade .tabset-pills}
+
+## Winter 2020
+```{r survey q2 data cleaning, include=FALSE}
+q2 <- bricc %>% 
+  select(student_id, student_name, group, term, pre_survey_q2, post_survey_q2) %>% 
+  rename("Pre" = pre_survey_q2,
+         "Post" = post_survey_q2) %>% 
+  pivot_longer(
+    cols = c(5:6),
+    names_to = "Survey",
+    values_to = "Response"
+  ) 
+
+q2$Survey <- factor(q2$Survey, levels = c("Pre", "Post"))
+
+
+q2_plots <- q2 %>% 
+  group_by(group) %>% 
+  nest() %>% 
+  mutate(plots = pmap(list(group, data),
+  ~ggplot(..2, aes(Response, student_name)) +
+  geom_line(aes(group = student_name), color = "gray40") +
+  geom_point(aes(color = Survey)) +
+  scale_x_discrete(limits = survey_resp) +
+  theme(panel.grid.major.y = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.major.x = element_line(color = "gray80")) +
+  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
+        axis.text = element_text(size = 10),
+        axis.title=element_text(size=10),
+        strip.text = element_text(size = 10),
+        plot.caption = element_text(size = 10)) +
+  labs(x = "",
+       y = "",
+    title = glue("{.x}"))))
+
+q2_plots$plots[[1]]
+
+fs::dir_create(here::here("plots", "q2"))
+
+
+files <- q2_plots$group
+paths <- here::here("plots", "q2", glue("{files}.png"))
+paths
+
+walk2(paths, q2_plots$plots, ggsave,
+      width = 9.5, 
+      height = 6.5,
+      dpi = 500)
+```
+
+```{r winter 2020 plot q2, include=TRUE}
+q2_plots$plots[[1]]
+```
+
+## Spring 2020
+```{r spring 2020 plot q2, include=TRUE}
+q2_plots$plots[[2]]
+```
+
+# I am confident in my ability to conduct a client-centered clinical interview {.tabset .tabset-fade .tabset-pills}
+
+## Winter 2020
+```{r survey q3 data cleaning, include=FALSE}
+q3 <- bricc %>% 
+  select(student_id, student_name, group, term, pre_survey_q3, post_survey_q3) %>% 
+  rename("Pre" = pre_survey_q3,
+         "Post" = post_survey_q3) %>% 
+  pivot_longer(
+    cols = c(5:6),
+    names_to = "Survey",
+    values_to = "Response"
+  ) 
+
+q3$Survey <- factor(q3$Survey, levels = c("Pre", "Post"))
+
+
+q3_plots <- q3 %>% 
+  group_by(group) %>% 
+  nest() %>% 
+  mutate(plots = pmap(list(group, data),
+  ~ggplot(..2, aes(Response, student_name)) +
+  geom_line(aes(group = student_name), color = "gray40") +
+  geom_point(aes(color = Survey)) +
+  scale_x_discrete(limits = survey_resp) +
+  theme(panel.grid.major.y = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.major.x = element_line(color = "gray80")) +
+  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
+        axis.text = element_text(size = 10),
+        axis.title=element_text(size=10),
+        strip.text = element_text(size = 10),
+        plot.caption = element_text(size = 10)) +
+  labs(x = "",
+       y = "",
+    title = glue("{.x}"))))
+
+q3_plots$plots[[1]]
+
+fs::dir_create(here::here("plots", "q3"))
+
+
+files <- q3_plots$group
+paths <- here::here("plots", "q3", glue("{files}.png"))
+paths
+
+walk2(paths, q3_plots$plots, ggsave,
+      width = 9.5, 
+      height = 6.5,
+      dpi = 500)
+```
+
+```{r winter 2020 plot q3, include=TRUE}
+q3_plots$plots[[1]]
+```
+
+## Spring 2020
+```{r spring 2020 plot q3, include=TRUE}
+q3_plots$plots[[2]]
+```
+
+# I am confident in my ability to identify treatment options to assist people with acquired cognitive impairments {.tabset .tabset-fade .tabset-pills}
+
+## Winter 2020
+```{r survey q4 data cleaning, include=FALSE}
+q4 <- bricc %>% 
+  select(student_id, student_name, group, term, pre_survey_q4, post_survey_q4) %>% 
+  rename("Pre" = pre_survey_q4,
+         "Post" = post_survey_q4) %>% 
+  pivot_longer(
+    cols = c(5:6),
+    names_to = "Survey",
+    values_to = "Response"
+  ) 
+
+q4$Survey <- factor(q4$Survey, levels = c("Pre", "Post"))
+
+
+q4_plots <- q4 %>% 
+  group_by(group) %>% 
+  nest() %>% 
+  mutate(plots = pmap(list(group, data),
+  ~ggplot(..2, aes(Response, student_name)) +
+  geom_line(aes(group = student_name), color = "gray40") +
+  geom_point(aes(color = Survey)) +
+  scale_x_discrete(limits = survey_resp) +
+  theme(panel.grid.major.y = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.major.x = element_line(color = "gray80")) +
+  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
+        axis.text = element_text(size = 10),
+        axis.title=element_text(size=10),
+        strip.text = element_text(size = 10),
+        plot.caption = element_text(size = 10)) +
+  labs(x = "",
+       y = "",
+    title = glue("{.x}"))))
+
+q4_plots$plots[[1]]
+
+fs::dir_create(here::here("plots", "q4"))
+
+
+files <- q4_plots$group
+paths <- here::here("plots", "q4", glue("{files}.png"))
+paths
+
+walk2(paths, q4_plots$plots, ggsave,
+      width = 9.5, 
+      height = 6.5,
+      dpi = 500)
+```
+
+```{r winter 2020 plot q4, include=TRUE}
+q4_plots$plots[[1]]
+```
+
+## Spring 2020
+```{r spring 2020 plot q4, include=TRUE}
+q4_plots$plots[[2]]
+```
+
+# I am prepared to write cognitive rehabilitation goals {.tabset .tabset-fade .tabset-pills}
+
+## Winter 2020
+```{r survey q5 data cleaning, include=FALSE}
+q5 <- bricc %>% 
+  select(student_id, student_name, group, term, pre_survey_q5, post_survey_q5) %>% 
+  rename("Pre" = pre_survey_q5,
+         "Post" = post_survey_q5) %>% 
+  pivot_longer(
+    cols = c(5:6),
+    names_to = "Survey",
+    values_to = "Response"
+  ) 
+
+q5$Survey <- factor(q5$Survey, levels = c("Pre", "Post"))
+
+
+q5_plots <- q5 %>% 
+  group_by(group) %>% 
+  nest() %>% 
+  mutate(plots = pmap(list(group, data),
+  ~ggplot(..2, aes(Response, student_name)) +
+  geom_line(aes(group = student_name), color = "gray40") +
+  geom_point(aes(color = Survey)) +
+  scale_x_discrete(limits = survey_resp) +
+  theme(panel.grid.major.y = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.major.x = element_line(color = "gray80")) +
+  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
+        axis.text = element_text(size = 10),
+        axis.title=element_text(size=10),
+        strip.text = element_text(size = 10),
+        plot.caption = element_text(size = 10)) +
+  labs(x = "",
+       y = "",
+    title = glue("{.x}"))))
+
+q5_plots$plots[[1]]
+
+fs::dir_create(here::here("plots", "q5"))
+
+
+files <- q5_plots$group
+paths <- here::here("plots", "q5", glue("{files}.png"))
+paths
+
+walk2(paths, q5_plots$plots, ggsave,
+      width = 9.5, 
+      height = 6.5,
+      dpi = 500)
+```
+
+```{r winter 2020 plot q5, include=TRUE}
+q5_plots$plots[[1]]
+```
+
+## Spring 2020
+```{r spring 2020 plot q5, include=TRUE}
+q5_plots$plots[[2]]
+```
+
+
+# I am prepared to administer direct interventions such as attention training or goal management training {.tabset .tabset-fade .tabset-pills}
+
+## Winter 2020
+```{r survey q6 data cleaning, include=FALSE}
+q6 <- bricc %>% 
+  select(student_id, student_name, group, term, pre_survey_q6, post_survey_q6) %>% 
+  rename("Pre" = pre_survey_q6,
+         "Post" = post_survey_q6) %>% 
+  pivot_longer(
+    cols = c(5:6),
+    names_to = "Survey",
+    values_to = "Response"
+  ) 
+
+q6$Survey <- factor(q6$Survey, levels = c("Pre", "Post"))
+
+
+q6_plots <- q6 %>% 
+  group_by(group) %>% 
+  nest() %>% 
+  mutate(plots = pmap(list(group, data),
+  ~ggplot(..2, aes(Response, student_name)) +
+  geom_line(aes(group = student_name), color = "gray40") +
+  geom_point(aes(color = Survey)) +
+  scale_x_discrete(limits = survey_resp) +
+  theme(panel.grid.major.y = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.major.x = element_line(color = "gray80")) +
+  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
+        axis.text = element_text(size = 10),
+        axis.title=element_text(size=10),
+        strip.text = element_text(size = 10),
+        plot.caption = element_text(size = 10)) +
+  labs(x = "",
+       y = "",
+    title = glue("{.x}"))))
+
+fs::dir_create(here::here("plots", "q6"))
+
+files <- q6_plots$group
+paths <- here::here("plots", "q6", glue("{files}.png"))
+paths
+
+walk2(paths, q6_plots$plots, ggsave,
+      width = 9.5, 
+      height = 6.5,
+      dpi = 500)
+```
+
+```{r winter 2020 plot q6, include=TRUE}
+q6_plots$plots[[1]]
+```
+
+## Spring 2020
+```{r spring 2020 plot q6, include=TRUE}
+q6_plots$plots[[2]]
+```
+
+# I am prepared to engage in systematic instruction to support the use of external aids {.tabset .tabset-fade .tabset-pills}
+
+## Winter 2020
+```{r survey q7 data cleaning, include=FALSE}
+q7 <- bricc %>% 
+  select(student_id, student_name, group, term, pre_survey_q7, post_survey_q7) %>% 
+  rename("Pre" = pre_survey_q7,
+         "Post" = post_survey_q7) %>% 
+  pivot_longer(
+    cols = c(5:6),
+    names_to = "Survey",
+    values_to = "Response"
+  ) 
+
+q7$Survey <- factor(q7$Survey, levels = c("Pre", "Post"))
+
+
+q7_plots <- q7 %>% 
+  group_by(group) %>% 
+  nest() %>% 
+  mutate(plots = pmap(list(group, data),
+  ~ggplot(..2, aes(Response, student_name)) +
+  geom_line(aes(group = student_name), color = "gray40") +
+  geom_point(aes(color = Survey)) +
+  scale_x_discrete(limits = survey_resp) +
+  theme(panel.grid.major.y = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.major.x = element_line(color = "gray80")) +
+  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
+        axis.text = element_text(size = 10),
+        axis.title=element_text(size=10),
+        strip.text = element_text(size = 10),
+        plot.caption = element_text(size = 10)) +
+  labs(x = "",
+       y = "",
+    title = glue("{.x}"))))
+
+fs::dir_create(here::here("plots", "q7"))
+
+files <- q7_plots$group
+paths <- here::here("plots", "q7", glue("{files}.png"))
+paths
+
+walk2(paths, q7_plots$plots, ggsave,
+      width = 9.5, 
+      height = 6.5,
+      dpi = 500)
+```
+
+```{r winter 2020 plot q7, include=TRUE}
+q7_plots$plots[[1]]
+```
+
+## Spring 2020
+```{r spring 2020 plot q7, include=TRUE}
+q7_plots$plots[[2]]
+```
+
+# I am prepared to engage in a needs assessment to identify cognitive strategies and support learning and use of them {.tabset .tabset-fade .tabset-pills}
+
+## Winter 2020
+```{r survey q8 data cleaning, include=FALSE}
+q8 <- bricc %>% 
+  select(student_id, student_name, group, term, pre_survey_q8, post_survey_q8) %>% 
+  rename("Pre" = pre_survey_q8,
+         "Post" = post_survey_q8) %>% 
+  pivot_longer(
+    cols = c(5:6),
+    names_to = "Survey",
+    values_to = "Response"
+  ) 
+
+q8$Survey <- factor(q8$Survey, levels = c("Pre", "Post"))
+
+
+q8_plots <- q8 %>% 
+  group_by(group) %>% 
+  nest() %>% 
+  mutate(plots = pmap(list(group, data),
+  ~ggplot(..2, aes(Response, student_name)) +
+  geom_line(aes(group = student_name), color = "gray40") +
+  geom_point(aes(color = Survey)) +
+  scale_x_discrete(limits = survey_resp) +
+  theme(panel.grid.major.y = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.major.x = element_line(color = "gray80")) +
+  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
+        axis.text = element_text(size = 10),
+        axis.title=element_text(size=10),
+        strip.text = element_text(size = 10),
+        plot.caption = element_text(size = 10)) +
+  labs(x = "",
+       y = "",
+    title = glue("{.x}"))))
+
+fs::dir_create(here::here("plots", "q8"))
+
+files <- q8_plots$group
+paths <- here::here("plots", "q8", glue("{files}.png"))
+paths
+
+walk2(paths, q8_plots$plots, ggsave,
+      width = 9.5, 
+      height = 6.5,
+      dpi = 500)
+```
+
+```{r winter 2020 plot q8, include=TRUE}
+q8_plots$plots[[1]]
+```
+
+## Spring 2020
+```{r spring 2020 plot q8, include=TRUE}
+q8_plots$plots[[2]]
+```
+
+# I am confident in my ability to collect and analyze client session data {.tabset .tabset-fade .tabset-pills}
+
+## Winter 2020
+```{r survey q9 data cleaning, include=FALSE}
+q9 <- bricc %>% 
+  select(student_id, student_name, group, term, pre_survey_q9, post_survey_q9) %>% 
+  rename("Pre" = pre_survey_q9,
+         "Post" = post_survey_q9) %>% 
+  pivot_longer(
+    cols = c(5:6),
+    names_to = "Survey",
+    values_to = "Response"
+  ) 
+
+q9$Survey <- factor(q9$Survey, levels = c("Pre", "Post"))
+
+
+q9_plots <- q9 %>% 
+  group_by(group) %>% 
+  nest() %>% 
+  mutate(plots = pmap(list(group, data),
+  ~ggplot(..2, aes(Response, student_name)) +
+  geom_line(aes(group = student_name), color = "gray40") +
+  geom_point(aes(color = Survey)) +
+  scale_x_discrete(limits = survey_resp) +
+  theme(panel.grid.major.y = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.major.x = element_line(color = "gray80")) +
+  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
+        axis.text = element_text(size = 10),
+        axis.title=element_text(size=10),
+        strip.text = element_text(size = 10),
+        plot.caption = element_text(size = 10)) +
+  labs(x = "",
+       y = "",
+    title = glue("{.x}"))))
+
+fs::dir_create(here::here("plots", "q9"))
+
+files <- q9_plots$group
+paths <- here::here("plots", "q9", glue("{files}.png"))
+paths
+
+walk2(paths, q9_plots$plots, ggsave,
+      width = 9.5, 
+      height = 6.5,
+      dpi = 500)
+```
+
+```{r winter 2020 plot q9, include=TRUE}
+q9_plots$plots[[1]]
+```
+
+## Spring 2020
+```{r spring 2020 plot q9, include=TRUE}
+q9_plots$plots[[2]]
+```
+
+# I am prepared to justify my decisions related to assessment and treatment selection {.tabset .tabset-fade .tabset-pills}
+
+## Winter 2020
+```{r survey q10 data cleaning, include=FALSE}
+q10 <- bricc %>% 
+  select(student_id, student_name, group, term, pre_survey_q10, post_survey_q10) %>% 
+  rename("Pre" = pre_survey_q10,
+         "Post" = post_survey_q10) %>% 
+  pivot_longer(
+    cols = c(5:6),
+    names_to = "Survey",
+    values_to = "Response"
+  ) 
+
+q10$Survey <- factor(q10$Survey, levels = c("Pre", "Post"))
+
+
+q10_plots <- q10 %>% 
+  group_by(group) %>% 
+  nest() %>% 
+  mutate(plots = pmap(list(group, data),
+  ~ggplot(..2, aes(Response, student_name)) +
+  geom_line(aes(group = student_name), color = "gray40") +
+  geom_point(aes(color = Survey)) +
+  scale_x_discrete(limits = survey_resp) +
+  theme(panel.grid.major.y = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.major.x = element_line(color = "gray80")) +
+  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
+        axis.text = element_text(size = 10),
+        axis.title=element_text(size=10),
+        strip.text = element_text(size = 10),
+        plot.caption = element_text(size = 10)) +
+  labs(x = "",
+       y = "",
+    title = glue("{.x}"))))
+
+fs::dir_create(here::here("plots", "q10"))
+
+files <- q10_plots$group
+paths <- here::here("plots", "q10", glue("{files}.png"))
+paths
+
+walk2(paths, q10_plots$plots, ggsave,
+      width = 9.5, 
+      height = 6.5,
+      dpi = 500)
+```
+
+```{r winter 2020 plot q10, include=TRUE}
+q10_plots$plots[[1]]
+```
+
+## Spring 2020
+```{r spring 2020 plot q10, include=TRUE}
+q10_plots$plots[[2]]
+```
+
+# I am confident in my ability to apply principles of evidence-based practice to my assessment and treatment decisions {.tabset .tabset-fade .tabset-pills}
+
+## Winter 2020
+```{r survey q11 data cleaning, include=FALSE}
+q11 <- bricc %>% 
+  select(student_id, student_name, group, term, pre_survey_q11, post_survey_q11) %>% 
+  rename("Pre" = pre_survey_q11,
+         "Post" = post_survey_q11) %>% 
+  pivot_longer(
+    cols = c(5:6),
+    names_to = "Survey",
+    values_to = "Response"
+  ) 
+
+q11$Survey <- factor(q11$Survey, levels = c("Pre", "Post"))
+
+
+q11_plots <- q11 %>% 
+  group_by(group) %>% 
+  nest() %>% 
+  mutate(plots = pmap(list(group, data),
+  ~ggplot(..2, aes(Response, student_name)) +
+  geom_line(aes(group = student_name), color = "gray40") +
+  geom_point(aes(color = Survey)) +
+  scale_x_discrete(limits = survey_resp) +
+  theme(panel.grid.major.y = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.major.x = element_line(color = "gray80")) +
+  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
+        axis.text = element_text(size = 10),
+        axis.title=element_text(size=10),
+        strip.text = element_text(size = 10),
+        plot.caption = element_text(size = 10)) +
+  labs(x = "",
+       y = "",
+    title = glue("{.x}"))))
+
+fs::dir_create(here::here("plots", "q11"))
+
+files <- q11_plots$group
+paths <- here::here("plots", "q11", glue("{files}.png"))
+paths
+
+walk2(paths, q11_plots$plots, ggsave,
+      width = 9.5, 
+      height = 6.5,
+      dpi = 500)
+```
+
+```{r winter 2020 plot q11, include=TRUE}
+q11_plots$plots[[1]]
+```
+
+## Spring 2020
+```{r spring 2020 plot q11, include=TRUE}
+q11_plots$plots[[2]]
+```
+
+# I am confident in my ability to make ‘online’ (in session) changes to my daily plans {.tabset .tabset-fade .tabset-pills}
+
+## Winter 2020
+```{r survey q12 data cleaning, include=FALSE}
+q12 <- bricc %>% 
+  select(student_id, student_name, group, term, pre_survey_q12, post_survey_q12) %>% 
+  rename("Pre" = pre_survey_q12,
+         "Post" = post_survey_q12) %>% 
+  pivot_longer(
+    cols = c(5:6),
+    names_to = "Survey",
+    values_to = "Response"
+  ) 
+
+q12$Survey <- factor(q12$Survey, levels = c("Pre", "Post"))
+
+
+q12_plots <- q12 %>% 
+  group_by(group) %>% 
+  nest() %>% 
+  mutate(plots = pmap(list(group, data),
+  ~ggplot(..2, aes(Response, student_name)) +
+  geom_line(aes(group = student_name), color = "gray40") +
+  geom_point(aes(color = Survey)) +
+  scale_x_discrete(limits = survey_resp) +
+  theme(panel.grid.major.y = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.major.x = element_line(color = "gray80")) +
+  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
+        axis.text = element_text(size = 10),
+        axis.title=element_text(size=10),
+        strip.text = element_text(size = 10),
+        plot.caption = element_text(size = 10)) +
+  labs(x = "",
+       y = "",
+    title = glue("{.x}"))))
+
+fs::dir_create(here::here("plots", "q12"))
+
+files <- q12_plots$group
+paths <- here::here("plots", "q12", glue("{files}.png"))
+paths
+
+walk2(paths, q12_plots$plots, ggsave,
+      width = 9.5, 
+      height = 6.5,
+      dpi = 500)
+```
+
+```{r winter 2020 plot q12, include=TRUE}
+q12_plots$plots[[1]]
+```
+
+## Spring 2020
+```{r spring 2020 plot q12, include=TRUE}
+q12_plots$plots[[2]]
+```
+
+# I am knowledgeable about concussion management {.tabset .tabset-fade .tabset-pills}
+
+## Winter 2020
+```{r survey q13 data cleaning, include=FALSE}
+q13 <- bricc %>% 
+  select(student_id, student_name, group, term, pre_survey_q13, post_survey_q13) %>% 
+  rename("Pre" = pre_survey_q13,
+         "Post" = post_survey_q13) %>% 
+  pivot_longer(
+    cols = c(5:6),
+    names_to = "Survey",
+    values_to = "Response"
+  ) 
+
+q13$Survey <- factor(q13$Survey, levels = c("Pre", "Post"))
+
+
+q13_plots <- q13 %>% 
+  group_by(group) %>% 
+  nest() %>% 
+  mutate(plots = pmap(list(group, data),
+  ~ggplot(..2, aes(Response, student_name)) +
+  geom_line(aes(group = student_name), color = "gray40") +
+  geom_point(aes(color = Survey)) +
+  scale_x_discrete(limits = survey_resp) +
+  theme(panel.grid.major.y = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.major.x = element_line(color = "gray80")) +
+  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
+        axis.text = element_text(size = 10),
+        axis.title=element_text(size=10),
+        strip.text = element_text(size = 10),
+        plot.caption = element_text(size = 10)) +
+  labs(x = "",
+       y = "",
+    title = glue("{.x}"))))
+
+fs::dir_create(here::here("plots", "q13"))
+
+files <- q13_plots$group
+paths <- here::here("plots", "q13", glue("{files}.png"))
+paths
+
+walk2(paths, q13_plots$plots, ggsave,
+      width = 9.5, 
+      height = 6.5,
+      dpi = 500)
+```
+
+```{r winter 2020 plot q13, include=TRUE}
+q13_plots$plots[[1]]
+```
+
+## Spring 2020
+```{r spring 2020 plot q13, include=TRUE}
+q13_plots$plots[[2]]
+```
+
+# I am comfortable working with clients with brain injuries {.tabset .tabset-fade .tabset-pills}
+
+## Winter 2020
+```{r survey q14 data cleaning, include=FALSE}
+q14 <- bricc %>% 
+  select(student_id, student_name, group, term, pre_survey_q14, post_survey_q14) %>% 
+  rename("Pre" = pre_survey_q14,
+         "Post" = post_survey_q14) %>% 
+  pivot_longer(
+    cols = c(5:6),
+    names_to = "Survey",
+    values_to = "Response"
+  ) 
+
+q14$Survey <- factor(q14$Survey, levels = c("Pre", "Post"))
+
+
+q14_plots <- q14 %>% 
+  group_by(group) %>% 
+  nest() %>% 
+  mutate(plots = pmap(list(group, data),
+  ~ggplot(..2, aes(Response, student_name)) +
+  geom_line(aes(group = student_name), color = "gray40") +
+  geom_point(aes(color = Survey)) +
+  scale_x_discrete(limits = survey_resp) +
+  theme(panel.grid.major.y = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.major.x = element_line(color = "gray80")) +
+  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
+        axis.text = element_text(size = 10),
+        axis.title=element_text(size=10),
+        strip.text = element_text(size = 10),
+        plot.caption = element_text(size = 10)) +
+  labs(x = "",
+       y = "",
+    title = glue("{.x}"))))
+
+fs::dir_create(here::here("plots", "q14"))
+
+files <- q14_plots$group
+paths <- here::here("plots", "q14", glue("{files}.png"))
+paths
+
+walk2(paths, q14_plots$plots, ggsave,
+      width = 9.5, 
+      height = 6.5,
+      dpi = 500)
+```
+
+```{r winter 2020 plot q14, include=TRUE}
+q14_plots$plots[[1]]
+```
+
+## Spring 2020
+```{r spring 2020 plot q14, include=TRUE}
+q14_plots$plots[[2]]
+```
+
+# I am comfortable working with clients with awareness deficits {.tabset .tabset-fade .tabset-pills}
+
+## Winter 2020
+```{r survey q15 data cleaning, include=FALSE}
+q15 <- bricc %>% 
+  select(student_id, student_name, group, term, pre_survey_q15, post_survey_q15) %>% 
+  rename("Pre" = pre_survey_q15,
+         "Post" = post_survey_q15) %>% 
+  pivot_longer(
+    cols = c(5:6),
+    names_to = "Survey",
+    values_to = "Response"
+  ) 
+
+q15$Survey <- factor(q15$Survey, levels = c("Pre", "Post"))
+
+
+q15_plots <- q15 %>% 
+  group_by(group) %>% 
+  nest() %>% 
+  mutate(plots = pmap(list(group, data),
+  ~ggplot(..2, aes(Response, student_name)) +
+  geom_line(aes(group = student_name), color = "gray40") +
+  geom_point(aes(color = Survey)) +
+  scale_x_discrete(limits = survey_resp) +
+  theme(panel.grid.major.y = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.major.x = element_line(color = "gray80")) +
+  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
+        axis.text = element_text(size = 10),
+        axis.title=element_text(size=10),
+        strip.text = element_text(size = 10),
+        plot.caption = element_text(size = 10)) +
+  labs(x = "",
+       y = "",
+    title = glue("{.x}"))))
+
+fs::dir_create(here::here("plots", "q15"))
+
+files <- q15_plots$group
+paths <- here::here("plots", "q15", glue("{files}.png"))
+paths
+
+walk2(paths, q15_plots$plots, ggsave,
+      width = 9.5, 
+      height = 6.5,
+      dpi = 500)
+```
+
+```{r winter 2020 plot q15, include=TRUE}
+q15_plots$plots[[1]]
+```
+
+## Spring 2020
+```{r spring 2020 plot q15, include=TRUE}
+q15_plots$plots[[2]]
+```
+
+# I am able to use case history information (e.g., information about etiology) to guide my clinical decision making {.tabset .tabset-fade .tabset-pills}
+
+## Winter 2020
+```{r survey q16 data cleaning, include=FALSE}
+q16 <- bricc %>% 
+  select(student_id, student_name, group, term, pre_survey_q16, post_survey_q16) %>% 
+  rename("Pre" = pre_survey_q16,
+         "Post" = post_survey_q16) %>% 
+  pivot_longer(
+    cols = c(5:6),
+    names_to = "Survey",
+    values_to = "Response"
+  ) 
+
+q16$Survey <- factor(q16$Survey, levels = c("Pre", "Post"))
+
+
+q16_plots <- q16 %>% 
+  group_by(group) %>% 
+  nest() %>% 
+  mutate(plots = pmap(list(group, data),
+  ~ggplot(..2, aes(Response, student_name)) +
+  geom_line(aes(group = student_name), color = "gray40") +
+  geom_point(aes(color = Survey)) +
+  scale_x_discrete(limits = survey_resp) +
+  theme(panel.grid.major.y = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.major.x = element_line(color = "gray80")) +
+  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
+        axis.text = element_text(size = 10),
+        axis.title=element_text(size=10),
+        strip.text = element_text(size = 10),
+        plot.caption = element_text(size = 10)) +
+  labs(x = "",
+       y = "",
+    title = glue("{.x}"))))
+
+fs::dir_create(here::here("plots", "q16"))
+
+files <- q16_plots$group
+paths <- here::here("plots", "q16", glue("{files}.png"))
+paths
+
+walk2(paths, q16_plots$plots, ggsave,
+      width = 9.5, 
+      height = 6.5,
+      dpi = 500)
+```
+
+```{r winter 2020 plot q16, include=TRUE}
+q16_plots$plots[[1]]
+```
+
+## Spring 2020
+```{r spring 2020 plot q16, include=TRUE}
+q16_plots$plots[[2]]
+```
+
+# I feel prepared to orally present cases {.tabset .tabset-fade .tabset-pills}
+
+## Winter 2020
+```{r survey q17 data cleaning, include=FALSE}
+q17 <- bricc %>% 
+  select(student_id, student_name, group, term, pre_survey_q17, post_survey_q17) %>% 
+  rename("Pre" = pre_survey_q17,
+         "Post" = post_survey_q17) %>% 
+  pivot_longer(
+    cols = c(5:6),
+    names_to = "Survey",
+    values_to = "Response"
+  ) 
+
+q17$Survey <- factor(q17$Survey, levels = c("Pre", "Post"))
+
+
+q17_plots <- q17 %>% 
+  group_by(group) %>% 
+  nest() %>% 
+  mutate(plots = pmap(list(group, data),
+  ~ggplot(..2, aes(Response, student_name)) +
+  geom_line(aes(group = student_name), color = "gray40") +
+  geom_point(aes(color = Survey)) +
+  scale_x_discrete(limits = survey_resp) +
+  theme(panel.grid.major.y = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.major.x = element_line(color = "gray80")) +
+  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
+        axis.text = element_text(size = 10),
+        axis.title=element_text(size=10),
+        strip.text = element_text(size = 10),
+        plot.caption = element_text(size = 10)) +
+  labs(x = "",
+       y = "",
+    title = glue("{.x}"))))
+
+fs::dir_create(here::here("plots", "q17"))
+
+files <- q17_plots$group
+paths <- here::here("plots", "q17", glue("{files}.png"))
+paths
+
+walk2(paths, q17_plots$plots, ggsave,
+      width = 9.5, 
+      height = 6.5,
+      dpi = 500)
+```
+
+```{r winter 2020 plot q17, include=TRUE}
+q17_plots$plots[[1]]
+```
+
+## Spring 2020
+```{r spring 2020 plot q17, include=TRUE}
+q17_plots$plots[[2]]
+```
+
+# Training was systematic and well organized (Post-Survey Only) {.tabset .tabset-fade .tabset-pills}
+
+## Winter 2020
+```{r survey q18 data cleaning, include=FALSE}
+q18 <- bricc %>% 
+  select(student_id, student_name, group, term, post_survey_q18) %>% 
+  rename("Post" = post_survey_q18) %>% 
+  pivot_longer(
+    cols = c(5),
+    names_to = "Survey",
+    values_to = "Response"
+  ) 
+
+q18_plots <- q18 %>% 
+  group_by(group) %>% 
+  nest() %>% 
+  mutate(plots = pmap(list(group, data),
+  ~ggplot(..2, aes(Response, student_name)) +
+  geom_line(aes(group = student_name), color = "gray40") +
+  geom_point(aes(color = Survey)) +
+  scale_x_discrete(limits = survey_resp) +
+  theme(panel.grid.major.y = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.major.x = element_line(color = "gray80")) +
+  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
+        axis.text = element_text(size = 10),
+        axis.title=element_text(size=10),
+        strip.text = element_text(size = 10),
+        plot.caption = element_text(size = 10)) +
+  labs(x = "",
+       y = "",
+    title = glue("{.x}"))))
+
+fs::dir_create(here::here("plots", "q18"))
+
+files <- q18_plots$group
+paths <- here::here("plots", "q18", glue("{files}.png"))
+paths
+
+walk2(paths, q18_plots$plots, ggsave,
+      width = 9.5, 
+      height = 6.5,
+      dpi = 500)
+```
+
+```{r winter 2020 plot q18, include=TRUE}
+q18_plots$plots[[1]]
+```
+
+## Spring 2020
+```{r spring 2020 plot q18, include=TRUE}
+q18_plots$plots[[2]]
+```
+
+# Group meetings enhanced my learning (Post-Survey Only) {.tabset .tabset-fade .tabset-pills}
+
+## Winter 2020
+```{r survey q19 data cleaning, include=FALSE}
+q19 <- bricc %>% 
+  select(student_id, student_name, group, term, post_survey_q19) %>% 
+  rename("Post" = post_survey_q19) %>% 
+  pivot_longer(
+    cols = c(5),
+    names_to = "Survey",
+    values_to = "Response"
+  ) 
+
+q19_plots <- q19 %>% 
+  group_by(group) %>% 
+  nest() %>% 
+  mutate(plots = pmap(list(group, data),
+  ~ggplot(..2, aes(Response, student_name)) +
+  geom_line(aes(group = student_name), color = "gray40") +
+  geom_point(aes(color = Survey)) +
+  scale_x_discrete(limits = survey_resp) +
+  theme(panel.grid.major.y = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.major.x = element_line(color = "gray80")) +
+  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
+        axis.text = element_text(size = 10),
+        axis.title=element_text(size=10),
+        strip.text = element_text(size = 10),
+        plot.caption = element_text(size = 10)) +
+  labs(x = "",
+       y = "",
+    title = glue("{.x}"))))
+
+fs::dir_create(here::here("plots", "q19"))
+
+files <- q19_plots$group
+paths <- here::here("plots", "q19", glue("{files}.png"))
+paths
+
+walk2(paths, q19_plots$plots, ggsave,
+      width = 9.5, 
+      height = 6.5,
+      dpi = 500)
+```
+
+```{r winter 2020 plot q19, include=TRUE}
+q19_plots$plots[[1]]
+```
+
+## Spring 2020
+```{r spring 2020 plot q19, include=TRUE}
+q19_plots$plots[[2]]
+```
+
+# Group meetings were efficient (Post-Survey Only) {.tabset .tabset-fade .tabset-pills}
+
+## Winter 2020
+```{r survey q20 data cleaning, include=FALSE}
+q20 <- bricc %>% 
+  select(student_id, student_name, group, term, post_survey_q20) %>% 
+  rename("Post" = post_survey_q20) %>% 
+  pivot_longer(
+    cols = c(5),
+    names_to = "Survey",
+    values_to = "Response"
+  ) 
+
+q20_plots <- q20 %>% 
+  group_by(group) %>% 
+  nest() %>% 
+  mutate(plots = pmap(list(group, data),
+  ~ggplot(..2, aes(Response, student_name)) +
+  geom_line(aes(group = student_name), color = "gray40") +
+  geom_point(aes(color = Survey)) +
+  scale_x_discrete(limits = survey_resp) +
+  theme(panel.grid.major.y = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.major.x = element_line(color = "gray80")) +
+  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
+        axis.text = element_text(size = 10),
+        axis.title=element_text(size=10),
+        strip.text = element_text(size = 10),
+        plot.caption = element_text(size = 10)) +
+  labs(x = "",
+       y = "",
+    title = glue("{.x}"))))
+
+fs::dir_create(here::here("plots", "q20"))
+
+files <- q20_plots$group
+paths <- here::here("plots", "q20", glue("{files}.png"))
+paths
+
+walk2(paths, q20_plots$plots, ggsave,
+      width = 9.5, 
+      height = 6.5,
+      dpi = 500)
+```
+
+```{r winter 2020 plot q20, include=TRUE}
+q20_plots$plots[[1]]
+```
+
+## Spring 2020
+```{r spring 2020 plot q20, include=TRUE}
+q20_plots$plots[[2]]
+```
+
+# Group meetings exposed me to learning about other client profiles and case management techniques (Post-Survey Only) {.tabset .tabset-fade .tabset-pills}
+
+## Winter 2020
+```{r survey q21 data cleaning, include=FALSE}
+q21 <- bricc %>% 
+  select(student_id, student_name, group, term, post_survey_q21) %>% 
+  rename("Post" = post_survey_q21) %>% 
+  pivot_longer(
+    cols = c(5),
+    names_to = "Survey",
+    values_to = "Response"
+  ) 
+
+q21_plots <- q21 %>% 
+  group_by(group) %>% 
+  nest() %>% 
+  mutate(plots = pmap(list(group, data),
+  ~ggplot(..2, aes(Response, student_name)) +
+  geom_line(aes(group = student_name), color = "gray40") +
+  geom_point(aes(color = Survey)) +
+  scale_x_discrete(limits = survey_resp) +
+  theme(panel.grid.major.y = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.major.x = element_line(color = "gray80")) +
+  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
+        axis.text = element_text(size = 10),
+        axis.title=element_text(size=10),
+        strip.text = element_text(size = 10),
+        plot.caption = element_text(size = 10)) +
+  labs(x = "",
+       y = "",
+    title = glue("{.x}"))))
+
+fs::dir_create(here::here("plots", "q21"))
+
+files <- q21_plots$group
+paths <- here::here("plots", "q21", glue("{files}.png"))
+paths
+
+walk2(paths, q21_plots$plots, ggsave,
+      width = 9.5, 
+      height = 6.5,
+      dpi = 500)
+```
+
+```{r winter 2020 plot q21, include=TRUE}
+q21_plots$plots[[1]]
+```
+
+## Spring 2020
+```{r spring 2020 plot q21, include=TRUE}
+q21_plots$plots[[2]]
+```
+
+# I learned enough about treatment approaches implemented by my peers to be able to implement them with a client even though I never personally delivered the intervention (Post-Survey Only) {.tabset .tabset-fade .tabset-pills}
+
+## Winter 2020
+```{r survey q22 data cleaning, include=FALSE}
+q22 <- bricc %>% 
+  select(student_id, student_name, group, term, post_survey_q22) %>% 
+  rename("Post" = post_survey_q22) %>% 
+  pivot_longer(
+    cols = c(5),
+    names_to = "Survey",
+    values_to = "Response"
+  ) 
+
+q22_plots <- q22 %>% 
+  group_by(group) %>% 
+  nest() %>% 
+  mutate(plots = pmap(list(group, data),
+  ~ggplot(..2, aes(Response, student_name)) +
+  geom_line(aes(group = student_name), color = "gray40") +
+  geom_point(aes(color = Survey)) +
+  scale_x_discrete(limits = survey_resp) +
+  theme(panel.grid.major.y = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.major.x = element_line(color = "gray80")) +
+  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
+        axis.text = element_text(size = 10),
+        axis.title=element_text(size=10),
+        strip.text = element_text(size = 10),
+        plot.caption = element_text(size = 10)) +
+  labs(x = "",
+       y = "",
+    title = glue("{.x}"))))
+
+fs::dir_create(here::here("plots", "q22"))
+
+files <- q22_plots$group
+paths <- here::here("plots", "q22", glue("{files}.png"))
+paths
+
+walk2(paths, q22_plots$plots, ggsave,
+      width = 9.5, 
+      height = 6.5,
+      dpi = 500)
+```
+
+```{r winter 2020 plot q22, include=TRUE}
+q22_plots$plots[[1]]
+```
+
+## Spring 2020
+```{r spring 2020 plot q22, include=TRUE}
+q22_plots$plots[[2]]
+```
+
+# I was exposed to clients with the same disorder/diagnosis with different manifestations or treatment needs (Post-Survey Only) {.tabset .tabset-fade .tabset-pills}
+
+## Winter 2020
+```{r survey q23 data cleaning, include=FALSE}
+q23 <- bricc %>% 
+  select(student_id, student_name, group, term, post_survey_q23) %>% 
+  rename("Post" = post_survey_q23) %>% 
+  pivot_longer(
+    cols = c(5),
+    names_to = "Survey",
+    values_to = "Response"
+  ) 
+
+q23_plots <- q23 %>% 
+  group_by(group) %>% 
+  nest() %>% 
+  mutate(plots = pmap(list(group, data),
+  ~ggplot(..2, aes(Response, student_name)) +
+  geom_line(aes(group = student_name), color = "gray40") +
+  geom_point(aes(color = Survey)) +
+  scale_x_discrete(limits = survey_resp) +
+  theme(panel.grid.major.y = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.major.x = element_line(color = "gray80")) +
+  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
+        axis.text = element_text(size = 10),
+        axis.title=element_text(size=10),
+        strip.text = element_text(size = 10),
+        plot.caption = element_text(size = 10)) +
+  labs(x = "",
+       y = "",
+    title = glue("{.x}"))))
+
+fs::dir_create(here::here("plots", "q23"))
+
+files <- q23_plots$group
+paths <- here::here("plots", "q23", glue("{files}.png"))
+paths
+
+walk2(paths, q23_plots$plots, ggsave,
+      width = 9.5, 
+      height = 6.5,
+      dpi = 500)
+```
+
+```{r winter 2020 plot q23, include=TRUE}
+q23_plots$plots[[1]]
+```
+
+## Spring 2020
+```{r spring 2020 plot q23, include=TRUE}
+q23_plots$plots[[2]]
+```
+
+# My supervisor supported my case management and clinical approach (Post-Survey Only) {.tabset .tabset-fade .tabset-pills}
+
+## Winter 2020
+```{r survey q24 data cleaning, include=FALSE}
+q24 <- bricc %>% 
+  select(student_id, student_name, group, term, post_survey_q24) %>% 
+  rename("Post" = post_survey_q24) %>% 
+  pivot_longer(
+    cols = c(5),
+    names_to = "Survey",
+    values_to = "Response"
+  ) 
+
+q24_plots <- q24 %>% 
+  group_by(group) %>% 
+  nest() %>% 
+  mutate(plots = pmap(list(group, data),
+  ~ggplot(..2, aes(Response, student_name)) +
+  geom_line(aes(group = student_name), color = "gray40") +
+  geom_point(aes(color = Survey)) +
+  scale_x_discrete(limits = survey_resp) +
+  theme(panel.grid.major.y = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.major.x = element_line(color = "gray80")) +
+  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
+        axis.text = element_text(size = 10),
+        axis.title=element_text(size=10),
+        strip.text = element_text(size = 10),
+        plot.caption = element_text(size = 10)) +
+  labs(x = "",
+       y = "",
+    title = glue("{.x}"))))
+
+fs::dir_create(here::here("plots", "q24"))
+
+files <- q24_plots$group
+paths <- here::here("plots", "q24", glue("{files}.png"))
+paths
+
+walk2(paths, q24_plots$plots, ggsave,
+      width = 9.5, 
+      height = 6.5,
+      dpi = 500)
+```
+
+```{r winter 2020 plot q24, include=TRUE}
+q24_plots$plots[[1]]
+```
+
+## Spring 2020
+```{r spring 2020 plot q24, include=TRUE}
+q24_plots$plots[[2]]
+```
+
+# (If you have already taken cognitive rehabilitation course) Because of this clinical experience, I am now able to apply theoretical knowledge and principles in a clinically sound matter (Post-Survey Only) {.tabset .tabset-fade .tabset-pills}
+
+## Winter 2020
+```{r survey q25 data cleaning, include=FALSE}
+q25 <- bricc %>% 
+  select(student_id, student_name, group, term, post_survey_q25) %>% 
+  rename("Post" = post_survey_q25) %>% 
+  pivot_longer(
+    cols = c(5),
+    names_to = "Survey",
+    values_to = "Response"
+  ) 
+
+q25_plots <- q25 %>% 
+  group_by(group) %>% 
+  nest() %>% 
+  mutate(plots = pmap(list(group, data),
+  ~ggplot(..2, aes(Response, student_name)) +
+  geom_line(aes(group = student_name), color = "gray40") +
+  geom_point(aes(color = Survey)) +
+  scale_x_discrete(limits = survey_resp) +
+  theme(panel.grid.major.y = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.major.x = element_line(color = "gray80")) +
+  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
+        axis.text = element_text(size = 10),
+        axis.title=element_text(size=10),
+        strip.text = element_text(size = 10),
+        plot.caption = element_text(size = 10)) +
+  labs(x = "",
+       y = "",
+    title = glue("{.x}"))))
+
+fs::dir_create(here::here("plots", "q25"))
+
+files <- q25_plots$group
+paths <- here::here("plots", "q25", glue("{files}.png"))
+paths
+
+walk2(paths, q25_plots$plots, ggsave,
+      width = 9.5, 
+      height = 6.5,
+      dpi = 500)
+```
+
+```{r winter 2020 plot q25, include=TRUE}
+q25_plots$plots[[1]]
+```
+
+## Spring 2020
+```{r spring 2020 plot q25, include=TRUE}
+q25_plots$plots[[2]]
+```
+
+# (If you have already taken cognitive rehabilitation course) I had the appropriate knowledge of theories and practice from my coursework to apply to this clinical experience (Post-Survey Only) {.tabset .tabset-fade .tabset-pills}
+
+## Winter 2020
+```{r survey q26 data cleaning, include=FALSE}
+q26 <- bricc %>% 
+  select(student_id, student_name, group, term, post_survey_q26) %>% 
+  rename("Post" = post_survey_q26) %>% 
+  pivot_longer(
+    cols = c(5),
+    names_to = "Survey",
+    values_to = "Response"
+  ) 
+
+q26_plots <- q26 %>% 
+  group_by(group) %>% 
+  nest() %>% 
+  mutate(plots = pmap(list(group, data),
+  ~ggplot(..2, aes(Response, student_name)) +
+  geom_line(aes(group = student_name), color = "gray40") +
+  geom_point(aes(color = Survey)) +
+  scale_x_discrete(limits = survey_resp) +
+  theme(panel.grid.major.y = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.major.x = element_line(color = "gray80")) +
+  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
+        axis.text = element_text(size = 10),
+        axis.title=element_text(size=10),
+        strip.text = element_text(size = 10),
+        plot.caption = element_text(size = 10)) +
+  labs(x = "",
+       y = "",
+    title = glue("{.x}"))))
+
+fs::dir_create(here::here("plots", "q26"))
+
+files <- q26_plots$group
+paths <- here::here("plots", "q26", glue("{files}.png"))
+paths
+
+walk2(paths, q26_plots$plots, ggsave,
+      width = 9.5, 
+      height = 6.5,
+      dpi = 500)
+```
+
+```{r winter 2020 plot q26, include=TRUE}
+q26_plots$plots[[1]]
+```
+
+## Spring 2020
+```{r spring 2020 plot q26, include=TRUE}
+q26_plots$plots[[2]]
+```
+
+# (If you have not yet taken cognitive rehabilitation course) I feel more prepared about enrolling in class because of this clinical experience (Post-Survey Only) {.tabset .tabset-fade .tabset-pills}
+
+## Winter 2020
+```{r survey q27 data cleaning, include=FALSE}
+q27 <- bricc %>% 
+  select(student_id, student_name, group, term, post_survey_q27) %>% 
+  rename("Post" = post_survey_q27) %>% 
+  pivot_longer(
+    cols = c(5),
+    names_to = "Survey",
+    values_to = "Response"
+  ) 
+
+q27_plots <- q27 %>% 
+  group_by(group) %>% 
+  nest() %>% 
+  mutate(plots = pmap(list(group, data),
+  ~ggplot(..2, aes(Response, student_name)) +
+  geom_line(aes(group = student_name), color = "gray40") +
+  geom_point(aes(color = Survey)) +
+  scale_x_discrete(limits = survey_resp) +
+  theme(panel.grid.major.y = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.major.x = element_line(color = "gray80")) +
+  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
+        axis.text = element_text(size = 10),
+        axis.title=element_text(size=10),
+        strip.text = element_text(size = 10),
+        plot.caption = element_text(size = 10)) +
+  labs(x = "",
+       y = "",
+    title = glue("{.x}"))))
+
+fs::dir_create(here::here("plots", "q27"))
+
+files <- q27_plots$group
+paths <- here::here("plots", "q27", glue("{files}.png"))
+paths
+
+walk2(paths, q27_plots$plots, ggsave,
+      width = 9.5, 
+      height = 6.5,
+      dpi = 500)
+```
+
+```{r winter 2020 plot q27, include=TRUE}
+q27_plots$plots[[1]]
+```
+
+## Spring 2020
+```{r spring 2020 plot q27, include=TRUE}
+q27_plots$plots[[2]]
+```
