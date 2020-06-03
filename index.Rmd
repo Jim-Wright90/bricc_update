@@ -131,9 +131,11 @@ quiz_plots$plots[[1]]
 quiz_plots$plots[[2]]
 ```
 
-# I am confident in my ability to conduct a consultation for the BrICC clinic {.tabset .tabset-fade .tabset-pills}
+# BrICC Survey 
 
-## Winter 2020
+## I am confident in my ability to conduct a consultation for the BrICC clinic {.tabset .tabset-fade .tabset-pills}
+
+### Winter 2020
 ```{r survey data cleaning, include=FALSE}
 head(bricc)
 names(bricc)
@@ -207,14 +209,14 @@ walk2(paths, q1_plots$plots, ggsave,
 q1_plots$plots[[1]]
 ```
 
-## Spring 2020
+### Spring 2020
 ```{r spring 2020 plot, include=TRUE}
 q1_plots$plots[[2]]
 ```
 
-# I am confident in my ability to administer standardized cognitive tests {.tabset .tabset-fade .tabset-pills}
+## I am confident in my ability to administer standardized cognitive tests {.tabset .tabset-fade .tabset-pills}
 
-## Winter 2020
+### Winter 2020
 ```{r survey q2 data cleaning, include=FALSE}
 q2 <- bricc %>% 
   select(student_id, student_name, group, term, pre_survey_q2, post_survey_q2) %>% 
@@ -269,14 +271,14 @@ walk2(paths, q2_plots$plots, ggsave,
 q2_plots$plots[[1]]
 ```
 
-## Spring 2020
+### Spring 2020
 ```{r spring 2020 plot q2, include=TRUE}
 q2_plots$plots[[2]]
 ```
 
-# I am confident in my ability to conduct a client-centered clinical interview {.tabset .tabset-fade .tabset-pills}
+## I am confident in my ability to conduct a client-centered clinical interview {.tabset .tabset-fade .tabset-pills}
 
-## Winter 2020
+### Winter 2020
 ```{r survey q3 data cleaning, include=FALSE}
 q3 <- bricc %>% 
   select(student_id, student_name, group, term, pre_survey_q3, post_survey_q3) %>% 
@@ -331,14 +333,14 @@ walk2(paths, q3_plots$plots, ggsave,
 q3_plots$plots[[1]]
 ```
 
-## Spring 2020
+### Spring 2020
 ```{r spring 2020 plot q3, include=TRUE}
 q3_plots$plots[[2]]
 ```
 
-# I am confident in my ability to identify treatment options to assist people with acquired cognitive impairments {.tabset .tabset-fade .tabset-pills}
+## I am confident in my ability to identify treatment options to assist people with acquired cognitive impairments {.tabset .tabset-fade .tabset-pills}
 
-## Winter 2020
+### Winter 2020
 ```{r survey q4 data cleaning, include=FALSE}
 q4 <- bricc %>% 
   select(student_id, student_name, group, term, pre_survey_q4, post_survey_q4) %>% 
@@ -393,14 +395,14 @@ walk2(paths, q4_plots$plots, ggsave,
 q4_plots$plots[[1]]
 ```
 
-## Spring 2020
+### Spring 2020
 ```{r spring 2020 plot q4, include=TRUE}
 q4_plots$plots[[2]]
 ```
 
-# I am prepared to write cognitive rehabilitation goals {.tabset .tabset-fade .tabset-pills}
+## I am prepared to write cognitive rehabilitation goals {.tabset .tabset-fade .tabset-pills}
 
-## Winter 2020
+### Winter 2020
 ```{r survey q5 data cleaning, include=FALSE}
 q5 <- bricc %>% 
   select(student_id, student_name, group, term, pre_survey_q5, post_survey_q5) %>% 
@@ -455,15 +457,15 @@ walk2(paths, q5_plots$plots, ggsave,
 q5_plots$plots[[1]]
 ```
 
-## Spring 2020
+### Spring 2020
 ```{r spring 2020 plot q5, include=TRUE}
 q5_plots$plots[[2]]
 ```
 
 
-# I am prepared to administer direct interventions such as attention training or goal management training {.tabset .tabset-fade .tabset-pills}
+## I am prepared to administer direct interventions such as attention training or goal management training {.tabset .tabset-fade .tabset-pills}
 
-## Winter 2020
+### Winter 2020
 ```{r survey q6 data cleaning, include=FALSE}
 q6 <- bricc %>% 
   select(student_id, student_name, group, term, pre_survey_q6, post_survey_q6) %>% 
@@ -515,14 +517,14 @@ walk2(paths, q6_plots$plots, ggsave,
 q6_plots$plots[[1]]
 ```
 
-## Spring 2020
+### Spring 2020
 ```{r spring 2020 plot q6, include=TRUE}
 q6_plots$plots[[2]]
 ```
 
-# I am prepared to engage in systematic instruction to support the use of external aids {.tabset .tabset-fade .tabset-pills}
+## I am prepared to engage in systematic instruction to support the use of external aids {.tabset .tabset-fade .tabset-pills}
 
-## Winter 2020
+### Winter 2020
 ```{r survey q7 data cleaning, include=FALSE}
 q7 <- bricc %>% 
   select(student_id, student_name, group, term, pre_survey_q7, post_survey_q7) %>% 
@@ -574,14 +576,14 @@ walk2(paths, q7_plots$plots, ggsave,
 q7_plots$plots[[1]]
 ```
 
-## Spring 2020
+### Spring 2020
 ```{r spring 2020 plot q7, include=TRUE}
 q7_plots$plots[[2]]
 ```
 
-# I am prepared to engage in a needs assessment to identify cognitive strategies and support learning and use of them {.tabset .tabset-fade .tabset-pills}
+## I am prepared to engage in a needs assessment to identify cognitive strategies and support learning and use of them {.tabset .tabset-fade .tabset-pills}
 
-## Winter 2020
+### Winter 2020
 ```{r survey q8 data cleaning, include=FALSE}
 q8 <- bricc %>% 
   select(student_id, student_name, group, term, pre_survey_q8, post_survey_q8) %>% 
@@ -633,14 +635,14 @@ walk2(paths, q8_plots$plots, ggsave,
 q8_plots$plots[[1]]
 ```
 
-## Spring 2020
+### Spring 2020
 ```{r spring 2020 plot q8, include=TRUE}
 q8_plots$plots[[2]]
 ```
 
-# I am confident in my ability to collect and analyze client session data {.tabset .tabset-fade .tabset-pills}
+## I am confident in my ability to collect and analyze client session data {.tabset .tabset-fade .tabset-pills}
 
-## Winter 2020
+### Winter 2020
 ```{r survey q9 data cleaning, include=FALSE}
 q9 <- bricc %>% 
   select(student_id, student_name, group, term, pre_survey_q9, post_survey_q9) %>% 
@@ -692,14 +694,14 @@ walk2(paths, q9_plots$plots, ggsave,
 q9_plots$plots[[1]]
 ```
 
-## Spring 2020
+### Spring 2020
 ```{r spring 2020 plot q9, include=TRUE}
 q9_plots$plots[[2]]
 ```
 
-# I am prepared to justify my decisions related to assessment and treatment selection {.tabset .tabset-fade .tabset-pills}
+## I am prepared to justify my decisions related to assessment and treatment selection {.tabset .tabset-fade .tabset-pills}
 
-## Winter 2020
+### Winter 2020
 ```{r survey q10 data cleaning, include=FALSE}
 q10 <- bricc %>% 
   select(student_id, student_name, group, term, pre_survey_q10, post_survey_q10) %>% 
@@ -751,14 +753,14 @@ walk2(paths, q10_plots$plots, ggsave,
 q10_plots$plots[[1]]
 ```
 
-## Spring 2020
+### Spring 2020
 ```{r spring 2020 plot q10, include=TRUE}
 q10_plots$plots[[2]]
 ```
 
-# I am confident in my ability to apply principles of evidence-based practice to my assessment and treatment decisions {.tabset .tabset-fade .tabset-pills}
+## I am confident in my ability to apply principles of evidence-based practice to my assessment and treatment decisions {.tabset .tabset-fade .tabset-pills}
 
-## Winter 2020
+### Winter 2020
 ```{r survey q11 data cleaning, include=FALSE}
 q11 <- bricc %>% 
   select(student_id, student_name, group, term, pre_survey_q11, post_survey_q11) %>% 
@@ -810,14 +812,14 @@ walk2(paths, q11_plots$plots, ggsave,
 q11_plots$plots[[1]]
 ```
 
-## Spring 2020
+### Spring 2020
 ```{r spring 2020 plot q11, include=TRUE}
 q11_plots$plots[[2]]
 ```
 
-# I am confident in my ability to make ‘online’ (in session) changes to my daily plans {.tabset .tabset-fade .tabset-pills}
+## I am confident in my ability to make ‘online’ (in session) changes to my daily plans {.tabset .tabset-fade .tabset-pills}
 
-## Winter 2020
+### Winter 2020
 ```{r survey q12 data cleaning, include=FALSE}
 q12 <- bricc %>% 
   select(student_id, student_name, group, term, pre_survey_q12, post_survey_q12) %>% 
@@ -869,14 +871,14 @@ walk2(paths, q12_plots$plots, ggsave,
 q12_plots$plots[[1]]
 ```
 
-## Spring 2020
+### Spring 2020
 ```{r spring 2020 plot q12, include=TRUE}
 q12_plots$plots[[2]]
 ```
 
-# I am knowledgeable about concussion management {.tabset .tabset-fade .tabset-pills}
+## I am knowledgeable about concussion management {.tabset .tabset-fade .tabset-pills}
 
-## Winter 2020
+### Winter 2020
 ```{r survey q13 data cleaning, include=FALSE}
 q13 <- bricc %>% 
   select(student_id, student_name, group, term, pre_survey_q13, post_survey_q13) %>% 
@@ -928,14 +930,14 @@ walk2(paths, q13_plots$plots, ggsave,
 q13_plots$plots[[1]]
 ```
 
-## Spring 2020
+### Spring 2020
 ```{r spring 2020 plot q13, include=TRUE}
 q13_plots$plots[[2]]
 ```
 
-# I am comfortable working with clients with brain injuries {.tabset .tabset-fade .tabset-pills}
+## I am comfortable working with clients with brain injuries {.tabset .tabset-fade .tabset-pills}
 
-## Winter 2020
+### Winter 2020
 ```{r survey q14 data cleaning, include=FALSE}
 q14 <- bricc %>% 
   select(student_id, student_name, group, term, pre_survey_q14, post_survey_q14) %>% 
@@ -987,14 +989,14 @@ walk2(paths, q14_plots$plots, ggsave,
 q14_plots$plots[[1]]
 ```
 
-## Spring 2020
+### Spring 2020
 ```{r spring 2020 plot q14, include=TRUE}
 q14_plots$plots[[2]]
 ```
 
-# I am comfortable working with clients with awareness deficits {.tabset .tabset-fade .tabset-pills}
+## I am comfortable working with clients with awareness deficits {.tabset .tabset-fade .tabset-pills}
 
-## Winter 2020
+### Winter 2020
 ```{r survey q15 data cleaning, include=FALSE}
 q15 <- bricc %>% 
   select(student_id, student_name, group, term, pre_survey_q15, post_survey_q15) %>% 
@@ -1046,14 +1048,14 @@ walk2(paths, q15_plots$plots, ggsave,
 q15_plots$plots[[1]]
 ```
 
-## Spring 2020
+### Spring 2020
 ```{r spring 2020 plot q15, include=TRUE}
 q15_plots$plots[[2]]
 ```
 
-# I am able to use case history information (e.g., information about etiology) to guide my clinical decision making {.tabset .tabset-fade .tabset-pills}
+## I am able to use case history information (e.g., information about etiology) to guide my clinical decision making {.tabset .tabset-fade .tabset-pills}
 
-## Winter 2020
+### Winter 2020
 ```{r survey q16 data cleaning, include=FALSE}
 q16 <- bricc %>% 
   select(student_id, student_name, group, term, pre_survey_q16, post_survey_q16) %>% 
@@ -1105,14 +1107,14 @@ walk2(paths, q16_plots$plots, ggsave,
 q16_plots$plots[[1]]
 ```
 
-## Spring 2020
+### Spring 2020
 ```{r spring 2020 plot q16, include=TRUE}
 q16_plots$plots[[2]]
 ```
 
-# I feel prepared to orally present cases {.tabset .tabset-fade .tabset-pills}
+## I feel prepared to orally present cases {.tabset .tabset-fade .tabset-pills}
 
-## Winter 2020
+### Winter 2020
 ```{r survey q17 data cleaning, include=FALSE}
 q17 <- bricc %>% 
   select(student_id, student_name, group, term, pre_survey_q17, post_survey_q17) %>% 
@@ -1164,14 +1166,14 @@ walk2(paths, q17_plots$plots, ggsave,
 q17_plots$plots[[1]]
 ```
 
-## Spring 2020
+### Spring 2020
 ```{r spring 2020 plot q17, include=TRUE}
 q17_plots$plots[[2]]
 ```
 
-# Training was systematic and well organized (Post-Survey Only) {.tabset .tabset-fade .tabset-pills}
+## Training was systematic and well organized (Post-Survey Only) {.tabset .tabset-fade .tabset-pills}
 
-## Winter 2020
+### Winter 2020
 ```{r survey q18 data cleaning, include=FALSE}
 q18 <- bricc %>% 
   select(student_id, student_name, group, term, post_survey_q18) %>% 
@@ -1219,14 +1221,14 @@ walk2(paths, q18_plots$plots, ggsave,
 q18_plots$plots[[1]]
 ```
 
-## Spring 2020
+### Spring 2020
 ```{r spring 2020 plot q18, include=TRUE}
 q18_plots$plots[[2]]
 ```
 
-# Group meetings enhanced my learning (Post-Survey Only) {.tabset .tabset-fade .tabset-pills}
+## Group meetings enhanced my learning (Post-Survey Only) {.tabset .tabset-fade .tabset-pills}
 
-## Winter 2020
+### Winter 2020
 ```{r survey q19 data cleaning, include=FALSE}
 q19 <- bricc %>% 
   select(student_id, student_name, group, term, post_survey_q19) %>% 
@@ -1274,14 +1276,14 @@ walk2(paths, q19_plots$plots, ggsave,
 q19_plots$plots[[1]]
 ```
 
-## Spring 2020
+### Spring 2020
 ```{r spring 2020 plot q19, include=TRUE}
 q19_plots$plots[[2]]
 ```
 
-# Group meetings were efficient (Post-Survey Only) {.tabset .tabset-fade .tabset-pills}
+## Group meetings were efficient (Post-Survey Only) {.tabset .tabset-fade .tabset-pills}
 
-## Winter 2020
+### Winter 2020
 ```{r survey q20 data cleaning, include=FALSE}
 q20 <- bricc %>% 
   select(student_id, student_name, group, term, post_survey_q20) %>% 
@@ -1329,14 +1331,14 @@ walk2(paths, q20_plots$plots, ggsave,
 q20_plots$plots[[1]]
 ```
 
-## Spring 2020
+### Spring 2020
 ```{r spring 2020 plot q20, include=TRUE}
 q20_plots$plots[[2]]
 ```
 
-# Group meetings exposed me to learning about other client profiles and case management techniques (Post-Survey Only) {.tabset .tabset-fade .tabset-pills}
+## Group meetings exposed me to learning about other client profiles and case management techniques (Post-Survey Only) {.tabset .tabset-fade .tabset-pills}
 
-## Winter 2020
+### Winter 2020
 ```{r survey q21 data cleaning, include=FALSE}
 q21 <- bricc %>% 
   select(student_id, student_name, group, term, post_survey_q21) %>% 
@@ -1384,14 +1386,14 @@ walk2(paths, q21_plots$plots, ggsave,
 q21_plots$plots[[1]]
 ```
 
-## Spring 2020
+### Spring 2020
 ```{r spring 2020 plot q21, include=TRUE}
 q21_plots$plots[[2]]
 ```
 
-# I learned enough about treatment approaches implemented by my peers to be able to implement them with a client even though I never personally delivered the intervention (Post-Survey Only) {.tabset .tabset-fade .tabset-pills}
+## I learned enough about treatment approaches implemented by my peers to be able to implement them with a client even though I never personally delivered the intervention (Post-Survey Only) {.tabset .tabset-fade .tabset-pills}
 
-## Winter 2020
+### Winter 2020
 ```{r survey q22 data cleaning, include=FALSE}
 q22 <- bricc %>% 
   select(student_id, student_name, group, term, post_survey_q22) %>% 
@@ -1439,14 +1441,14 @@ walk2(paths, q22_plots$plots, ggsave,
 q22_plots$plots[[1]]
 ```
 
-## Spring 2020
+### Spring 2020
 ```{r spring 2020 plot q22, include=TRUE}
 q22_plots$plots[[2]]
 ```
 
-# I was exposed to clients with the same disorder/diagnosis with different manifestations or treatment needs (Post-Survey Only) {.tabset .tabset-fade .tabset-pills}
+## I was exposed to clients with the same disorder/diagnosis with different manifestations or treatment needs (Post-Survey Only) {.tabset .tabset-fade .tabset-pills}
 
-## Winter 2020
+### Winter 2020
 ```{r survey q23 data cleaning, include=FALSE}
 q23 <- bricc %>% 
   select(student_id, student_name, group, term, post_survey_q23) %>% 
@@ -1494,14 +1496,14 @@ walk2(paths, q23_plots$plots, ggsave,
 q23_plots$plots[[1]]
 ```
 
-## Spring 2020
+### Spring 2020
 ```{r spring 2020 plot q23, include=TRUE}
 q23_plots$plots[[2]]
 ```
 
-# My supervisor supported my case management and clinical approach (Post-Survey Only) {.tabset .tabset-fade .tabset-pills}
+## My supervisor supported my case management and clinical approach (Post-Survey Only) {.tabset .tabset-fade .tabset-pills}
 
-## Winter 2020
+### Winter 2020
 ```{r survey q24 data cleaning, include=FALSE}
 q24 <- bricc %>% 
   select(student_id, student_name, group, term, post_survey_q24) %>% 
@@ -1549,14 +1551,14 @@ walk2(paths, q24_plots$plots, ggsave,
 q24_plots$plots[[1]]
 ```
 
-## Spring 2020
+### Spring 2020
 ```{r spring 2020 plot q24, include=TRUE}
 q24_plots$plots[[2]]
 ```
 
-# (If you have already taken cognitive rehabilitation course) Because of this clinical experience, I am now able to apply theoretical knowledge and principles in a clinically sound matter (Post-Survey Only) {.tabset .tabset-fade .tabset-pills}
+## (If you have already taken cognitive rehabilitation course) Because of this clinical experience, I am now able to apply theoretical knowledge and principles in a clinically sound matter (Post-Survey Only) {.tabset .tabset-fade .tabset-pills}
 
-## Winter 2020
+### Winter 2020
 ```{r survey q25 data cleaning, include=FALSE}
 q25 <- bricc %>% 
   select(student_id, student_name, group, term, post_survey_q25) %>% 
@@ -1604,14 +1606,14 @@ walk2(paths, q25_plots$plots, ggsave,
 q25_plots$plots[[1]]
 ```
 
-## Spring 2020
+### Spring 2020
 ```{r spring 2020 plot q25, include=TRUE}
 q25_plots$plots[[2]]
 ```
 
-# (If you have already taken cognitive rehabilitation course) I had the appropriate knowledge of theories and practice from my coursework to apply to this clinical experience (Post-Survey Only) {.tabset .tabset-fade .tabset-pills}
+## (If you have already taken cognitive rehabilitation course) I had the appropriate knowledge of theories and practice from my coursework to apply to this clinical experience (Post-Survey Only) {.tabset .tabset-fade .tabset-pills}
 
-## Winter 2020
+### Winter 2020
 ```{r survey q26 data cleaning, include=FALSE}
 q26 <- bricc %>% 
   select(student_id, student_name, group, term, post_survey_q26) %>% 
@@ -1659,14 +1661,14 @@ walk2(paths, q26_plots$plots, ggsave,
 q26_plots$plots[[1]]
 ```
 
-## Spring 2020
+### Spring 2020
 ```{r spring 2020 plot q26, include=TRUE}
 q26_plots$plots[[2]]
 ```
 
-# (If you have not yet taken cognitive rehabilitation course) I feel more prepared about enrolling in class because of this clinical experience (Post-Survey Only) {.tabset .tabset-fade .tabset-pills}
+## (If you have not yet taken cognitive rehabilitation course) I feel more prepared about enrolling in class because of this clinical experience (Post-Survey Only) {.tabset .tabset-fade .tabset-pills}
 
-## Winter 2020
+### Winter 2020
 ```{r survey q27 data cleaning, include=FALSE}
 q27 <- bricc %>% 
   select(student_id, student_name, group, term, post_survey_q27) %>% 
@@ -1714,7 +1716,7 @@ walk2(paths, q27_plots$plots, ggsave,
 q27_plots$plots[[1]]
 ```
 
-## Spring 2020
+### Spring 2020
 ```{r spring 2020 plot q27, include=TRUE}
 q27_plots$plots[[2]]
 ```
