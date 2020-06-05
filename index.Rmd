@@ -203,6 +203,39 @@ walk2(paths, q1_plots$plots, ggsave,
       width = 9.5, 
       height = 6.5,
       dpi = 500)
+
+head(q1)
+
+q1 <- unique(q1)
+
+q1$Response <- factor(q1$Response, levels = c("Strongly Agree",
+                                              "Agree",
+                                              "Undecided",
+                                              "Disagree",
+                                              "Strongly Disagree"))
+
+q1$group <- factor(q1$group, levels = c("Winter 2020", "Spring 2020"))
+
+
+ggplot(q1, aes(Response)) +
+  geom_bar(aes(fill = group), alpha = 0.9) +
+  scale_fill_brewer(palette = "Dark2") +
+  coord_flip() +
+  facet_wrap(~Survey, ncol = 1) +
+    labs(y = "Number of Responses",
+         x = "")
+
+total_plot <- function(df) {
+  ggplot(df, aes(Response)) +
+  geom_bar(aes(fill = group), alpha = 0.9) +
+  scale_fill_brewer(palette = "Dark2") +
+  coord_flip() +
+  facet_wrap(~Survey, ncol = 1) +
+    labs(y = "Number of Responses",
+         x = "")
+}
+
+total_plot(q1)
 ```
 
 ```{r winter 2020 plot, include=TRUE}
@@ -212,6 +245,11 @@ q1_plots$plots[[1]]
 ### Spring 2020
 ```{r spring 2020 plot, include=TRUE}
 q1_plots$plots[[2]]
+```
+
+### Total
+```{r q1 total, include=TRUE}
+total_plot(q1)
 ```
 
 ## I am confident in my ability to administer standardized cognitive tests {.tabset .tabset-fade .tabset-pills}
@@ -265,6 +303,16 @@ walk2(paths, q2_plots$plots, ggsave,
       width = 9.5, 
       height = 6.5,
       dpi = 500)
+
+q2 <- unique(q2)
+
+q2$Response <- factor(q2$Response, levels = c("Strongly Agree",
+                                              "Agree",
+                                              "Undecided",
+                                              "Disagree",
+                                              "Strongly Disagree"))
+
+q2$group <- factor(q2$group, levels = c("Winter 2020", "Spring 2020"))
 ```
 
 ```{r winter 2020 plot q2, include=TRUE}
@@ -274,6 +322,11 @@ q2_plots$plots[[1]]
 ### Spring 2020
 ```{r spring 2020 plot q2, include=TRUE}
 q2_plots$plots[[2]]
+```
+
+### Total
+```{r q2 total, include=TRUE}
+total_plot(q2)
 ```
 
 ## I am confident in my ability to conduct a client-centered clinical interview {.tabset .tabset-fade .tabset-pills}
@@ -327,6 +380,16 @@ walk2(paths, q3_plots$plots, ggsave,
       width = 9.5, 
       height = 6.5,
       dpi = 500)
+
+q3 <- unique(q3)
+
+q3$Response <- factor(q3$Response, levels = c("Strongly Agree",
+                                              "Agree",
+                                              "Undecided",
+                                              "Disagree",
+                                              "Strongly Disagree"))
+
+q3$group <- factor(q3$group, levels = c("Winter 2020", "Spring 2020"))
 ```
 
 ```{r winter 2020 plot q3, include=TRUE}
@@ -336,6 +399,11 @@ q3_plots$plots[[1]]
 ### Spring 2020
 ```{r spring 2020 plot q3, include=TRUE}
 q3_plots$plots[[2]]
+```
+
+### Total
+```{r q3 total, include=TRUE}
+total_plot(q3)
 ```
 
 ## I am confident in my ability to identify treatment options to assist people with acquired cognitive impairments {.tabset .tabset-fade .tabset-pills}
@@ -389,6 +457,16 @@ walk2(paths, q4_plots$plots, ggsave,
       width = 9.5, 
       height = 6.5,
       dpi = 500)
+
+q4 <- unique(q4)
+
+q4$Response <- factor(q4$Response, levels = c("Strongly Agree",
+                                              "Agree",
+                                              "Undecided",
+                                              "Disagree",
+                                              "Strongly Disagree"))
+
+q4$group <- factor(q4$group, levels = c("Winter 2020", "Spring 2020"))
 ```
 
 ```{r winter 2020 plot q4, include=TRUE}
@@ -398,6 +476,11 @@ q4_plots$plots[[1]]
 ### Spring 2020
 ```{r spring 2020 plot q4, include=TRUE}
 q4_plots$plots[[2]]
+```
+
+### Total
+```{r q4 total, include=TRUE}
+total_plot(q4)
 ```
 
 ## I am prepared to write cognitive rehabilitation goals {.tabset .tabset-fade .tabset-pills}
@@ -451,6 +534,16 @@ walk2(paths, q5_plots$plots, ggsave,
       width = 9.5, 
       height = 6.5,
       dpi = 500)
+
+q5 <- unique(q5)
+
+q5$Response <- factor(q5$Response, levels = c("Strongly Agree",
+                                              "Agree",
+                                              "Undecided",
+                                              "Disagree",
+                                              "Strongly Disagree"))
+
+q5$group <- factor(q5$group, levels = c("Winter 2020", "Spring 2020"))
 ```
 
 ```{r winter 2020 plot q5, include=TRUE}
@@ -462,6 +555,10 @@ q5_plots$plots[[1]]
 q5_plots$plots[[2]]
 ```
 
+### Total
+```{r q5 total, include=TRUE}
+total_plot(q5)
+```
 
 ## I am prepared to administer direct interventions such as attention training or goal management training {.tabset .tabset-fade .tabset-pills}
 
@@ -511,6 +608,16 @@ walk2(paths, q6_plots$plots, ggsave,
       width = 9.5, 
       height = 6.5,
       dpi = 500)
+
+q6 <- unique(q6)
+
+q6$Response <- factor(q6$Response, levels = c("Strongly Agree",
+                                              "Agree",
+                                              "Undecided",
+                                              "Disagree",
+                                              "Strongly Disagree"))
+
+q6$group <- factor(q6$group, levels = c("Winter 2020", "Spring 2020"))
 ```
 
 ```{r winter 2020 plot q6, include=TRUE}
@@ -520,6 +627,11 @@ q6_plots$plots[[1]]
 ### Spring 2020
 ```{r spring 2020 plot q6, include=TRUE}
 q6_plots$plots[[2]]
+```
+
+### Total
+```{r q6 total, include=TRUE}
+total_plot(q6)
 ```
 
 ## I am prepared to engage in systematic instruction to support the use of external aids {.tabset .tabset-fade .tabset-pills}
@@ -570,6 +682,16 @@ walk2(paths, q7_plots$plots, ggsave,
       width = 9.5, 
       height = 6.5,
       dpi = 500)
+
+q7 <- unique(q7)
+
+q7$Response <- factor(q7$Response, levels = c("Strongly Agree",
+                                              "Agree",
+                                              "Undecided",
+                                              "Disagree",
+                                              "Strongly Disagree"))
+
+q7$group <- factor(q7$group, levels = c("Winter 2020", "Spring 2020"))
 ```
 
 ```{r winter 2020 plot q7, include=TRUE}
@@ -579,6 +701,11 @@ q7_plots$plots[[1]]
 ### Spring 2020
 ```{r spring 2020 plot q7, include=TRUE}
 q7_plots$plots[[2]]
+```
+
+### Total
+```{r q7 total, include=TRUE}
+total_plot(q7)
 ```
 
 ## I am prepared to engage in a needs assessment to identify cognitive strategies and support learning and use of them {.tabset .tabset-fade .tabset-pills}
@@ -629,6 +756,16 @@ walk2(paths, q8_plots$plots, ggsave,
       width = 9.5, 
       height = 6.5,
       dpi = 500)
+
+q8 <- unique(q8)
+
+q8$Response <- factor(q8$Response, levels = c("Strongly Agree",
+                                              "Agree",
+                                              "Undecided",
+                                              "Disagree",
+                                              "Strongly Disagree"))
+
+q8$group <- factor(q8$group, levels = c("Winter 2020", "Spring 2020"))
 ```
 
 ```{r winter 2020 plot q8, include=TRUE}
@@ -638,6 +775,11 @@ q8_plots$plots[[1]]
 ### Spring 2020
 ```{r spring 2020 plot q8, include=TRUE}
 q8_plots$plots[[2]]
+```
+
+### Total
+```{r q8 total, include=TRUE}
+total_plot(q8)
 ```
 
 ## I am confident in my ability to collect and analyze client session data {.tabset .tabset-fade .tabset-pills}
@@ -688,6 +830,16 @@ walk2(paths, q9_plots$plots, ggsave,
       width = 9.5, 
       height = 6.5,
       dpi = 500)
+
+q9 <- unique(q9)
+
+q9$Response <- factor(q9$Response, levels = c("Strongly Agree",
+                                              "Agree",
+                                              "Undecided",
+                                              "Disagree",
+                                              "Strongly Disagree"))
+
+q9$group <- factor(q9$group, levels = c("Winter 2020", "Spring 2020"))
 ```
 
 ```{r winter 2020 plot q9, include=TRUE}
@@ -697,6 +849,11 @@ q9_plots$plots[[1]]
 ### Spring 2020
 ```{r spring 2020 plot q9, include=TRUE}
 q9_plots$plots[[2]]
+```
+
+### Total
+```{r q9 total, include=TRUE}
+total_plot(q9)
 ```
 
 ## I am prepared to justify my decisions related to assessment and treatment selection {.tabset .tabset-fade .tabset-pills}
@@ -747,6 +904,16 @@ walk2(paths, q10_plots$plots, ggsave,
       width = 9.5, 
       height = 6.5,
       dpi = 500)
+
+q10 <- unique(q10)
+
+q10$Response <- factor(q10$Response, levels = c("Strongly Agree",
+                                              "Agree",
+                                              "Undecided",
+                                              "Disagree",
+                                              "Strongly Disagree"))
+
+q10$group <- factor(q10$group, levels = c("Winter 2020", "Spring 2020"))
 ```
 
 ```{r winter 2020 plot q10, include=TRUE}
@@ -756,6 +923,11 @@ q10_plots$plots[[1]]
 ### Spring 2020
 ```{r spring 2020 plot q10, include=TRUE}
 q10_plots$plots[[2]]
+```
+
+### Total
+```{r q10 total, include=TRUE}
+total_plot(q10)
 ```
 
 ## I am confident in my ability to apply principles of evidence-based practice to my assessment and treatment decisions {.tabset .tabset-fade .tabset-pills}
@@ -806,6 +978,16 @@ walk2(paths, q11_plots$plots, ggsave,
       width = 9.5, 
       height = 6.5,
       dpi = 500)
+
+q11 <- unique(q11)
+
+q11$Response <- factor(q11$Response, levels = c("Strongly Agree",
+                                              "Agree",
+                                              "Undecided",
+                                              "Disagree",
+                                              "Strongly Disagree"))
+
+q11$group <- factor(q11$group, levels = c("Winter 2020", "Spring 2020"))
 ```
 
 ```{r winter 2020 plot q11, include=TRUE}
@@ -815,6 +997,11 @@ q11_plots$plots[[1]]
 ### Spring 2020
 ```{r spring 2020 plot q11, include=TRUE}
 q11_plots$plots[[2]]
+```
+
+### Total
+```{r q11 total, include=TRUE}
+total_plot(q11)
 ```
 
 ## I am confident in my ability to make ‘online’ (in session) changes to my daily plans {.tabset .tabset-fade .tabset-pills}
@@ -865,6 +1052,16 @@ walk2(paths, q12_plots$plots, ggsave,
       width = 9.5, 
       height = 6.5,
       dpi = 500)
+
+q12 <- unique(q12)
+
+q12$Response <- factor(q12$Response, levels = c("Strongly Agree",
+                                              "Agree",
+                                              "Undecided",
+                                              "Disagree",
+                                              "Strongly Disagree"))
+
+q12$group <- factor(q12$group, levels = c("Winter 2020", "Spring 2020"))
 ```
 
 ```{r winter 2020 plot q12, include=TRUE}
@@ -874,6 +1071,11 @@ q12_plots$plots[[1]]
 ### Spring 2020
 ```{r spring 2020 plot q12, include=TRUE}
 q12_plots$plots[[2]]
+```
+
+### Total
+```{r q12 total, include=TRUE}
+total_plot(q12)
 ```
 
 ## I am knowledgeable about concussion management {.tabset .tabset-fade .tabset-pills}
@@ -924,6 +1126,16 @@ walk2(paths, q13_plots$plots, ggsave,
       width = 9.5, 
       height = 6.5,
       dpi = 500)
+
+q13 <- unique(q13)
+
+q13$Response <- factor(q13$Response, levels = c("Strongly Agree",
+                                              "Agree",
+                                              "Undecided",
+                                              "Disagree",
+                                              "Strongly Disagree"))
+
+q13$group <- factor(q13$group, levels = c("Winter 2020", "Spring 2020"))
 ```
 
 ```{r winter 2020 plot q13, include=TRUE}
@@ -933,6 +1145,11 @@ q13_plots$plots[[1]]
 ### Spring 2020
 ```{r spring 2020 plot q13, include=TRUE}
 q13_plots$plots[[2]]
+```
+
+### Total
+```{r q13 total, include=TRUE}
+total_plot(q13)
 ```
 
 ## I am comfortable working with clients with brain injuries {.tabset .tabset-fade .tabset-pills}
@@ -983,6 +1200,16 @@ walk2(paths, q14_plots$plots, ggsave,
       width = 9.5, 
       height = 6.5,
       dpi = 500)
+
+q14 <- unique(q14)
+
+q14$Response <- factor(q14$Response, levels = c("Strongly Agree",
+                                              "Agree",
+                                              "Undecided",
+                                              "Disagree",
+                                              "Strongly Disagree"))
+
+q14$group <- factor(q14$group, levels = c("Winter 2020", "Spring 2020"))
 ```
 
 ```{r winter 2020 plot q14, include=TRUE}
@@ -992,6 +1219,11 @@ q14_plots$plots[[1]]
 ### Spring 2020
 ```{r spring 2020 plot q14, include=TRUE}
 q14_plots$plots[[2]]
+```
+
+### Total
+```{r q14 total, include=TRUE}
+total_plot(q14)
 ```
 
 ## I am comfortable working with clients with awareness deficits {.tabset .tabset-fade .tabset-pills}
@@ -1042,6 +1274,16 @@ walk2(paths, q15_plots$plots, ggsave,
       width = 9.5, 
       height = 6.5,
       dpi = 500)
+
+q15 <- unique(q15)
+
+q15$Response <- factor(q15$Response, levels = c("Strongly Agree",
+                                              "Agree",
+                                              "Undecided",
+                                              "Disagree",
+                                              "Strongly Disagree"))
+
+q15$group <- factor(q15$group, levels = c("Winter 2020", "Spring 2020"))
 ```
 
 ```{r winter 2020 plot q15, include=TRUE}
@@ -1051,6 +1293,11 @@ q15_plots$plots[[1]]
 ### Spring 2020
 ```{r spring 2020 plot q15, include=TRUE}
 q15_plots$plots[[2]]
+```
+
+### Total
+```{r q15 total, include=TRUE}
+total_plot(q15)
 ```
 
 ## I am able to use case history information (e.g., information about etiology) to guide my clinical decision making {.tabset .tabset-fade .tabset-pills}
@@ -1101,6 +1348,16 @@ walk2(paths, q16_plots$plots, ggsave,
       width = 9.5, 
       height = 6.5,
       dpi = 500)
+
+q16 <- unique(q16)
+
+q16$Response <- factor(q16$Response, levels = c("Strongly Agree",
+                                              "Agree",
+                                              "Undecided",
+                                              "Disagree",
+                                              "Strongly Disagree"))
+
+q16$group <- factor(q16$group, levels = c("Winter 2020", "Spring 2020"))
 ```
 
 ```{r winter 2020 plot q16, include=TRUE}
@@ -1110,6 +1367,11 @@ q16_plots$plots[[1]]
 ### Spring 2020
 ```{r spring 2020 plot q16, include=TRUE}
 q16_plots$plots[[2]]
+```
+
+### Total
+```{r q16 total, include=TRUE}
+total_plot(q16)
 ```
 
 ## I feel prepared to orally present cases {.tabset .tabset-fade .tabset-pills}
@@ -1160,6 +1422,16 @@ walk2(paths, q17_plots$plots, ggsave,
       width = 9.5, 
       height = 6.5,
       dpi = 500)
+
+q17 <- unique(q17)
+
+q17$Response <- factor(q17$Response, levels = c("Strongly Agree",
+                                              "Agree",
+                                              "Undecided",
+                                              "Disagree",
+                                              "Strongly Disagree"))
+
+q17$group <- factor(q17$group, levels = c("Winter 2020", "Spring 2020"))
 ```
 
 ```{r winter 2020 plot q17, include=TRUE}
@@ -1169,6 +1441,11 @@ q17_plots$plots[[1]]
 ### Spring 2020
 ```{r spring 2020 plot q17, include=TRUE}
 q17_plots$plots[[2]]
+```
+
+### Total
+```{r q17 total, include=TRUE}
+total_plot(q17)
 ```
 
 ## Training was systematic and well organized (Post-Survey Only) {.tabset .tabset-fade .tabset-pills}
@@ -1215,6 +1492,16 @@ walk2(paths, q18_plots$plots, ggsave,
       width = 9.5, 
       height = 6.5,
       dpi = 500)
+
+q18 <- unique(q18)
+
+q18$Response <- factor(q18$Response, levels = c("Strongly Agree",
+                                              "Agree",
+                                              "Undecided",
+                                              "Disagree",
+                                              "Strongly Disagree"))
+
+q18$group <- factor(q18$group, levels = c("Winter 2020", "Spring 2020"))
 ```
 
 ```{r winter 2020 plot q18, include=TRUE}
@@ -1224,6 +1511,11 @@ q18_plots$plots[[1]]
 ### Spring 2020
 ```{r spring 2020 plot q18, include=TRUE}
 q18_plots$plots[[2]]
+```
+
+### Total
+```{r q18 total, include=TRUE}
+total_plot(q18)
 ```
 
 ## Group meetings enhanced my learning (Post-Survey Only) {.tabset .tabset-fade .tabset-pills}
@@ -1270,6 +1562,16 @@ walk2(paths, q19_plots$plots, ggsave,
       width = 9.5, 
       height = 6.5,
       dpi = 500)
+
+q19 <- unique(q19)
+
+q19$Response <- factor(q19$Response, levels = c("Strongly Agree",
+                                              "Agree",
+                                              "Undecided",
+                                              "Disagree",
+                                              "Strongly Disagree"))
+
+q19$group <- factor(q19$group, levels = c("Winter 2020", "Spring 2020"))
 ```
 
 ```{r winter 2020 plot q19, include=TRUE}
@@ -1279,6 +1581,11 @@ q19_plots$plots[[1]]
 ### Spring 2020
 ```{r spring 2020 plot q19, include=TRUE}
 q19_plots$plots[[2]]
+```
+
+### Total
+```{r q19 total, include=TRUE}
+total_plot(q19)
 ```
 
 ## Group meetings were efficient (Post-Survey Only) {.tabset .tabset-fade .tabset-pills}
@@ -1325,6 +1632,16 @@ walk2(paths, q20_plots$plots, ggsave,
       width = 9.5, 
       height = 6.5,
       dpi = 500)
+
+q20 <- unique(q20)
+
+q20$Response <- factor(q20$Response, levels = c("Strongly Agree",
+                                              "Agree",
+                                              "Undecided",
+                                              "Disagree",
+                                              "Strongly Disagree"))
+
+q20$group <- factor(q20$group, levels = c("Winter 2020", "Spring 2020"))
 ```
 
 ```{r winter 2020 plot q20, include=TRUE}
@@ -1334,6 +1651,11 @@ q20_plots$plots[[1]]
 ### Spring 2020
 ```{r spring 2020 plot q20, include=TRUE}
 q20_plots$plots[[2]]
+```
+
+### Total
+```{r q20 total, include=TRUE}
+total_plot(q20)
 ```
 
 ## Group meetings exposed me to learning about other client profiles and case management techniques (Post-Survey Only) {.tabset .tabset-fade .tabset-pills}
@@ -1380,6 +1702,16 @@ walk2(paths, q21_plots$plots, ggsave,
       width = 9.5, 
       height = 6.5,
       dpi = 500)
+
+q21 <- unique(q21)
+
+q21$Response <- factor(q21$Response, levels = c("Strongly Agree",
+                                              "Agree",
+                                              "Undecided",
+                                              "Disagree",
+                                              "Strongly Disagree"))
+
+q21$group <- factor(q21$group, levels = c("Winter 2020", "Spring 2020"))
 ```
 
 ```{r winter 2020 plot q21, include=TRUE}
@@ -1389,6 +1721,11 @@ q21_plots$plots[[1]]
 ### Spring 2020
 ```{r spring 2020 plot q21, include=TRUE}
 q21_plots$plots[[2]]
+```
+
+### Total
+```{r q21 total, include=TRUE}
+total_plot(q21)
 ```
 
 ## I learned enough about treatment approaches implemented by my peers to be able to implement them with a client even though I never personally delivered the intervention (Post-Survey Only) {.tabset .tabset-fade .tabset-pills}
@@ -1435,6 +1772,16 @@ walk2(paths, q22_plots$plots, ggsave,
       width = 9.5, 
       height = 6.5,
       dpi = 500)
+
+q22 <- unique(q22)
+
+q22$Response <- factor(q22$Response, levels = c("Strongly Agree",
+                                              "Agree",
+                                              "Undecided",
+                                              "Disagree",
+                                              "Strongly Disagree"))
+
+q22$group <- factor(q22$group, levels = c("Winter 2020", "Spring 2020"))
 ```
 
 ```{r winter 2020 plot q22, include=TRUE}
@@ -1444,6 +1791,11 @@ q22_plots$plots[[1]]
 ### Spring 2020
 ```{r spring 2020 plot q22, include=TRUE}
 q22_plots$plots[[2]]
+```
+
+### Total
+```{r q22 total, include=TRUE}
+total_plot(q22)
 ```
 
 ## I was exposed to clients with the same disorder/diagnosis with different manifestations or treatment needs (Post-Survey Only) {.tabset .tabset-fade .tabset-pills}
@@ -1490,6 +1842,16 @@ walk2(paths, q23_plots$plots, ggsave,
       width = 9.5, 
       height = 6.5,
       dpi = 500)
+
+q23 <- unique(q23)
+
+q23$Response <- factor(q23$Response, levels = c("Strongly Agree",
+                                              "Agree",
+                                              "Undecided",
+                                              "Disagree",
+                                              "Strongly Disagree"))
+
+q23$group <- factor(q23$group, levels = c("Winter 2020", "Spring 2020"))
 ```
 
 ```{r winter 2020 plot q23, include=TRUE}
@@ -1499,6 +1861,11 @@ q23_plots$plots[[1]]
 ### Spring 2020
 ```{r spring 2020 plot q23, include=TRUE}
 q23_plots$plots[[2]]
+```
+
+### Total
+```{r q23 total, include=TRUE}
+total_plot(q23)
 ```
 
 ## My supervisor supported my case management and clinical approach (Post-Survey Only) {.tabset .tabset-fade .tabset-pills}
@@ -1545,6 +1912,16 @@ walk2(paths, q24_plots$plots, ggsave,
       width = 9.5, 
       height = 6.5,
       dpi = 500)
+
+q24 <- unique(q24)
+
+q24$Response <- factor(q24$Response, levels = c("Strongly Agree",
+                                              "Agree",
+                                              "Undecided",
+                                              "Disagree",
+                                              "Strongly Disagree"))
+
+q24$group <- factor(q24$group, levels = c("Winter 2020", "Spring 2020"))
 ```
 
 ```{r winter 2020 plot q24, include=TRUE}
@@ -1554,6 +1931,11 @@ q24_plots$plots[[1]]
 ### Spring 2020
 ```{r spring 2020 plot q24, include=TRUE}
 q24_plots$plots[[2]]
+```
+
+### Total
+```{r q24 total, include=TRUE}
+total_plot(q24)
 ```
 
 ## (If you have already taken cognitive rehabilitation course) Because of this clinical experience, I am now able to apply theoretical knowledge and principles in a clinically sound matter (Post-Survey Only) {.tabset .tabset-fade .tabset-pills}
@@ -1600,6 +1982,16 @@ walk2(paths, q25_plots$plots, ggsave,
       width = 9.5, 
       height = 6.5,
       dpi = 500)
+
+q25 <- unique(q25)
+
+q25$Response <- factor(q25$Response, levels = c("Strongly Agree",
+                                              "Agree",
+                                              "Undecided",
+                                              "Disagree",
+                                              "Strongly Disagree"))
+
+q25$group <- factor(q25$group, levels = c("Winter 2020", "Spring 2020"))
 ```
 
 ```{r winter 2020 plot q25, include=TRUE}
@@ -1609,6 +2001,11 @@ q25_plots$plots[[1]]
 ### Spring 2020
 ```{r spring 2020 plot q25, include=TRUE}
 q25_plots$plots[[2]]
+```
+
+### Total
+```{r q25 total, include=TRUE}
+total_plot(q25)
 ```
 
 ## (If you have already taken cognitive rehabilitation course) I had the appropriate knowledge of theories and practice from my coursework to apply to this clinical experience (Post-Survey Only) {.tabset .tabset-fade .tabset-pills}
@@ -1655,6 +2052,16 @@ walk2(paths, q26_plots$plots, ggsave,
       width = 9.5, 
       height = 6.5,
       dpi = 500)
+
+q26 <- unique(q26)
+
+q26$Response <- factor(q26$Response, levels = c("Strongly Agree",
+                                              "Agree",
+                                              "Undecided",
+                                              "Disagree",
+                                              "Strongly Disagree"))
+
+q26$group <- factor(q26$group, levels = c("Winter 2020", "Spring 2020"))
 ```
 
 ```{r winter 2020 plot q26, include=TRUE}
@@ -1664,6 +2071,11 @@ q26_plots$plots[[1]]
 ### Spring 2020
 ```{r spring 2020 plot q26, include=TRUE}
 q26_plots$plots[[2]]
+```
+
+### Total
+```{r q26 total, include=TRUE}
+total_plot(q26)
 ```
 
 ## (If you have not yet taken cognitive rehabilitation course) I feel more prepared about enrolling in class because of this clinical experience (Post-Survey Only) {.tabset .tabset-fade .tabset-pills}
@@ -1710,6 +2122,16 @@ walk2(paths, q27_plots$plots, ggsave,
       width = 9.5, 
       height = 6.5,
       dpi = 500)
+
+q27 <- unique(q27)
+
+q27$Response <- factor(q27$Response, levels = c("Strongly Agree",
+                                              "Agree",
+                                              "Undecided",
+                                              "Disagree",
+                                              "Strongly Disagree"))
+
+q27$group <- factor(q27$group, levels = c("Winter 2020", "Spring 2020"))
 ```
 
 ```{r winter 2020 plot q27, include=TRUE}
@@ -1719,4 +2141,9 @@ q27_plots$plots[[1]]
 ### Spring 2020
 ```{r spring 2020 plot q27, include=TRUE}
 q27_plots$plots[[2]]
+```
+
+### Total
+```{r q27 total, include=TRUE}
+total_plot(q27)
 ```
