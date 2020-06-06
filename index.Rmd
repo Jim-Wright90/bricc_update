@@ -226,6 +226,8 @@ q1$group <- factor(q1$group, levels = c("Winter 2020", "Spring 2020"))
 ggplot(q1, aes(Response)) +
   geom_bar(aes(fill = group), alpha = 0.9) +
   scale_x_discrete(limits = sv_rep) +
+  scale_y_continuous(limits = c(0, 20),
+                     breaks = c(0, 5, 10, 15, 20)) +
   scale_fill_OkabeIto() +
   coord_flip() +
   facet_wrap(~Survey, ncol = 1) +
@@ -236,6 +238,8 @@ total_plot <- function(df) {
   ggplot(df, aes(Response)) +
   geom_bar(aes(fill = group), alpha = 0.9) +
   scale_x_discrete(limits = sv_rep) +
+  scale_y_continuous(limits = c(0, 20),
+                     breaks = c(0, 5, 10, 15, 20)) +  
   scale_fill_OkabeIto() +
   coord_flip() +
   facet_wrap(~Survey, ncol = 1) +
