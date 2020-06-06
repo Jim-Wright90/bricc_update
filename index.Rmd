@@ -115,6 +115,70 @@ walk2(paths, quiz_plots$plots, ggsave,
       width = 9.5, 
       height = 6.5,
       dpi = 500)
+
+head(bricc)
+
+bricc_means <- bricc %>% 
+  select(student_id, student_name, group, term, assessment, score) %>% 
+  group_by(assessment, group) %>% 
+  summarize(average = mean(score)) %>% 
+  mutate_if(is.numeric, ~round(., 2))
+
+bricc_means$group <- factor(bricc_means$group, levels = c("Winter 2020", "Spring 2020"))
+
+mean_plot <- ggplot(bricc_means, aes(assessment, average)) +
+  geom_col(fill = "blue", 
+           alpha = 0.7) +
+  scale_x_discrete(limits = test_order) +
+  scale_y_continuous(limits = c(0,10),
+                     breaks = c(0 ,2, 4, 6, 8, 10)) +
+  coord_flip() +
+  geom_text(aes(assessment, average, label = average),
+            nudge_y = -0.7,
+            color = "white") +
+  facet_wrap(~group) +
+  theme(panel.grid.major.y = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.major.x = element_line(color = "gray80")) +
+  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
+        axis.text = element_text(size = 10),
+        axis.title=element_text(size=10),
+        strip.text = element_text(size = 10)) +
+  labs(x = "",
+       y = "Score",
+       title = "Average Score per Group")
+  
+mean_plot
+
+term_means <- bricc %>% 
+  select(student_id, student_name, group, term, assessment, score) %>% 
+  group_by(assessment, term) %>% 
+  summarize(average = mean(score)) %>% 
+  mutate_if(is.numeric, ~round(., 2))
+
+term_plot <- ggplot(term_means, aes(assessment, average)) +
+  geom_col(fill = "blue", 
+           alpha = 0.7) +
+  scale_x_discrete(limits = test_order) +
+  scale_y_continuous(limits = c(0,10),
+                     breaks = c(0 ,2, 4, 6, 8, 10)) +
+  coord_flip() +
+  geom_text(aes(assessment, average, label = average),
+            nudge_y = -0.7,
+            color = "white") +
+  facet_wrap(~term) +
+  theme(panel.grid.major.y = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.major.x = element_line(color = "gray80")) +
+  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
+        axis.text = element_text(size = 10),
+        axis.title=element_text(size=10),
+        strip.text = element_text(size = 10)) +
+  labs(x = "",
+       y = "Score",
+       title = "Average Score per Term in BrICC")
+  
+term_plot
 ```
 
 # BrICC Assessment {.tabset .tabset-fade .tabset-pills}
@@ -129,6 +193,16 @@ quiz_plots$plots[[1]]
 
 ```{r spring 2020 scores, include=TRUE}
 quiz_plots$plots[[2]]
+```
+
+## Group Average
+```{r group average plot, include=TRUE}
+mean_plot
+```
+
+## Term Average
+```{r term average plot, include=TRUE}
+term_plot
 ```
 
 # BrICC Survey 
