@@ -102,6 +102,7 @@ quiz_plots <- bricc %>%
 
 quiz_plots$plots[[1]]
 quiz_plots$plots[[2]]
+quiz_plots$plots[[3]]
 
 
 fs::dir_create(here::here("plots", "quiz_plots"))
@@ -124,7 +125,9 @@ bricc_means <- bricc %>%
   summarize(average = mean(score)) %>% 
   mutate_if(is.numeric, ~round(., 2))
 
-bricc_means$group <- factor(bricc_means$group, levels = c("Winter 2020", "Spring 2020"))
+bricc_means$group <- factor(bricc_means$group, levels = c("Winter 2020", 
+                                                          "Spring 2020", 
+                                                          "Summer 2020"))
 
 mean_plot <- ggplot(bricc_means, aes(assessment, average)) +
   geom_col(fill = "blue", 
@@ -193,6 +196,11 @@ quiz_plots$plots[[1]]
 
 ```{r spring 2020 scores, include=TRUE}
 quiz_plots$plots[[2]]
+```
+
+## Summer 2020
+```{r summer 2020 scores, include=TRUE}
+quiz_plots$plots[[3]]
 ```
 
 ## Group Average
@@ -265,6 +273,7 @@ q1_plots <- q1 %>%
     title = glue("{.x}"))))
 
 q1_plots$plots[[1]]
+q1_plots$plots[[3]]
 
 fs::dir_create(here::here("plots", "q1"))
 
@@ -294,7 +303,9 @@ sv_rep <- c("Strongly Agree",
             "Disagree",
             "Strongly Disagree")
 
-q1$group <- factor(q1$group, levels = c("Winter 2020", "Spring 2020"))
+q1$group <- factor(q1$group, levels = c("Winter 2020", 
+                                        "Spring 2020",
+                                        "Summer 2020"))
 
 
 ggplot(q1, aes(Response)) +
@@ -317,7 +328,7 @@ total_plot <- function(df) {
   scale_fill_OkabeIto() +
   coord_flip() +
   facet_wrap(~Survey, ncol = 1) +
-    labs(y = "Number of Responses",
+  labs(y = "Number of Responses",
          x = "")
 }
 
@@ -333,8 +344,13 @@ q1_plots$plots[[1]]
 q1_plots$plots[[2]]
 ```
 
+### Summer 2020
+```{r summer 2020 plot, include=TRUE}
+q1_plots$plots[[3]]
+```
+
 ### Total
-```{r q1 total, include=TRUE}
+```{r q1 total, include=TRUE, fig.width=10, fig.height=6}
 total_plot(q1)
 ```
 
@@ -398,7 +414,9 @@ q2$Response <- factor(q2$Response, levels = c("Strongly Agree",
                                               "Disagree",
                                               "Strongly Disagree"))
 
-q2$group <- factor(q2$group, levels = c("Winter 2020", "Spring 2020"))
+q2$group <- factor(q2$group, levels = c("Winter 2020", 
+                                        "Spring 2020",
+                                        "Summer 2020"))
 ```
 
 ```{r winter 2020 plot q2, include=TRUE}
@@ -410,8 +428,13 @@ q2_plots$plots[[1]]
 q2_plots$plots[[2]]
 ```
 
+### Summer 2020
+```{r summer 2020 q2, include=TRUE}
+q2_plots$plots[[3]]
+```
+
 ### Total
-```{r q2 total, include=TRUE}
+```{r q2 total, include=TRUE, fig.width=10, fig.height=6}
 total_plot(q2)
 ```
 
@@ -475,7 +498,9 @@ q3$Response <- factor(q3$Response, levels = c("Strongly Agree",
                                               "Disagree",
                                               "Strongly Disagree"))
 
-q3$group <- factor(q3$group, levels = c("Winter 2020", "Spring 2020"))
+q3$group <- factor(q3$group, levels = c("Winter 2020", 
+                                        "Spring 2020",
+                                        "Summer 2020"))
 ```
 
 ```{r winter 2020 plot q3, include=TRUE}
@@ -487,8 +512,13 @@ q3_plots$plots[[1]]
 q3_plots$plots[[2]]
 ```
 
+### Summer 2020
+```{r summer 2020 q3, include=TRUE}
+q3_plots$plots[[3]]
+```
+
 ### Total
-```{r q3 total, include=TRUE}
+```{r q3 total, include=TRUE, fig.width=10, fig.height=6}
 total_plot(q3)
 ```
 
@@ -552,7 +582,9 @@ q4$Response <- factor(q4$Response, levels = c("Strongly Agree",
                                               "Disagree",
                                               "Strongly Disagree"))
 
-q4$group <- factor(q4$group, levels = c("Winter 2020", "Spring 2020"))
+q4$group <- factor(q4$group, levels = c("Winter 2020",
+                                        "Spring 2020",
+                                        "Summer 2020"))
 ```
 
 ```{r winter 2020 plot q4, include=TRUE}
@@ -564,8 +596,13 @@ q4_plots$plots[[1]]
 q4_plots$plots[[2]]
 ```
 
+### Summer 2020
+```{r summer 2020 q4, include=TRUE}
+q4_plots$plots[[3]]
+```
+
 ### Total
-```{r q4 total, include=TRUE}
+```{r q4 total, include=TRUE, fig.width=10, fig.height=6}
 total_plot(q4)
 ```
 
@@ -629,7 +666,9 @@ q5$Response <- factor(q5$Response, levels = c("Strongly Agree",
                                               "Disagree",
                                               "Strongly Disagree"))
 
-q5$group <- factor(q5$group, levels = c("Winter 2020", "Spring 2020"))
+q5$group <- factor(q5$group, levels = c("Winter 2020",
+                                        "Spring 2020",
+                                        "Summer 2020"))
 ```
 
 ```{r winter 2020 plot q5, include=TRUE}
@@ -641,8 +680,13 @@ q5_plots$plots[[1]]
 q5_plots$plots[[2]]
 ```
 
+### Summer 2020
+```{r summer 2020 q5, include=TRUE}
+q5_plots$plots[[3]]
+```
+
 ### Total
-```{r q5 total, include=TRUE}
+```{r q5 total, include=TRUE, fig.width=10, fig.height=6}
 total_plot(q5)
 ```
 
@@ -703,7 +747,9 @@ q6$Response <- factor(q6$Response, levels = c("Strongly Agree",
                                               "Disagree",
                                               "Strongly Disagree"))
 
-q6$group <- factor(q6$group, levels = c("Winter 2020", "Spring 2020"))
+q6$group <- factor(q6$group, levels = c("Winter 2020",
+                                        "Spring 2020",
+                                        "Summer 2020"))
 ```
 
 ```{r winter 2020 plot q6, include=TRUE}
@@ -715,8 +761,13 @@ q6_plots$plots[[1]]
 q6_plots$plots[[2]]
 ```
 
+### Summer 2020
+```{r summer 2020 q6, include=TRUE}
+q6_plots$plots[[3]]
+```
+
 ### Total
-```{r q6 total, include=TRUE}
+```{r q6 total, include=TRUE, fig.width=10, fig.height=6}
 total_plot(q6)
 ```
 
@@ -777,7 +828,9 @@ q7$Response <- factor(q7$Response, levels = c("Strongly Agree",
                                               "Disagree",
                                               "Strongly Disagree"))
 
-q7$group <- factor(q7$group, levels = c("Winter 2020", "Spring 2020"))
+q7$group <- factor(q7$group, levels = c("Winter 2020",
+                                        "Spring 2020",
+                                        "Summer 2020"))
 ```
 
 ```{r winter 2020 plot q7, include=TRUE}
@@ -789,8 +842,13 @@ q7_plots$plots[[1]]
 q7_plots$plots[[2]]
 ```
 
+### Summer 2020
+```{r summer 2020 q7, include=TRUE}
+q7_plots$plots[[3]]
+```
+
 ### Total
-```{r q7 total, include=TRUE}
+```{r q7 total, include=TRUE, fig.width=10, fig.height=6}
 total_plot(q7)
 ```
 
@@ -851,7 +909,9 @@ q8$Response <- factor(q8$Response, levels = c("Strongly Agree",
                                               "Disagree",
                                               "Strongly Disagree"))
 
-q8$group <- factor(q8$group, levels = c("Winter 2020", "Spring 2020"))
+q8$group <- factor(q8$group, levels = c("Winter 2020",
+                                        "Spring 2020",
+                                        "Summer 2020"))
 ```
 
 ```{r winter 2020 plot q8, include=TRUE}
@@ -863,8 +923,13 @@ q8_plots$plots[[1]]
 q8_plots$plots[[2]]
 ```
 
+### Summer 2020
+```{r summer 2020 q8, include=TRUE}
+q8_plots$plots[[3]]
+```
+
 ### Total
-```{r q8 total, include=TRUE}
+```{r q8 total, include=TRUE, fig.width=10, fig.height=6}
 total_plot(q8)
 ```
 
@@ -925,7 +990,9 @@ q9$Response <- factor(q9$Response, levels = c("Strongly Agree",
                                               "Disagree",
                                               "Strongly Disagree"))
 
-q9$group <- factor(q9$group, levels = c("Winter 2020", "Spring 2020"))
+q9$group <- factor(q9$group, levels = c("Winter 2020",
+                                        "Spring 2020",
+                                        "Summer 2020"))
 ```
 
 ```{r winter 2020 plot q9, include=TRUE}
@@ -937,8 +1004,13 @@ q9_plots$plots[[1]]
 q9_plots$plots[[2]]
 ```
 
+### Summer 2020
+```{r summer 2020 q9, include=TRUE}
+q9_plots$plots[[3]]
+```
+
 ### Total
-```{r q9 total, include=TRUE}
+```{r q9 total, include=TRUE, fig.width=10, fig.height=6}
 total_plot(q9)
 ```
 
@@ -999,7 +1071,9 @@ q10$Response <- factor(q10$Response, levels = c("Strongly Agree",
                                               "Disagree",
                                               "Strongly Disagree"))
 
-q10$group <- factor(q10$group, levels = c("Winter 2020", "Spring 2020"))
+q10$group <- factor(q10$group, levels = c("Winter 2020",
+                                          "Spring 2020",
+                                          "Summer 2020"))
 ```
 
 ```{r winter 2020 plot q10, include=TRUE}
@@ -1011,8 +1085,13 @@ q10_plots$plots[[1]]
 q10_plots$plots[[2]]
 ```
 
+### Summer 2020
+```{r summer 2020 q10, include=TRUE}
+q10_plots$plots[[3]]
+```
+
 ### Total
-```{r q10 total, include=TRUE}
+```{r q10 total, include=TRUE, fig.width=10, fig.height=6}
 total_plot(q10)
 ```
 
@@ -1073,7 +1152,9 @@ q11$Response <- factor(q11$Response, levels = c("Strongly Agree",
                                               "Disagree",
                                               "Strongly Disagree"))
 
-q11$group <- factor(q11$group, levels = c("Winter 2020", "Spring 2020"))
+q11$group <- factor(q11$group, levels = c("Winter 2020",
+                                          "Spring 2020",
+                                          "Summer 2020"))
 ```
 
 ```{r winter 2020 plot q11, include=TRUE}
@@ -1085,8 +1166,13 @@ q11_plots$plots[[1]]
 q11_plots$plots[[2]]
 ```
 
+### Summer 2020
+```{r summer 2020 q11, include=TRUE}
+q11_plots$plots[[3]]
+```
+
 ### Total
-```{r q11 total, include=TRUE}
+```{r q11 total, include=TRUE, fig.width=10, fig.height=6}
 total_plot(q11)
 ```
 
@@ -1147,7 +1233,9 @@ q12$Response <- factor(q12$Response, levels = c("Strongly Agree",
                                               "Disagree",
                                               "Strongly Disagree"))
 
-q12$group <- factor(q12$group, levels = c("Winter 2020", "Spring 2020"))
+q12$group <- factor(q12$group, levels = c("Winter 2020",
+                                          "Spring 2020",
+                                          "Summer 2020"))
 ```
 
 ```{r winter 2020 plot q12, include=TRUE}
@@ -1159,8 +1247,13 @@ q12_plots$plots[[1]]
 q12_plots$plots[[2]]
 ```
 
+### Summer 2020
+```{r summer 2020 q12, include=TRUE}
+q12_plots$plots[[3]]
+```
+
 ### Total
-```{r q12 total, include=TRUE}
+```{r q12 total, include=TRUE, fig.width=10, fig.height=6}
 total_plot(q12)
 ```
 
@@ -1221,7 +1314,9 @@ q13$Response <- factor(q13$Response, levels = c("Strongly Agree",
                                               "Disagree",
                                               "Strongly Disagree"))
 
-q13$group <- factor(q13$group, levels = c("Winter 2020", "Spring 2020"))
+q13$group <- factor(q13$group, levels = c("Winter 2020",
+                                          "Spring 2020",
+                                          "Summer 2020"))
 ```
 
 ```{r winter 2020 plot q13, include=TRUE}
@@ -1233,8 +1328,13 @@ q13_plots$plots[[1]]
 q13_plots$plots[[2]]
 ```
 
+### Summer 2020
+```{r summer 2020 q13, include=TRUE}
+q13_plots$plots[[3]]
+```
+
 ### Total
-```{r q13 total, include=TRUE}
+```{r q13 total, include=TRUE, fig.width=10, fig.height=6}
 total_plot(q13)
 ```
 
@@ -1295,7 +1395,9 @@ q14$Response <- factor(q14$Response, levels = c("Strongly Agree",
                                               "Disagree",
                                               "Strongly Disagree"))
 
-q14$group <- factor(q14$group, levels = c("Winter 2020", "Spring 2020"))
+q14$group <- factor(q14$group, levels = c("Winter 2020",
+                                          "Spring 2020",
+                                          "Summer 2020"))
 ```
 
 ```{r winter 2020 plot q14, include=TRUE}
@@ -1307,8 +1409,13 @@ q14_plots$plots[[1]]
 q14_plots$plots[[2]]
 ```
 
+### Summer 2020
+```{r summer 2020 q14, include=TRUE}
+q14_plots$plots[[3]]
+```
+
 ### Total
-```{r q14 total, include=TRUE}
+```{r q14 total, include=TRUE, fig.width=10, fig.height=6}
 total_plot(q14)
 ```
 
@@ -1369,7 +1476,9 @@ q15$Response <- factor(q15$Response, levels = c("Strongly Agree",
                                               "Disagree",
                                               "Strongly Disagree"))
 
-q15$group <- factor(q15$group, levels = c("Winter 2020", "Spring 2020"))
+q15$group <- factor(q15$group, levels = c("Winter 2020",
+                                          "Spring 2020",
+                                          "Summer 2020"))
 ```
 
 ```{r winter 2020 plot q15, include=TRUE}
@@ -1381,8 +1490,13 @@ q15_plots$plots[[1]]
 q15_plots$plots[[2]]
 ```
 
+### Summer 2020
+```{r summer 2020 q15, include=TRUE}
+q15_plots$plots[[3]]
+```
+
 ### Total
-```{r q15 total, include=TRUE}
+```{r q15 total, include=TRUE, fig.width=10, fig.height=6}
 total_plot(q15)
 ```
 
@@ -1443,7 +1557,9 @@ q16$Response <- factor(q16$Response, levels = c("Strongly Agree",
                                               "Disagree",
                                               "Strongly Disagree"))
 
-q16$group <- factor(q16$group, levels = c("Winter 2020", "Spring 2020"))
+q16$group <- factor(q16$group, levels = c("Winter 2020",
+                                          "Spring 2020",
+                                          "Summer 2020"))
 ```
 
 ```{r winter 2020 plot q16, include=TRUE}
@@ -1455,8 +1571,13 @@ q16_plots$plots[[1]]
 q16_plots$plots[[2]]
 ```
 
+### Summer 2020
+```{r summer 2020 q16, include=TRUE}
+q16_plots$plots[[3]]
+```
+
 ### Total
-```{r q16 total, include=TRUE}
+```{r q16 total, include=TRUE, fig.width=10, fig.height=6}
 total_plot(q16)
 ```
 
@@ -1517,7 +1638,9 @@ q17$Response <- factor(q17$Response, levels = c("Strongly Agree",
                                               "Disagree",
                                               "Strongly Disagree"))
 
-q17$group <- factor(q17$group, levels = c("Winter 2020", "Spring 2020"))
+q17$group <- factor(q17$group, levels = c("Winter 2020",
+                                          "Spring 2020",
+                                          "Summer 2020"))
 ```
 
 ```{r winter 2020 plot q17, include=TRUE}
@@ -1529,8 +1652,13 @@ q17_plots$plots[[1]]
 q17_plots$plots[[2]]
 ```
 
+### Summer 2020
+```{r summer 2020 q17, include=TRUE}
+q17_plots$plots[[3]]
+```
+
 ### Total
-```{r q17 total, include=TRUE}
+```{r q17 total, include=TRUE, fig.width=10, fig.height=6}
 total_plot(q17)
 ```
 
@@ -1600,7 +1728,7 @@ q18_plots$plots[[2]]
 ```
 
 ### Total
-```{r q18 total, include=TRUE}
+```{r q18 total, include=TRUE, fig.width=10, fig.height=6}
 total_plot(q18)
 ```
 
@@ -1670,7 +1798,7 @@ q19_plots$plots[[2]]
 ```
 
 ### Total
-```{r q19 total, include=TRUE}
+```{r q19 total, include=TRUE, fig.width=10, fig.height=6}
 total_plot(q19)
 ```
 
@@ -1740,7 +1868,7 @@ q20_plots$plots[[2]]
 ```
 
 ### Total
-```{r q20 total, include=TRUE}
+```{r q20 total, include=TRUE, fig.width=10, fig.height=6}
 total_plot(q20)
 ```
 
@@ -1810,7 +1938,7 @@ q21_plots$plots[[2]]
 ```
 
 ### Total
-```{r q21 total, include=TRUE}
+```{r q21 total, include=TRUE, fig.width=10, fig.height=6}
 total_plot(q21)
 ```
 
@@ -1880,7 +2008,7 @@ q22_plots$plots[[2]]
 ```
 
 ### Total
-```{r q22 total, include=TRUE}
+```{r q22 total, include=TRUE, fig.width=10, fig.height=6}
 total_plot(q22)
 ```
 
@@ -1950,7 +2078,7 @@ q23_plots$plots[[2]]
 ```
 
 ### Total
-```{r q23 total, include=TRUE}
+```{r q23 total, include=TRUE, fig.width=10, fig.height=6}
 total_plot(q23)
 ```
 
@@ -2020,7 +2148,7 @@ q24_plots$plots[[2]]
 ```
 
 ### Total
-```{r q24 total, include=TRUE}
+```{r q24 total, include=TRUE, fig.width=10, fig.height=6}
 total_plot(q24)
 ```
 
@@ -2090,7 +2218,7 @@ q25_plots$plots[[2]]
 ```
 
 ### Total
-```{r q25 total, include=TRUE}
+```{r q25 total, include=TRUE, fig.width=10, fig.height=6}
 total_plot(q25)
 ```
 
@@ -2160,7 +2288,7 @@ q26_plots$plots[[2]]
 ```
 
 ### Total
-```{r q26 total, include=TRUE}
+```{r q26 total, include=TRUE, fig.width=10, fig.height=6}
 total_plot(q26)
 ```
 
@@ -2230,6 +2358,6 @@ q27_plots$plots[[2]]
 ```
 
 ### Total
-```{r q27 total, include=TRUE}
+```{r q27 total, include=TRUE, fig.width=10, fig.height=6}
 total_plot(q27)
 ```
