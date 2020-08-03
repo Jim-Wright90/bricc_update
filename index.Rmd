@@ -29,7 +29,7 @@ library(plotly)
 library(glue)
 library(fs)
 
-theme_set(theme_minimal(20) +
+theme_set(theme_minimal(15) +
             theme(legend.position = "bottom",
                   panel.grid.major.x = element_line(colour = "gray60"),
                   panel.grid.minor.x = element_blank(),
@@ -92,10 +92,7 @@ quiz_plots <- bricc %>%
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
         panel.grid.major.x = element_line(color = "gray80")) +
-  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
-        axis.text = element_text(size = 10),
-        axis.title=element_text(size=10),
-        strip.text = element_text(size = 10)) +
+  theme(plot.title = element_text(color = "black", face = "bold", hjust = 0.5)) +
   labs(x = "",
        y = "Score",
        title = glue("{.x}"))))
@@ -143,10 +140,7 @@ mean_plot <- ggplot(bricc_means, aes(assessment, average)) +
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
         panel.grid.major.x = element_line(color = "gray80")) +
-  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
-        axis.text = element_text(size = 10),
-        axis.title=element_text(size=10),
-        strip.text = element_text(size = 10)) +
+  theme(plot.title = element_text(color = "black", face = "bold", hjust = 0.5)) +
   labs(x = "",
        y = "Score",
        title = "Average Score per Group")
@@ -173,10 +167,7 @@ term_plot <- ggplot(term_means, aes(assessment, average)) +
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
         panel.grid.major.x = element_line(color = "gray80")) +
-  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
-        axis.text = element_text(size = 10),
-        axis.title=element_text(size=10),
-        strip.text = element_text(size = 10)) +
+  theme(plot.title = element_text(color = "black", face = "bold", hjust = 0.5)) +
   labs(x = "",
        y = "Score",
        title = "Average Score per Term in BrICC")
@@ -262,12 +253,8 @@ q1_plots <- q1 %>%
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
         panel.grid.major.x = element_line(color = "gray80")) +
-  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
-        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
-        axis.text = element_text(size = 10),
-        axis.title=element_text(size=10),
-        strip.text = element_text(size = 10),
-        plot.caption = element_text(size = 10)) +
+  theme(plot.title = element_text(color = "black", face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
     title = glue("{.x}"))))
@@ -382,12 +369,8 @@ q2_plots <- q2 %>%
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
         panel.grid.major.x = element_line(color = "gray80")) +
-  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
-        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
-        axis.text = element_text(size = 10),
-        axis.title=element_text(size=10),
-        strip.text = element_text(size = 10),
-        plot.caption = element_text(size = 10)) +
+  theme(plot.title = element_text(color = "black", face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
     title = glue("{.x}"))))
@@ -466,12 +449,8 @@ q3_plots <- q3 %>%
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
         panel.grid.major.x = element_line(color = "gray80")) +
-  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
-        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
-        axis.text = element_text(size = 10),
-        axis.title=element_text(size=10),
-        strip.text = element_text(size = 10),
-        plot.caption = element_text(size = 10)) +
+  theme(plot.title = element_text(color = "black", face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
     title = glue("{.x}"))))
@@ -550,12 +529,8 @@ q4_plots <- q4 %>%
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
         panel.grid.major.x = element_line(color = "gray80")) +
-  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
-        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
-        axis.text = element_text(size = 10),
-        axis.title=element_text(size=10),
-        strip.text = element_text(size = 10),
-        plot.caption = element_text(size = 10)) +
+  theme(plot.title = element_text(color = "black", face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
     title = glue("{.x}"))))
@@ -634,12 +609,8 @@ q5_plots <- q5 %>%
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
         panel.grid.major.x = element_line(color = "gray80")) +
-  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
-        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
-        axis.text = element_text(size = 10),
-        axis.title=element_text(size=10),
-        strip.text = element_text(size = 10),
-        plot.caption = element_text(size = 10)) +
+  theme(plot.title = element_text(color = "black", face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
     title = glue("{.x}"))))
@@ -718,12 +689,8 @@ q6_plots <- q6 %>%
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
         panel.grid.major.x = element_line(color = "gray80")) +
-  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
-        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
-        axis.text = element_text(size = 10),
-        axis.title=element_text(size=10),
-        strip.text = element_text(size = 10),
-        plot.caption = element_text(size = 10)) +
+  theme(plot.title = element_text(color = "black", face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
     title = glue("{.x}"))))
@@ -799,12 +766,8 @@ q7_plots <- q7 %>%
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
         panel.grid.major.x = element_line(color = "gray80")) +
-  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
-        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
-        axis.text = element_text(size = 10),
-        axis.title=element_text(size=10),
-        strip.text = element_text(size = 10),
-        plot.caption = element_text(size = 10)) +
+  theme(plot.title = element_text(color = "black", face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
     title = glue("{.x}"))))
@@ -880,12 +843,8 @@ q8_plots <- q8 %>%
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
         panel.grid.major.x = element_line(color = "gray80")) +
-  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
-        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
-        axis.text = element_text(size = 10),
-        axis.title=element_text(size=10),
-        strip.text = element_text(size = 10),
-        plot.caption = element_text(size = 10)) +
+  theme(plot.title = element_text(color = "black", face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
     title = glue("{.x}"))))
@@ -961,12 +920,8 @@ q9_plots <- q9 %>%
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
         panel.grid.major.x = element_line(color = "gray80")) +
-  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
-        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
-        axis.text = element_text(size = 10),
-        axis.title=element_text(size=10),
-        strip.text = element_text(size = 10),
-        plot.caption = element_text(size = 10)) +
+  theme(plot.title = element_text(color = "black", face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
     title = glue("{.x}"))))
@@ -1042,12 +997,8 @@ q10_plots <- q10 %>%
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
         panel.grid.major.x = element_line(color = "gray80")) +
-  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
-        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
-        axis.text = element_text(size = 10),
-        axis.title=element_text(size=10),
-        strip.text = element_text(size = 10),
-        plot.caption = element_text(size = 10)) +
+  theme(plot.title = element_text(color = "black", face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
     title = glue("{.x}"))))
@@ -1123,12 +1074,8 @@ q11_plots <- q11 %>%
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
         panel.grid.major.x = element_line(color = "gray80")) +
-  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
-        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
-        axis.text = element_text(size = 10),
-        axis.title=element_text(size=10),
-        strip.text = element_text(size = 10),
-        plot.caption = element_text(size = 10)) +
+  theme(plot.title = element_text(color = "black", face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
     title = glue("{.x}"))))
@@ -1204,12 +1151,8 @@ q12_plots <- q12 %>%
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
         panel.grid.major.x = element_line(color = "gray80")) +
-  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
-        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
-        axis.text = element_text(size = 10),
-        axis.title=element_text(size=10),
-        strip.text = element_text(size = 10),
-        plot.caption = element_text(size = 10)) +
+  theme(plot.title = element_text(color = "black", face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
     title = glue("{.x}"))))
@@ -1285,12 +1228,8 @@ q13_plots <- q13 %>%
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
         panel.grid.major.x = element_line(color = "gray80")) +
-  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
-        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
-        axis.text = element_text(size = 10),
-        axis.title=element_text(size=10),
-        strip.text = element_text(size = 10),
-        plot.caption = element_text(size = 10)) +
+  theme(plot.title = element_text(color = "black", face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
     title = glue("{.x}"))))
@@ -1366,12 +1305,8 @@ q14_plots <- q14 %>%
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
         panel.grid.major.x = element_line(color = "gray80")) +
-  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
-        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
-        axis.text = element_text(size = 10),
-        axis.title=element_text(size=10),
-        strip.text = element_text(size = 10),
-        plot.caption = element_text(size = 10)) +
+  theme(plot.title = element_text(color = "black", face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
     title = glue("{.x}"))))
@@ -1447,12 +1382,8 @@ q15_plots <- q15 %>%
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
         panel.grid.major.x = element_line(color = "gray80")) +
-  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
-        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
-        axis.text = element_text(size = 10),
-        axis.title=element_text(size=10),
-        strip.text = element_text(size = 10),
-        plot.caption = element_text(size = 10)) +
+  theme(plot.title = element_text(color = "black", face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
     title = glue("{.x}"))))
@@ -1528,12 +1459,8 @@ q16_plots <- q16 %>%
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
         panel.grid.major.x = element_line(color = "gray80")) +
-  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
-        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
-        axis.text = element_text(size = 10),
-        axis.title=element_text(size=10),
-        strip.text = element_text(size = 10),
-        plot.caption = element_text(size = 10)) +
+  theme(plot.title = element_text(color = "black", face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
     title = glue("{.x}"))))
@@ -1609,12 +1536,8 @@ q17_plots <- q17 %>%
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
         panel.grid.major.x = element_line(color = "gray80")) +
-  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
-        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
-        axis.text = element_text(size = 10),
-        axis.title=element_text(size=10),
-        strip.text = element_text(size = 10),
-        plot.caption = element_text(size = 10)) +
+  theme(plot.title = element_text(color = "black", face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
     title = glue("{.x}"))))
@@ -1686,12 +1609,8 @@ q18_plots <- q18 %>%
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
         panel.grid.major.x = element_line(color = "gray80")) +
-  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
-        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
-        axis.text = element_text(size = 10),
-        axis.title=element_text(size=10),
-        strip.text = element_text(size = 10),
-        plot.caption = element_text(size = 10)) +
+  theme(plot.title = element_text(color = "black", face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
     title = glue("{.x}"))))
@@ -1715,7 +1634,9 @@ q18$Response <- factor(q18$Response, levels = c("Strongly Agree",
                                               "Disagree",
                                               "Strongly Disagree"))
 
-q18$group <- factor(q18$group, levels = c("Winter 2020", "Spring 2020"))
+q18$group <- factor(q18$group, levels = c("Winter 2020", 
+                                          "Spring 2020",
+                                          "Summer 2020"))
 ```
 
 ```{r winter 2020 plot q18, include=TRUE, fig.width=10, fig.height=6}
@@ -1725,6 +1646,11 @@ q18_plots$plots[[1]]
 ### Spring 2020
 ```{r spring 2020 plot q18, include=TRUE, fig.width=10, fig.height=6}
 q18_plots$plots[[2]]
+```
+
+### Summer 2020
+```{r summer 2020 plot q18, include=TRUE, fig.width=10, fig.height=6}
+q18_plots$plots[[3]]
 ```
 
 ### Total
@@ -1756,12 +1682,8 @@ q19_plots <- q19 %>%
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
         panel.grid.major.x = element_line(color = "gray80")) +
-  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
-        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
-        axis.text = element_text(size = 10),
-        axis.title=element_text(size=10),
-        strip.text = element_text(size = 10),
-        plot.caption = element_text(size = 10)) +
+  theme(plot.title = element_text(color = "black", face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
     title = glue("{.x}"))))
@@ -1785,7 +1707,9 @@ q19$Response <- factor(q19$Response, levels = c("Strongly Agree",
                                               "Disagree",
                                               "Strongly Disagree"))
 
-q19$group <- factor(q19$group, levels = c("Winter 2020", "Spring 2020"))
+q19$group <- factor(q19$group, levels = c("Winter 2020",
+                                          "Spring 2020",
+                                          "Summer 2020"))
 ```
 
 ```{r winter 2020 plot q19, include=TRUE, fig.width=10, fig.height=6}
@@ -1795,6 +1719,11 @@ q19_plots$plots[[1]]
 ### Spring 2020
 ```{r spring 2020 plot q19, include=TRUE, fig.width=10, fig.height=6}
 q19_plots$plots[[2]]
+```
+
+### Summer 2020
+```{r summer 2020 plot q19, include=TRUE, fig.width=10, fig.height=6}
+q19_plots$plots[[3]]
 ```
 
 ### Total
@@ -1826,12 +1755,8 @@ q20_plots <- q20 %>%
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
         panel.grid.major.x = element_line(color = "gray80")) +
-  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
-        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
-        axis.text = element_text(size = 10),
-        axis.title=element_text(size=10),
-        strip.text = element_text(size = 10),
-        plot.caption = element_text(size = 10)) +
+  theme(plot.title = element_text(color = "black", face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
     title = glue("{.x}"))))
@@ -1855,7 +1780,9 @@ q20$Response <- factor(q20$Response, levels = c("Strongly Agree",
                                               "Disagree",
                                               "Strongly Disagree"))
 
-q20$group <- factor(q20$group, levels = c("Winter 2020", "Spring 2020"))
+q20$group <- factor(q20$group, levels = c("Winter 2020",
+                                          "Spring 2020",
+                                          "Summer 2020"))
 ```
 
 ```{r winter 2020 plot q20, include=TRUE, fig.width=10, fig.height=6}
@@ -1865,6 +1792,11 @@ q20_plots$plots[[1]]
 ### Spring 2020
 ```{r spring 2020 plot q20, include=TRUE, fig.width=10, fig.height=6}
 q20_plots$plots[[2]]
+```
+
+### Summer 2020
+```{r summer 2020 plot q20, include=TRUE, fig.width=10, fig.height=6}
+q20_plots$plots[[3]]
 ```
 
 ### Total
@@ -1896,12 +1828,8 @@ q21_plots <- q21 %>%
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
         panel.grid.major.x = element_line(color = "gray80")) +
-  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
-        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
-        axis.text = element_text(size = 10),
-        axis.title=element_text(size=10),
-        strip.text = element_text(size = 10),
-        plot.caption = element_text(size = 10)) +
+  theme(plot.title = element_text(color = "black", face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
     title = glue("{.x}"))))
@@ -1925,7 +1853,9 @@ q21$Response <- factor(q21$Response, levels = c("Strongly Agree",
                                               "Disagree",
                                               "Strongly Disagree"))
 
-q21$group <- factor(q21$group, levels = c("Winter 2020", "Spring 2020"))
+q21$group <- factor(q21$group, levels = c("Winter 2020",
+                                          "Spring 2020",
+                                          "Summer 2020"))
 ```
 
 ```{r winter 2020 plot q21, include=TRUE, fig.width=10, fig.height=6}
@@ -1935,6 +1865,11 @@ q21_plots$plots[[1]]
 ### Spring 2020
 ```{r spring 2020 plot q21, include=TRUE, fig.width=10, fig.height=6}
 q21_plots$plots[[2]]
+```
+
+### Summer 2020
+```{r summer 2020 plot q21, include=TRUE, fig.width=10, fig.height=6}
+q21_plots$plots[[3]]
 ```
 
 ### Total
@@ -1966,12 +1901,8 @@ q22_plots <- q22 %>%
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
         panel.grid.major.x = element_line(color = "gray80")) +
-  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
-        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
-        axis.text = element_text(size = 10),
-        axis.title=element_text(size=10),
-        strip.text = element_text(size = 10),
-        plot.caption = element_text(size = 10)) +
+  theme(plot.title = element_text(color = "black", face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
     title = glue("{.x}"))))
@@ -1995,7 +1926,9 @@ q22$Response <- factor(q22$Response, levels = c("Strongly Agree",
                                               "Disagree",
                                               "Strongly Disagree"))
 
-q22$group <- factor(q22$group, levels = c("Winter 2020", "Spring 2020"))
+q22$group <- factor(q22$group, levels = c("Winter 2020",
+                                          "Spring 2020",
+                                          "Summer 2020"))
 ```
 
 ```{r winter 2020 plot q22, include=TRUE, fig.width=10, fig.height=6}
@@ -2005,6 +1938,11 @@ q22_plots$plots[[1]]
 ### Spring 2020
 ```{r spring 2020 plot q22, include=TRUE, fig.width=10, fig.height=6}
 q22_plots$plots[[2]]
+```
+
+### Summer 2020
+```{r summer 2020 plot q22, include=TRUE, fig.width=10, fig.height=6}
+q22_plots$plots[[3]]
 ```
 
 ### Total
@@ -2036,12 +1974,8 @@ q23_plots <- q23 %>%
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
         panel.grid.major.x = element_line(color = "gray80")) +
-  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
-        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
-        axis.text = element_text(size = 10),
-        axis.title=element_text(size=10),
-        strip.text = element_text(size = 10),
-        plot.caption = element_text(size = 10)) +
+  theme(plot.title = element_text(color = "black", face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
     title = glue("{.x}"))))
@@ -2065,7 +1999,9 @@ q23$Response <- factor(q23$Response, levels = c("Strongly Agree",
                                               "Disagree",
                                               "Strongly Disagree"))
 
-q23$group <- factor(q23$group, levels = c("Winter 2020", "Spring 2020"))
+q23$group <- factor(q23$group, levels = c("Winter 2020",
+                                          "Spring 2020",
+                                          "Summer 2020"))
 ```
 
 ```{r winter 2020 plot q23, include=TRUE, fig.width=10, fig.height=6}
@@ -2075,6 +2011,11 @@ q23_plots$plots[[1]]
 ### Spring 2020
 ```{r spring 2020 plot q23, include=TRUE, fig.width=10, fig.height=6}
 q23_plots$plots[[2]]
+```
+
+### Summer 2020
+```{r summer 2020 plot q23, include=TRUE, fig.width=10, fig.height=6}
+q23_plots$plots[[3]]
 ```
 
 ### Total
@@ -2106,12 +2047,8 @@ q24_plots <- q24 %>%
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
         panel.grid.major.x = element_line(color = "gray80")) +
-  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
-        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
-        axis.text = element_text(size = 10),
-        axis.title=element_text(size=10),
-        strip.text = element_text(size = 10),
-        plot.caption = element_text(size = 10)) +
+  theme(plot.title = element_text(color = "black", face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
     title = glue("{.x}"))))
@@ -2135,7 +2072,9 @@ q24$Response <- factor(q24$Response, levels = c("Strongly Agree",
                                               "Disagree",
                                               "Strongly Disagree"))
 
-q24$group <- factor(q24$group, levels = c("Winter 2020", "Spring 2020"))
+q24$group <- factor(q24$group, levels = c("Winter 2020",
+                                          "Spring 2020",
+                                          "Summer 2020"))
 ```
 
 ```{r winter 2020 plot q24, include=TRUE, fig.width=10, fig.height=6}
@@ -2145,6 +2084,11 @@ q24_plots$plots[[1]]
 ### Spring 2020
 ```{r spring 2020 plot q24, include=TRUE, fig.width=10, fig.height=6}
 q24_plots$plots[[2]]
+```
+
+### Summer 2020
+```{r summer 2020 plot q24, include=TRUE, fig.width=10, fig.height=6}
+q24_plots$plots[[3]]
 ```
 
 ### Total
@@ -2176,12 +2120,8 @@ q25_plots <- q25 %>%
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
         panel.grid.major.x = element_line(color = "gray80")) +
-  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
-        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
-        axis.text = element_text(size = 10),
-        axis.title=element_text(size=10),
-        strip.text = element_text(size = 10),
-        plot.caption = element_text(size = 10)) +
+  theme(plot.title = element_text(color = "black", face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
     title = glue("{.x}"))))
@@ -2205,7 +2145,9 @@ q25$Response <- factor(q25$Response, levels = c("Strongly Agree",
                                               "Disagree",
                                               "Strongly Disagree"))
 
-q25$group <- factor(q25$group, levels = c("Winter 2020", "Spring 2020"))
+q25$group <- factor(q25$group, levels = c("Winter 2020",
+                                          "Spring 2020",
+                                          "Summer 2020"))
 ```
 
 ```{r winter 2020 plot q25, include=TRUE, fig.width=10, fig.height=6}
@@ -2215,6 +2157,11 @@ q25_plots$plots[[1]]
 ### Spring 2020
 ```{r spring 2020 plot q25, include=TRUE, fig.width=10, fig.height=6}
 q25_plots$plots[[2]]
+```
+
+### Summer 2020
+```{r summer 2020 plot q25, include=TRUE, fig.width=10, fig.height=6}
+q25_plots$plots[[3]]
 ```
 
 ### Total
@@ -2246,12 +2193,8 @@ q26_plots <- q26 %>%
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
         panel.grid.major.x = element_line(color = "gray80")) +
-  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
-        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
-        axis.text = element_text(size = 10),
-        axis.title=element_text(size=10),
-        strip.text = element_text(size = 10),
-        plot.caption = element_text(size = 10)) +
+  theme(plot.title = element_text(color = "black", face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
     title = glue("{.x}"))))
@@ -2275,7 +2218,9 @@ q26$Response <- factor(q26$Response, levels = c("Strongly Agree",
                                               "Disagree",
                                               "Strongly Disagree"))
 
-q26$group <- factor(q26$group, levels = c("Winter 2020", "Spring 2020"))
+q26$group <- factor(q26$group, levels = c("Winter 2020",
+                                          "Spring 2020",
+                                          "Summer 2020"))
 ```
 
 ```{r winter 2020 plot q26, include=TRUE, fig.width=10, fig.height=6}
@@ -2285,6 +2230,11 @@ q26_plots$plots[[1]]
 ### Spring 2020
 ```{r spring 2020 plot q26, include=TRUE, fig.width=10, fig.height=6}
 q26_plots$plots[[2]]
+```
+
+### Summer 2020
+```{r summer 2020 plot q26, include=TRUE, fig.width=10, fig.height=6}
+q26_plots$plots[[3]]
 ```
 
 ### Total
@@ -2316,12 +2266,8 @@ q27_plots <- q27 %>%
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
         panel.grid.major.x = element_line(color = "gray80")) +
-  theme(plot.title = element_text(color = "black", size = 12, face = "bold", hjust = 0.5),
-        plot.subtitle = element_text(color = "black", size = 10, face = "bold"),
-        axis.text = element_text(size = 10),
-        axis.title=element_text(size=10),
-        strip.text = element_text(size = 10),
-        plot.caption = element_text(size = 10)) +
+  theme(plot.title = element_text(color = "black", face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
     title = glue("{.x}"))))
@@ -2345,7 +2291,9 @@ q27$Response <- factor(q27$Response, levels = c("Strongly Agree",
                                               "Disagree",
                                               "Strongly Disagree"))
 
-q27$group <- factor(q27$group, levels = c("Winter 2020", "Spring 2020"))
+q27$group <- factor(q27$group, levels = c("Winter 2020",
+                                          "Spring 2020",
+                                          "Summer 2020"))
 ```
 
 ```{r winter 2020 plot q27, include=TRUE, fig.width=10, fig.height=6}
@@ -2356,6 +2304,12 @@ q27_plots$plots[[1]]
 ```{r spring 2020 plot q27, include=TRUE, fig.width=10, fig.height=6}
 q27_plots$plots[[2]]
 ```
+
+### Summer 2020
+```{r summer 2020 plot q27, include=TRUE, fig.width=10, fig.height=6}
+q27_plots$plots[[2]]
+```
+
 
 ### Total
 ```{r q27 total, include=TRUE, fig.width=10, fig.height=6}
