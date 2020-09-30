@@ -116,36 +116,38 @@ walk2(paths, quiz_plots$plots, ggsave,
 
 head(bricc)
 
-bricc_means <- bricc %>% 
-  select(student_id, student_name, group, term, assessment, score) %>% 
-  group_by(assessment, group) %>% 
-  summarize(average = mean(score)) %>% 
-  mutate_if(is.numeric, ~round(., 2))
+#bricc_means <- bricc %>% 
+  #select(student_id, student_name, group, term, assessment, score) %>% 
+  #group_by(assessment, group) %>% 
+  #summarize(average = mean(score)) %>% 
+  #mutate_if(is.numeric, ~round(., 2))
 
-bricc_means$group <- factor(bricc_means$group, levels = c("Winter 2020", 
-                                                          "Spring 2020", 
-                                                          "Summer 2020"))
+#bricc_means$group <- factor(bricc_means$group, levels = c("Winter 2020", 
+                                                          #"Spring 2020", 
+                                                          #"Summer 2020",
+                                                          #"Fall 2020 2nd Years",
+                                                          #"Fall 2020 1st Years"))
 
-mean_plot <- ggplot(bricc_means, aes(assessment, average)) +
-  geom_col(fill = "blue", 
-           alpha = 0.7) +
-  scale_x_discrete(limits = test_order) +
-  scale_y_continuous(limits = c(0,10),
-                     breaks = c(0 ,2, 4, 6, 8, 10)) +
-  coord_flip() +
-  geom_text(aes(assessment, average, label = average),
-            nudge_y = -0.7,
-            color = "white") +
-  facet_wrap(~group) +
-  theme(panel.grid.major.y = element_blank(),
-        panel.grid.minor.x = element_blank(),
-        panel.grid.major.x = element_line(color = "gray80")) +
-  theme(plot.title = element_text(color = "black", face = "bold", hjust = 0.5)) +
-  labs(x = "",
-       y = "Score",
-       title = "Average Score per Group")
+#mean_plot <- ggplot(bricc_means, aes(assessment, average)) +
+  #geom_col(fill = "blue", 
+          # alpha = 0.7) +
+  #scale_x_discrete(limits = test_order) +
+  #scale_y_continuous(limits = c(0,10),
+                     #breaks = c(0 ,2, 4, 6, 8, 10)) +
+  #coord_flip() +
+  #geom_text(aes(assessment, average, label = average),
+            #nudge_y = -0.7,
+            #color = "white") +
+  #facet_wrap(~group) +
+  #theme(panel.grid.major.y = element_blank(),
+       # panel.grid.minor.x = element_blank(),
+        #panel.grid.major.x = element_line(color = "gray80")) +
+ # theme(plot.title = element_text(color = "black", face = "bold", hjust = 0.5)) +
+  #labs(x = "",
+       #y = "Score",
+       #title = "Average Score per Group")
   
-mean_plot
+#mean_plot
 
 term_means <- bricc %>% 
   select(student_id, student_name, group, term, assessment, score) %>% 
@@ -190,13 +192,19 @@ quiz_plots$plots[[2]]
 ```
 
 ## Summer 2020
+
 ```{r summer 2020 scores, include=TRUE, fig.width=10, fig.height=6}
 quiz_plots$plots[[3]]
 ```
 
-## Group Average
-```{r group average plot, include=TRUE, fig.width=10, fig.height=6}
-mean_plot
+## Fall 2020 2nd Years
+```{r, include=TRUE, fig.width=10, fig.height=6}
+quiz_plots$plots[[4]]
+```
+
+## Fall 2020 1st Years
+```{r, include=TRUE, fig.width=10, fig.height=6}
+quiz_plots$plots[[5]]
 ```
 
 ## Term Average
@@ -249,6 +257,7 @@ q1_plots <- q1 %>%
   ~ggplot(..2, aes(Response, student_name)) +
   geom_line(aes(group = student_name), color = "gray40") +
   geom_point(aes(color = Survey)) +
+  scale_color_OkabeIto() +
   scale_x_discrete(limits = survey_resp) +
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
@@ -257,6 +266,7 @@ q1_plots <- q1 %>%
         plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
+       color = NULL,
     title = glue("{.x}"))))
 
 q1_plots$plots[[1]]
@@ -292,8 +302,11 @@ sv_rep <- c("Strongly Agree",
 
 q1$group <- factor(q1$group, levels = c("Winter 2020", 
                                         "Spring 2020",
-                                        "Summer 2020"))
+                                        "Summer 2020",
+                                        "Fall 2020 2nd Years",
+                                        "Fall 2020 1st Years"))
 
+str(q1)
 
 ggplot(q1, aes(Response)) +
   geom_bar(aes(fill = group), alpha = 0.9) +
@@ -304,11 +317,25 @@ ggplot(q1, aes(Response)) +
   coord_flip() +
   facet_wrap(~Survey, ncol = 1) +
     labs(y = "Number of Responses",
-         x = "")
+         x = "",
+         color = NULL)
+
+ggplot(q1, aes(Response)) +
+  geom_bar(aes(fill = term), alpha = 0.9) +
+  scale_x_discrete(limits = sv_rep) +
+  scale_y_continuous(limits = c(0, 20),
+                     breaks = c(0, 5, 10, 15, 20)) +
+  scale_fill_OkabeIto() +
+  coord_flip() +
+  facet_wrap(~Survey, ncol = 1) +
+    labs(y = "Number of Responses",
+         x = "",
+         color = NULL,
+         title = "")
 
 total_plot <- function(df) {
   ggplot(df, aes(Response)) +
-  geom_bar(aes(fill = group), alpha = 0.9) +
+  geom_bar(aes(fill = term), alpha = 0.9) +
   scale_x_discrete(limits = sv_rep) +
   scale_y_continuous(limits = c(0, 20),
                      breaks = c(0, 5, 10, 15, 20)) +  
@@ -334,6 +361,16 @@ q1_plots$plots[[2]]
 ### Summer 2020
 ```{r summer 2020 plot, include=TRUE, fig.width=10, fig.height=6}
 q1_plots$plots[[3]]
+```
+
+### Fall 2020 2nd Years
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q1_plots$plots[[4]]
+```
+
+### Fall 2020 1st Years
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q1_plots$plots[[5]]
 ```
 
 ### Total
@@ -365,6 +402,7 @@ q2_plots <- q2 %>%
   ~ggplot(..2, aes(Response, student_name)) +
   geom_line(aes(group = student_name), color = "gray40") +
   geom_point(aes(color = Survey)) +
+    scale_color_OkabeIto() +
   scale_x_discrete(limits = survey_resp) +
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
@@ -373,6 +411,7 @@ q2_plots <- q2 %>%
         plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
+       color = NULL,
     title = glue("{.x}"))))
 
 q2_plots$plots[[1]]
@@ -399,7 +438,8 @@ q2$Response <- factor(q2$Response, levels = c("Strongly Agree",
 
 q2$group <- factor(q2$group, levels = c("Winter 2020", 
                                         "Spring 2020",
-                                        "Summer 2020"))
+                                        "Summer 2020",
+                                        "Fall 2020"))
 ```
 
 ```{r winter 2020 plot q2, include=TRUE, fig.width=10, fig.height=6}
@@ -414,6 +454,16 @@ q2_plots$plots[[2]]
 ### Summer 2020
 ```{r summer 2020 q2, include=TRUE, fig.width=10, fig.height=6}
 q2_plots$plots[[3]]
+```
+
+### Fall 2020 2nd Years
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q2_plots$plots[[4]]
+```
+
+### Fall 2020 1st Years
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q2_plots$plots[[5]]
 ```
 
 ### Total
@@ -445,6 +495,7 @@ q3_plots <- q3 %>%
   ~ggplot(..2, aes(Response, student_name)) +
   geom_line(aes(group = student_name), color = "gray40") +
   geom_point(aes(color = Survey)) +
+  scale_color_OkabeIto() +
   scale_x_discrete(limits = survey_resp) +
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
@@ -453,6 +504,7 @@ q3_plots <- q3 %>%
         plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
+       color = NULL,
     title = glue("{.x}"))))
 
 q3_plots$plots[[1]]
@@ -477,9 +529,6 @@ q3$Response <- factor(q3$Response, levels = c("Strongly Agree",
                                               "Disagree",
                                               "Strongly Disagree"))
 
-q3$group <- factor(q3$group, levels = c("Winter 2020", 
-                                        "Spring 2020",
-                                        "Summer 2020"))
 ```
 
 ```{r winter 2020 plot q3, include=TRUE, fig.width=10, fig.height=6}
@@ -494,6 +543,16 @@ q3_plots$plots[[2]]
 ### Summer 2020
 ```{r summer 2020 q3, include=TRUE, fig.width=10, fig.height=6}
 q3_plots$plots[[3]]
+```
+
+### Fall 2020 2nd Years
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q3_plots$plots[[4]]
+```
+
+### Fall 2020 1st Years
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q3_plots$plots[[5]]
 ```
 
 ### Total
@@ -525,6 +584,7 @@ q4_plots <- q4 %>%
   ~ggplot(..2, aes(Response, student_name)) +
   geom_line(aes(group = student_name), color = "gray40") +
   geom_point(aes(color = Survey)) +
+  scale_color_OkabeIto() +
   scale_x_discrete(limits = survey_resp) +
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
@@ -533,6 +593,7 @@ q4_plots <- q4 %>%
         plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
+       color = NULL,
     title = glue("{.x}"))))
 
 q4_plots$plots[[1]]
@@ -557,9 +618,7 @@ q4$Response <- factor(q4$Response, levels = c("Strongly Agree",
                                               "Disagree",
                                               "Strongly Disagree"))
 
-q4$group <- factor(q4$group, levels = c("Winter 2020",
-                                        "Spring 2020",
-                                        "Summer 2020"))
+
 ```
 
 ```{r winter 2020 plot q4, include=TRUE, fig.width=10, fig.height=6}
@@ -574,6 +633,16 @@ q4_plots$plots[[2]]
 ### Summer 2020
 ```{r summer 2020 q4, include=TRUE, fig.width=10, fig.height=6}
 q4_plots$plots[[3]]
+```
+
+### Fall 2020 2nd Years
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q4_plots$plots[[4]]
+```
+
+### Fall 2020 1st Years
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q4_plots$plots[[5]]
 ```
 
 ### Total
@@ -605,6 +674,7 @@ q5_plots <- q5 %>%
   ~ggplot(..2, aes(Response, student_name)) +
   geom_line(aes(group = student_name), color = "gray40") +
   geom_point(aes(color = Survey)) +
+  scale_color_OkabeIto() +
   scale_x_discrete(limits = survey_resp) +
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
@@ -613,6 +683,7 @@ q5_plots <- q5 %>%
         plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
+       color = NULL,
     title = glue("{.x}"))))
 
 q5_plots$plots[[1]]
@@ -637,9 +708,6 @@ q5$Response <- factor(q5$Response, levels = c("Strongly Agree",
                                               "Disagree",
                                               "Strongly Disagree"))
 
-q5$group <- factor(q5$group, levels = c("Winter 2020",
-                                        "Spring 2020",
-                                        "Summer 2020"))
 ```
 
 ```{r winter 2020 plot q5, include=TRUE, fig.width=10, fig.height=6}
@@ -654,6 +722,16 @@ q5_plots$plots[[2]]
 ### Summer 2020
 ```{r summer 2020 q5, include=TRUE, fig.width=10, fig.height=6}
 q5_plots$plots[[3]]
+```
+
+### Fall 2020 2nd Years
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q5_plots$plots[[4]]
+```
+
+### Fall 2020 1st Years
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q5_plots$plots[[5]]
 ```
 
 ### Total
@@ -685,6 +763,7 @@ q6_plots <- q6 %>%
   ~ggplot(..2, aes(Response, student_name)) +
   geom_line(aes(group = student_name), color = "gray40") +
   geom_point(aes(color = Survey)) +
+  scale_color_OkabeIto() +
   scale_x_discrete(limits = survey_resp) +
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
@@ -693,6 +772,7 @@ q6_plots <- q6 %>%
         plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
+       color = NULL,
     title = glue("{.x}"))))
 
 fs::dir_create(here::here("plots", "q6"))
@@ -714,9 +794,6 @@ q6$Response <- factor(q6$Response, levels = c("Strongly Agree",
                                               "Disagree",
                                               "Strongly Disagree"))
 
-q6$group <- factor(q6$group, levels = c("Winter 2020",
-                                        "Spring 2020",
-                                        "Summer 2020"))
 ```
 
 ```{r winter 2020 plot q6, include=TRUE, fig.width=10, fig.height=6}
@@ -731,6 +808,16 @@ q6_plots$plots[[2]]
 ### Summer 2020
 ```{r summer 2020 q6, include=TRUE, fig.width=10, fig.height=6}
 q6_plots$plots[[3]]
+```
+
+### Fall 2020 2nd Years
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q6_plots$plots[[4]]
+```
+
+### Fall 2020 1st Years
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q6_plots$plots[[5]]
 ```
 
 ### Total
@@ -762,6 +849,7 @@ q7_plots <- q7 %>%
   ~ggplot(..2, aes(Response, student_name)) +
   geom_line(aes(group = student_name), color = "gray40") +
   geom_point(aes(color = Survey)) +
+  scale_color_OkabeIto() +
   scale_x_discrete(limits = survey_resp) +
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
@@ -770,6 +858,7 @@ q7_plots <- q7 %>%
         plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
+       color = NULL,
     title = glue("{.x}"))))
 
 fs::dir_create(here::here("plots", "q7"))
@@ -791,9 +880,6 @@ q7$Response <- factor(q7$Response, levels = c("Strongly Agree",
                                               "Disagree",
                                               "Strongly Disagree"))
 
-q7$group <- factor(q7$group, levels = c("Winter 2020",
-                                        "Spring 2020",
-                                        "Summer 2020"))
 ```
 
 ```{r winter 2020 plot q7, include=TRUE, fig.width=10, fig.height=6}
@@ -808,6 +894,16 @@ q7_plots$plots[[2]]
 ### Summer 2020
 ```{r summer 2020 q7, include=TRUE, fig.width=10, fig.height=6}
 q7_plots$plots[[3]]
+```
+
+### Fall 2020 2nd Years
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q7_plots$plots[[4]]
+```
+
+### Fall 2020 1st Years
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q7_plots$plots[[5]]
 ```
 
 ### Total
@@ -839,6 +935,7 @@ q8_plots <- q8 %>%
   ~ggplot(..2, aes(Response, student_name)) +
   geom_line(aes(group = student_name), color = "gray40") +
   geom_point(aes(color = Survey)) +
+  scale_color_OkabeIto() +
   scale_x_discrete(limits = survey_resp) +
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
@@ -847,6 +944,7 @@ q8_plots <- q8 %>%
         plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
+       color = NULL,
     title = glue("{.x}"))))
 
 fs::dir_create(here::here("plots", "q8"))
@@ -868,9 +966,6 @@ q8$Response <- factor(q8$Response, levels = c("Strongly Agree",
                                               "Disagree",
                                               "Strongly Disagree"))
 
-q8$group <- factor(q8$group, levels = c("Winter 2020",
-                                        "Spring 2020",
-                                        "Summer 2020"))
 ```
 
 ```{r winter 2020 plot q8, include=TRUE, fig.width=10, fig.height=6}
@@ -885,6 +980,16 @@ q8_plots$plots[[2]]
 ### Summer 2020
 ```{r summer 2020 q8, include=TRUE, fig.width=10, fig.height=6}
 q8_plots$plots[[3]]
+```
+
+### Fall 2020 2nd Years
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q8_plots$plots[[4]]
+```
+
+### Fall 2020 1st Years
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q8_plots$plots[[5]]
 ```
 
 ### Total
@@ -916,6 +1021,7 @@ q9_plots <- q9 %>%
   ~ggplot(..2, aes(Response, student_name)) +
   geom_line(aes(group = student_name), color = "gray40") +
   geom_point(aes(color = Survey)) +
+  scale_color_OkabeIto() +
   scale_x_discrete(limits = survey_resp) +
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
@@ -924,6 +1030,7 @@ q9_plots <- q9 %>%
         plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
+       color = NULL,
     title = glue("{.x}"))))
 
 fs::dir_create(here::here("plots", "q9"))
@@ -945,9 +1052,6 @@ q9$Response <- factor(q9$Response, levels = c("Strongly Agree",
                                               "Disagree",
                                               "Strongly Disagree"))
 
-q9$group <- factor(q9$group, levels = c("Winter 2020",
-                                        "Spring 2020",
-                                        "Summer 2020"))
 ```
 
 ```{r winter 2020 plot q9, include=TRUE, fig.width=10, fig.height=6}
@@ -962,6 +1066,16 @@ q9_plots$plots[[2]]
 ### Summer 2020
 ```{r summer 2020 q9, include=TRUE, fig.width=10, fig.height=6}
 q9_plots$plots[[3]]
+```
+
+### Fall 2020 2nd Years
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q9_plots$plots[[4]]
+```
+
+### Fall 2020 1st Years
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q9_plots$plots[[5]]
 ```
 
 ### Total
@@ -993,6 +1107,7 @@ q10_plots <- q10 %>%
   ~ggplot(..2, aes(Response, student_name)) +
   geom_line(aes(group = student_name), color = "gray40") +
   geom_point(aes(color = Survey)) +
+  scale_color_OkabeIto() +
   scale_x_discrete(limits = survey_resp) +
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
@@ -1001,6 +1116,7 @@ q10_plots <- q10 %>%
         plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
+       color = NULL,
     title = glue("{.x}"))))
 
 fs::dir_create(here::here("plots", "q10"))
@@ -1022,9 +1138,6 @@ q10$Response <- factor(q10$Response, levels = c("Strongly Agree",
                                               "Disagree",
                                               "Strongly Disagree"))
 
-q10$group <- factor(q10$group, levels = c("Winter 2020",
-                                          "Spring 2020",
-                                          "Summer 2020"))
 ```
 
 ```{r winter 2020 plot q10, include=TRUE, fig.width=10, fig.height=6}
@@ -1039,6 +1152,16 @@ q10_plots$plots[[2]]
 ### Summer 2020
 ```{r summer 2020 q10, include=TRUE, fig.width=10, fig.height=6}
 q10_plots$plots[[3]]
+```
+
+### Fall 2020 2nd Years
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q10_plots$plots[[4]]
+```
+
+### Fall 2020 1st Years
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q10_plots$plots[[5]]
 ```
 
 ### Total
@@ -1070,6 +1193,7 @@ q11_plots <- q11 %>%
   ~ggplot(..2, aes(Response, student_name)) +
   geom_line(aes(group = student_name), color = "gray40") +
   geom_point(aes(color = Survey)) +
+  scale_color_OkabeIto() +
   scale_x_discrete(limits = survey_resp) +
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
@@ -1078,6 +1202,7 @@ q11_plots <- q11 %>%
         plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
+       color = NULL,
     title = glue("{.x}"))))
 
 fs::dir_create(here::here("plots", "q11"))
@@ -1099,9 +1224,6 @@ q11$Response <- factor(q11$Response, levels = c("Strongly Agree",
                                               "Disagree",
                                               "Strongly Disagree"))
 
-q11$group <- factor(q11$group, levels = c("Winter 2020",
-                                          "Spring 2020",
-                                          "Summer 2020"))
 ```
 
 ```{r winter 2020 plot q11, include=TRUE, fig.width=10, fig.height=6}
@@ -1116,6 +1238,16 @@ q11_plots$plots[[2]]
 ### Summer 2020
 ```{r summer 2020 q11, include=TRUE, fig.width=10, fig.height=6}
 q11_plots$plots[[3]]
+```
+
+### Fall 2020 2nd Years
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q11_plots$plots[[4]]
+```
+
+### Fall 2020 1st Years
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q11_plots$plots[[5]]
 ```
 
 ### Total
@@ -1147,6 +1279,7 @@ q12_plots <- q12 %>%
   ~ggplot(..2, aes(Response, student_name)) +
   geom_line(aes(group = student_name), color = "gray40") +
   geom_point(aes(color = Survey)) +
+  scale_color_OkabeIto() +
   scale_x_discrete(limits = survey_resp) +
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
@@ -1155,6 +1288,7 @@ q12_plots <- q12 %>%
         plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
+       color = NULL,
     title = glue("{.x}"))))
 
 fs::dir_create(here::here("plots", "q12"))
@@ -1176,9 +1310,6 @@ q12$Response <- factor(q12$Response, levels = c("Strongly Agree",
                                               "Disagree",
                                               "Strongly Disagree"))
 
-q12$group <- factor(q12$group, levels = c("Winter 2020",
-                                          "Spring 2020",
-                                          "Summer 2020"))
 ```
 
 ```{r winter 2020 plot q12, include=TRUE, fig.width=10, fig.height=6}
@@ -1193,6 +1324,16 @@ q12_plots$plots[[2]]
 ### Summer 2020
 ```{r summer 2020 q12, include=TRUE, fig.width=10, fig.height=6}
 q12_plots$plots[[3]]
+```
+
+### Fall 2020 2nd Years
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q12_plots$plots[[4]]
+```
+
+### Fall 2020 1st Years
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q12_plots$plots[[5]]
 ```
 
 ### Total
@@ -1224,6 +1365,7 @@ q13_plots <- q13 %>%
   ~ggplot(..2, aes(Response, student_name)) +
   geom_line(aes(group = student_name), color = "gray40") +
   geom_point(aes(color = Survey)) +
+  scale_color_OkabeIto() +
   scale_x_discrete(limits = survey_resp) +
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
@@ -1232,6 +1374,7 @@ q13_plots <- q13 %>%
         plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
+       color = NULL,
     title = glue("{.x}"))))
 
 fs::dir_create(here::here("plots", "q13"))
@@ -1253,9 +1396,6 @@ q13$Response <- factor(q13$Response, levels = c("Strongly Agree",
                                               "Disagree",
                                               "Strongly Disagree"))
 
-q13$group <- factor(q13$group, levels = c("Winter 2020",
-                                          "Spring 2020",
-                                          "Summer 2020"))
 ```
 
 ```{r winter 2020 plot q13, include=TRUE, fig.width=10, fig.height=6}
@@ -1270,6 +1410,16 @@ q13_plots$plots[[2]]
 ### Summer 2020
 ```{r summer 2020 q13, include=TRUE, fig.width=10, fig.height=6}
 q13_plots$plots[[3]]
+```
+
+### Fall 2020 2nd Years
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q13_plots$plots[[4]]
+```
+
+### Fall 2020 1st Years
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q13_plots$plots[[5]]
 ```
 
 ### Total
@@ -1301,6 +1451,7 @@ q14_plots <- q14 %>%
   ~ggplot(..2, aes(Response, student_name)) +
   geom_line(aes(group = student_name), color = "gray40") +
   geom_point(aes(color = Survey)) +
+  scale_color_OkabeIto() +
   scale_x_discrete(limits = survey_resp) +
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
@@ -1309,6 +1460,7 @@ q14_plots <- q14 %>%
         plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
+       color = NULL,
     title = glue("{.x}"))))
 
 fs::dir_create(here::here("plots", "q14"))
@@ -1330,9 +1482,6 @@ q14$Response <- factor(q14$Response, levels = c("Strongly Agree",
                                               "Disagree",
                                               "Strongly Disagree"))
 
-q14$group <- factor(q14$group, levels = c("Winter 2020",
-                                          "Spring 2020",
-                                          "Summer 2020"))
 ```
 
 ```{r winter 2020 plot q14, include=TRUE, fig.width=10, fig.height=6}
@@ -1347,6 +1496,16 @@ q14_plots$plots[[2]]
 ### Summer 2020
 ```{r summer 2020 q14, include=TRUE, fig.width=10, fig.height=6}
 q14_plots$plots[[3]]
+```
+
+### Fall 2020 2nd Years
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q14_plots$plots[[4]]
+```
+
+### Fall 2020 1st Years
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q14_plots$plots[[5]]
 ```
 
 ### Total
@@ -1378,6 +1537,7 @@ q15_plots <- q15 %>%
   ~ggplot(..2, aes(Response, student_name)) +
   geom_line(aes(group = student_name), color = "gray40") +
   geom_point(aes(color = Survey)) +
+  scale_color_OkabeIto() +
   scale_x_discrete(limits = survey_resp) +
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
@@ -1386,6 +1546,7 @@ q15_plots <- q15 %>%
         plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
+       color = NULL,
     title = glue("{.x}"))))
 
 fs::dir_create(here::here("plots", "q15"))
@@ -1407,9 +1568,6 @@ q15$Response <- factor(q15$Response, levels = c("Strongly Agree",
                                               "Disagree",
                                               "Strongly Disagree"))
 
-q15$group <- factor(q15$group, levels = c("Winter 2020",
-                                          "Spring 2020",
-                                          "Summer 2020"))
 ```
 
 ```{r winter 2020 plot q15, include=TRUE, fig.width=10, fig.height=6}
@@ -1424,6 +1582,16 @@ q15_plots$plots[[2]]
 ### Summer 2020
 ```{r summer 2020 q15, include=TRUE, fig.width=10, fig.height=6}
 q15_plots$plots[[3]]
+```
+
+### Fall 2020 2nd Years
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q15_plots$plots[[4]]
+```
+
+### Fall 2020 1st Years
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q15_plots$plots[[5]]
 ```
 
 ### Total
@@ -1455,6 +1623,7 @@ q16_plots <- q16 %>%
   ~ggplot(..2, aes(Response, student_name)) +
   geom_line(aes(group = student_name), color = "gray40") +
   geom_point(aes(color = Survey)) +
+  scale_color_OkabeIto() +
   scale_x_discrete(limits = survey_resp) +
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
@@ -1463,6 +1632,7 @@ q16_plots <- q16 %>%
         plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
+       color = NULL,
     title = glue("{.x}"))))
 
 fs::dir_create(here::here("plots", "q16"))
@@ -1483,10 +1653,6 @@ q16$Response <- factor(q16$Response, levels = c("Strongly Agree",
                                               "Undecided",
                                               "Disagree",
                                               "Strongly Disagree"))
-
-q16$group <- factor(q16$group, levels = c("Winter 2020",
-                                          "Spring 2020",
-                                          "Summer 2020"))
 ```
 
 ```{r winter 2020 plot q16, include=TRUE, fig.width=10, fig.height=6}
@@ -1501,6 +1667,16 @@ q16_plots$plots[[2]]
 ### Summer 2020
 ```{r summer 2020 q16, include=TRUE, fig.width=10, fig.height=6}
 q16_plots$plots[[3]]
+```
+
+### Fall 2020 2nd Years
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q16_plots$plots[[4]]
+```
+
+### Fall 2020 1st Years
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q16_plots$plots[[5]]
 ```
 
 ### Total
@@ -1532,6 +1708,7 @@ q17_plots <- q17 %>%
   ~ggplot(..2, aes(Response, student_name)) +
   geom_line(aes(group = student_name), color = "gray40") +
   geom_point(aes(color = Survey)) +
+  scale_color_OkabeIto() +
   scale_x_discrete(limits = survey_resp) +
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
@@ -1540,6 +1717,7 @@ q17_plots <- q17 %>%
         plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
+       color = NULL,
     title = glue("{.x}"))))
 
 fs::dir_create(here::here("plots", "q17"))
@@ -1561,9 +1739,6 @@ q17$Response <- factor(q17$Response, levels = c("Strongly Agree",
                                               "Disagree",
                                               "Strongly Disagree"))
 
-q17$group <- factor(q17$group, levels = c("Winter 2020",
-                                          "Spring 2020",
-                                          "Summer 2020"))
 ```
 
 ```{r winter 2020 plot q17, include=TRUE, fig.width=10, fig.height=6}
@@ -1578,6 +1753,16 @@ q17_plots$plots[[2]]
 ### Summer 2020
 ```{r summer 2020 q17, include=TRUE, fig.width=10, fig.height=6}
 q17_plots$plots[[3]]
+```
+
+### Fall 2020 2nd Years
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q17_plots$plots[[4]]
+```
+
+### Fall 2020 1st Years
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q17_plots$plots[[5]]
 ```
 
 ### Total
@@ -1605,6 +1790,7 @@ q18_plots <- q18 %>%
   ~ggplot(..2, aes(Response, student_name)) +
   geom_line(aes(group = student_name), color = "gray40") +
   geom_point(aes(color = Survey)) +
+  scale_color_OkabeIto() +
   scale_x_discrete(limits = survey_resp) +
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
@@ -1613,6 +1799,7 @@ q18_plots <- q18 %>%
         plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
+       color = NULL,
     title = glue("{.x}"))))
 
 fs::dir_create(here::here("plots", "q18"))
@@ -1678,6 +1865,7 @@ q19_plots <- q19 %>%
   ~ggplot(..2, aes(Response, student_name)) +
   geom_line(aes(group = student_name), color = "gray40") +
   geom_point(aes(color = Survey)) +
+  scale_color_OkabeIto() +
   scale_x_discrete(limits = survey_resp) +
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
@@ -1686,6 +1874,7 @@ q19_plots <- q19 %>%
         plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
+       color = NULL,
     title = glue("{.x}"))))
 
 fs::dir_create(here::here("plots", "q19"))
@@ -1707,9 +1896,6 @@ q19$Response <- factor(q19$Response, levels = c("Strongly Agree",
                                               "Disagree",
                                               "Strongly Disagree"))
 
-q19$group <- factor(q19$group, levels = c("Winter 2020",
-                                          "Spring 2020",
-                                          "Summer 2020"))
 ```
 
 ```{r winter 2020 plot q19, include=TRUE, fig.width=10, fig.height=6}
@@ -1751,6 +1937,7 @@ q20_plots <- q20 %>%
   ~ggplot(..2, aes(Response, student_name)) +
   geom_line(aes(group = student_name), color = "gray40") +
   geom_point(aes(color = Survey)) +
+  scale_color_OkabeIto() +
   scale_x_discrete(limits = survey_resp) +
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
@@ -1759,6 +1946,7 @@ q20_plots <- q20 %>%
         plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
+       color = NULL,
     title = glue("{.x}"))))
 
 fs::dir_create(here::here("plots", "q20"))
@@ -1780,9 +1968,6 @@ q20$Response <- factor(q20$Response, levels = c("Strongly Agree",
                                               "Disagree",
                                               "Strongly Disagree"))
 
-q20$group <- factor(q20$group, levels = c("Winter 2020",
-                                          "Spring 2020",
-                                          "Summer 2020"))
 ```
 
 ```{r winter 2020 plot q20, include=TRUE, fig.width=10, fig.height=6}
@@ -1824,6 +2009,7 @@ q21_plots <- q21 %>%
   ~ggplot(..2, aes(Response, student_name)) +
   geom_line(aes(group = student_name), color = "gray40") +
   geom_point(aes(color = Survey)) +
+  scale_color_OkabeIto() +
   scale_x_discrete(limits = survey_resp) +
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
@@ -1832,6 +2018,7 @@ q21_plots <- q21 %>%
         plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
+       color = NULL,
     title = glue("{.x}"))))
 
 fs::dir_create(here::here("plots", "q21"))
@@ -1853,9 +2040,6 @@ q21$Response <- factor(q21$Response, levels = c("Strongly Agree",
                                               "Disagree",
                                               "Strongly Disagree"))
 
-q21$group <- factor(q21$group, levels = c("Winter 2020",
-                                          "Spring 2020",
-                                          "Summer 2020"))
 ```
 
 ```{r winter 2020 plot q21, include=TRUE, fig.width=10, fig.height=6}
@@ -1897,6 +2081,7 @@ q22_plots <- q22 %>%
   ~ggplot(..2, aes(Response, student_name)) +
   geom_line(aes(group = student_name), color = "gray40") +
   geom_point(aes(color = Survey)) +
+  scale_color_OkabeIto() +
   scale_x_discrete(limits = survey_resp) +
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
@@ -1905,6 +2090,7 @@ q22_plots <- q22 %>%
         plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
+       color = NULL,
     title = glue("{.x}"))))
 
 fs::dir_create(here::here("plots", "q22"))
@@ -1926,9 +2112,6 @@ q22$Response <- factor(q22$Response, levels = c("Strongly Agree",
                                               "Disagree",
                                               "Strongly Disagree"))
 
-q22$group <- factor(q22$group, levels = c("Winter 2020",
-                                          "Spring 2020",
-                                          "Summer 2020"))
 ```
 
 ```{r winter 2020 plot q22, include=TRUE, fig.width=10, fig.height=6}
@@ -1970,6 +2153,7 @@ q23_plots <- q23 %>%
   ~ggplot(..2, aes(Response, student_name)) +
   geom_line(aes(group = student_name), color = "gray40") +
   geom_point(aes(color = Survey)) +
+  scale_color_OkabeIto() +
   scale_x_discrete(limits = survey_resp) +
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
@@ -1978,6 +2162,7 @@ q23_plots <- q23 %>%
         plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
+       color = NULL,
     title = glue("{.x}"))))
 
 fs::dir_create(here::here("plots", "q23"))
@@ -1999,9 +2184,6 @@ q23$Response <- factor(q23$Response, levels = c("Strongly Agree",
                                               "Disagree",
                                               "Strongly Disagree"))
 
-q23$group <- factor(q23$group, levels = c("Winter 2020",
-                                          "Spring 2020",
-                                          "Summer 2020"))
 ```
 
 ```{r winter 2020 plot q23, include=TRUE, fig.width=10, fig.height=6}
@@ -2043,6 +2225,7 @@ q24_plots <- q24 %>%
   ~ggplot(..2, aes(Response, student_name)) +
   geom_line(aes(group = student_name), color = "gray40") +
   geom_point(aes(color = Survey)) +
+  scale_color_OkabeIto() +
   scale_x_discrete(limits = survey_resp) +
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
@@ -2051,6 +2234,7 @@ q24_plots <- q24 %>%
         plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
+       color = NULL,
     title = glue("{.x}"))))
 
 fs::dir_create(here::here("plots", "q24"))
@@ -2072,9 +2256,6 @@ q24$Response <- factor(q24$Response, levels = c("Strongly Agree",
                                               "Disagree",
                                               "Strongly Disagree"))
 
-q24$group <- factor(q24$group, levels = c("Winter 2020",
-                                          "Spring 2020",
-                                          "Summer 2020"))
 ```
 
 ```{r winter 2020 plot q24, include=TRUE, fig.width=10, fig.height=6}
@@ -2116,6 +2297,7 @@ q25_plots <- q25 %>%
   ~ggplot(..2, aes(Response, student_name)) +
   geom_line(aes(group = student_name), color = "gray40") +
   geom_point(aes(color = Survey)) +
+  scale_color_OkabeIto() +
   scale_x_discrete(limits = survey_resp) +
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
@@ -2124,6 +2306,7 @@ q25_plots <- q25 %>%
         plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
+       color = NULL,
     title = glue("{.x}"))))
 
 fs::dir_create(here::here("plots", "q25"))
@@ -2145,9 +2328,6 @@ q25$Response <- factor(q25$Response, levels = c("Strongly Agree",
                                               "Disagree",
                                               "Strongly Disagree"))
 
-q25$group <- factor(q25$group, levels = c("Winter 2020",
-                                          "Spring 2020",
-                                          "Summer 2020"))
 ```
 
 ```{r winter 2020 plot q25, include=TRUE, fig.width=10, fig.height=6}
@@ -2189,6 +2369,7 @@ q26_plots <- q26 %>%
   ~ggplot(..2, aes(Response, student_name)) +
   geom_line(aes(group = student_name), color = "gray40") +
   geom_point(aes(color = Survey)) +
+  scale_color_OkabeIto() +
   scale_x_discrete(limits = survey_resp) +
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
@@ -2197,6 +2378,7 @@ q26_plots <- q26 %>%
         plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
+       color = NULL,
     title = glue("{.x}"))))
 
 fs::dir_create(here::here("plots", "q26"))
@@ -2218,9 +2400,6 @@ q26$Response <- factor(q26$Response, levels = c("Strongly Agree",
                                               "Disagree",
                                               "Strongly Disagree"))
 
-q26$group <- factor(q26$group, levels = c("Winter 2020",
-                                          "Spring 2020",
-                                          "Summer 2020"))
 ```
 
 ```{r winter 2020 plot q26, include=TRUE, fig.width=10, fig.height=6}
@@ -2262,6 +2441,7 @@ q27_plots <- q27 %>%
   ~ggplot(..2, aes(Response, student_name)) +
   geom_line(aes(group = student_name), color = "gray40") +
   geom_point(aes(color = Survey)) +
+  scale_color_OkabeIto() +
   scale_x_discrete(limits = survey_resp) +
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
@@ -2270,6 +2450,7 @@ q27_plots <- q27 %>%
         plot.subtitle = element_text(color = "black", face = "bold")) +
   labs(x = "",
        y = "",
+       color = NULL,
     title = glue("{.x}"))))
 
 fs::dir_create(here::here("plots", "q27"))
@@ -2291,9 +2472,6 @@ q27$Response <- factor(q27$Response, levels = c("Strongly Agree",
                                               "Disagree",
                                               "Strongly Disagree"))
 
-q27$group <- factor(q27$group, levels = c("Winter 2020",
-                                          "Spring 2020",
-                                          "Summer 2020"))
 ```
 
 ```{r winter 2020 plot q27, include=TRUE, fig.width=10, fig.height=6}
