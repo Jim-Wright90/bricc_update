@@ -62,7 +62,78 @@ bricc <- import(here("data", "bricc.sav"),
 head(bricc)
 names(bricc)
 
+bricc_demo <- import(here("data", "bricc.sav"),
+               setclass = "tbl_df") %>% 
+  characterize() %>% 
+  janitor::clean_names() 
+
+head(bricc_demo)
+
 ```
+
+# Student Information {.tabset .tabset-fade .tabset-pills}
+
+```{r, include=FALSE}
+
+term_total <- bricc_demo %>% 
+  count(term)
+
+term_total_plot <- ggplot(term_total, aes(term, n)) +
+  geom_col(fill = "blue",
+           alpha = 0.7) +
+  geom_text(aes(term, n, label = n), 
+            nudge_y = -3,
+            color = "white") +
+  theme(panel.grid.major.y = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.major.x = element_line(color = "gray80")) +
+  theme(plot.title = element_text(color = "black", face = "bold", hjust = 0.5)) +
+  labs(x = "",
+       y = "Total",
+       title = "Number of Students per Term")
+
+group_total <- bricc_demo %>% 
+  count(group)
+  
+group_order <- c("Fall 2020 2nd Years",
+                 "Fall 2020 1st Years",
+                 "Summer 2020",
+                 "Spring 2020",
+                 "Winter 2020")
+
+group_plot <- ggplot(group_total, aes(group, n)) +
+  geom_col(fill = "blue", 
+           alpha = 0.7) +
+  scale_x_discrete(limits = group_order) +
+  scale_y_continuous(limits = c(0,10),
+                     breaks = c(0 ,2, 4, 6, 8, 10)) +
+  coord_flip() +
+  geom_text(aes(group, n, label = n),
+            nudge_y = -0.7,
+            color = "white") +
+  theme(panel.grid.major.y = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.major.x = element_line(color = "gray80")) +
+  theme(plot.title = element_text(color = "black", face = "bold", hjust = 0.5)) +
+  labs(x = "",
+       y = "Total",
+       title = "Number of Students per Group")
+  
+group_plot
+```
+
+## Students Per Term
+
+```{r, include=TRUE, fig.width=10, fig.height=6}
+term_total_plot
+```
+
+## Students Per Group
+
+```{r, include=TRUE, fig.width=10, fig.height=6}
+group_plot
+```
+
 
 ```{r, include=FALSE}
 test_order <- c("Post-Test Total",
@@ -183,7 +254,7 @@ term_plot <- ggplot(term_means, aes(assessment, average)) +
 term_plot
 ```
 
-# BrICC Assessment {.tabset .tabset-fade .tabset-pills}
+# BrICC Pre- and Post-Assessment {.tabset .tabset-fade .tabset-pills}
 
 ## Winter 2020
 
@@ -218,7 +289,7 @@ quiz_plots$plots[[5]]
 term_plot
 ```
 
-# BrICC Survey 
+# BrICC Pre- and Post-Survey 
 
 ## I am confident in my ability to conduct a consultation for the BrICC clinic {.tabset .tabset-fade .tabset-pills}
 
