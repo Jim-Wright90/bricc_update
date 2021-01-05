@@ -83,7 +83,8 @@ term_total_plot <- ggplot(term_total, aes(term, n)) +
            alpha = 0.7) +
   geom_text(aes(term, n, label = n), 
             nudge_y = -3,
-            color = "white") +
+            color = "white",
+            size = 5) +
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
         panel.grid.major.x = element_line(color = "gray80")) +
@@ -111,7 +112,8 @@ group_plot <- ggplot(group_total, aes(group, n)) +
   coord_flip() +
   geom_text(aes(group, n, label = n),
             nudge_y = -0.7,
-            color = "white") +
+            color = "white",
+            size = 5) +
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
         panel.grid.major.x = element_line(color = "gray80")) +
