@@ -95,7 +95,8 @@ term_total_plot <- ggplot(term_total, aes(term, n)) +
 group_total <- bricc_demo %>% 
   count(group)
   
-group_order <- c("Fall 2020 2nd Years",
+group_order <- c("Winter 2021",
+                 "Fall 2020 2nd Years",
                  "Fall 2020 1st Years",
                  "Summer 2020",
                  "Spring 2020",
@@ -284,6 +285,11 @@ quiz_plots$plots[[4]]
 quiz_plots$plots[[5]]
 ```
 
+## Winter 2021
+```{r, include=TRUE, fig.width=10, fig.height=6}
+quiz_plots$plots[[6]]
+```
+
 ## Term Average
 ```{r term average plot, include=TRUE, fig.width=10, fig.height=6}
 term_plot
@@ -377,12 +383,6 @@ sv_rep <- c("Strongly Agree",
             "Disagree",
             "Strongly Disagree")
 
-q1$group <- factor(q1$group, levels = c("Winter 2020", 
-                                        "Spring 2020",
-                                        "Summer 2020",
-                                        "Fall 2020 2nd Years",
-                                        "Fall 2020 1st Years"))
-
 str(q1)
 
 ggplot(q1, aes(Response)) +
@@ -450,6 +450,11 @@ q1_plots$plots[[4]]
 q1_plots$plots[[5]]
 ```
 
+### Winter 2021
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q1_plots$plots[[6]]
+```
+
 ### Total
 ```{r q1 total, include=TRUE, fig.width=10, fig.height=6}
 total_plot(q1)
@@ -513,10 +518,6 @@ q2$Response <- factor(q2$Response, levels = c("Strongly Agree",
                                               "Disagree",
                                               "Strongly Disagree"))
 
-q2$group <- factor(q2$group, levels = c("Winter 2020", 
-                                        "Spring 2020",
-                                        "Summer 2020",
-                                        "Fall 2020"))
 ```
 
 ```{r winter 2020 plot q2, include=TRUE, fig.width=10, fig.height=6}
@@ -541,6 +542,11 @@ q2_plots$plots[[4]]
 ### Fall 2020 1st Years
 ```{r, include=TRUE, fig.width=10, fig.height=6}
 q2_plots$plots[[5]]
+```
+
+### Winter 2021
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q2_plots$plots[[6]]
 ```
 
 ### Total
@@ -630,6 +636,11 @@ q3_plots$plots[[4]]
 ### Fall 2020 1st Years
 ```{r, include=TRUE, fig.width=10, fig.height=6}
 q3_plots$plots[[5]]
+```
+
+### Winter 2021
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q3_plots$plots[[6]]
 ```
 
 ### Total
@@ -722,6 +733,11 @@ q4_plots$plots[[4]]
 q4_plots$plots[[5]]
 ```
 
+### Winter 2021
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q4_plots$plots[[6]]
+```
+
 ### Total
 ```{r q4 total, include=TRUE, fig.width=10, fig.height=6}
 total_plot(q4)
@@ -811,6 +827,11 @@ q5_plots$plots[[4]]
 q5_plots$plots[[5]]
 ```
 
+### Winter 2021
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q5_plots$plots[[6]]
+```
+
 ### Total
 ```{r q5 total, include=TRUE, fig.width=10, fig.height=6}
 total_plot(q5)
@@ -897,6 +918,12 @@ q6_plots$plots[[4]]
 q6_plots$plots[[5]]
 ```
 
+### Winter 2021
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q6_plots$plots[[6]]
+```
+
+
 ### Total
 ```{r q6 total, include=TRUE, fig.width=10, fig.height=6}
 total_plot(q6)
@@ -981,6 +1008,11 @@ q7_plots$plots[[4]]
 ### Fall 2020 1st Years
 ```{r, include=TRUE, fig.width=10, fig.height=6}
 q7_plots$plots[[5]]
+```
+
+### Winter 2021
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q7_plots$plots[[6]]
 ```
 
 ### Total
@@ -1069,6 +1101,11 @@ q8_plots$plots[[4]]
 q8_plots$plots[[5]]
 ```
 
+### Winter 2021
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q8_plots$plots[[6]]
+```
+
 ### Total
 ```{r q8 total, include=TRUE, fig.width=10, fig.height=6}
 total_plot(q8)
@@ -1153,6 +1190,11 @@ q9_plots$plots[[4]]
 ### Fall 2020 1st Years
 ```{r, include=TRUE, fig.width=10, fig.height=6}
 q9_plots$plots[[5]]
+```
+
+### Winter 2021
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q9_plots$plots[[6]]
 ```
 
 ### Total
@@ -1241,6 +1283,11 @@ q10_plots$plots[[4]]
 q10_plots$plots[[5]]
 ```
 
+### Winter 2021
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q10_plots$plots[[6]]
+```
+
 ### Total
 ```{r q10 total, include=TRUE, fig.width=10, fig.height=6}
 total_plot(q10)
@@ -1325,6 +1372,11 @@ q11_plots$plots[[4]]
 ### Fall 2020 1st Years
 ```{r, include=TRUE, fig.width=10, fig.height=6}
 q11_plots$plots[[5]]
+```
+
+### Winter 2021
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q11_plots$plots[[6]]
 ```
 
 ### Total
@@ -1413,6 +1465,11 @@ q12_plots$plots[[4]]
 q12_plots$plots[[5]]
 ```
 
+### Winter 2021
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q12_plots$plots[[6]]
+```
+
 ### Total
 ```{r q12 total, include=TRUE, fig.width=10, fig.height=6}
 total_plot(q12)
@@ -1497,6 +1554,11 @@ q13_plots$plots[[4]]
 ### Fall 2020 1st Years
 ```{r, include=TRUE, fig.width=10, fig.height=6}
 q13_plots$plots[[5]]
+```
+
+### Winter 2021
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q13_plots$plots[[6]]
 ```
 
 ### Total
@@ -1585,6 +1647,11 @@ q14_plots$plots[[4]]
 q14_plots$plots[[5]]
 ```
 
+### Winter 2021
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q14_plots$plots[[6]]
+```
+
 ### Total
 ```{r q14 total, include=TRUE, fig.width=10, fig.height=6, fig.width=10, fig.height=6}
 total_plot(q14)
@@ -1669,6 +1736,11 @@ q15_plots$plots[[4]]
 ### Fall 2020 1st Years
 ```{r, include=TRUE, fig.width=10, fig.height=6}
 q15_plots$plots[[5]]
+```
+
+### Winter 2021
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q15_plots$plots[[6]]
 ```
 
 ### Total
@@ -1756,6 +1828,11 @@ q16_plots$plots[[4]]
 q16_plots$plots[[5]]
 ```
 
+### Winter 2021
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q16_plots$plots[[6]]
+```
+
 ### Total
 ```{r q16 total, include=TRUE, fig.width=10, fig.height=6}
 total_plot(q16)
@@ -1841,6 +1918,12 @@ q17_plots$plots[[4]]
 ```{r, include=TRUE, fig.width=10, fig.height=6}
 q17_plots$plots[[5]]
 ```
+
+### Winter 2021
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q17_plots$plots[[6]]
+```
+
 
 ### Total
 ```{r q17 total, include=TRUE, fig.width=10, fig.height=6}
