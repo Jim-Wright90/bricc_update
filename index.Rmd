@@ -2009,6 +2009,11 @@ q18_plots$plots[[4]]
 q18_plots$plots[[5]]
 ```
 
+### Winter 2021
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q18_plots$plots[[6]]
+```
+
 ### Total
 ```{r q18 total, include=TRUE, fig.width=10, fig.height=6}
 total_plot(q18)
@@ -2089,6 +2094,11 @@ q19_plots$plots[[4]]
 ### Fall 2020 1st Years
 ```{r, include=TRUE, fig.width=10, fig.height=6}
 q19_plots$plots[[5]]
+```
+
+### Winter 2021
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q19_plots$plots[[6]]
 ```
 
 ### Total
@@ -2173,6 +2183,11 @@ q20_plots$plots[[4]]
 q20_plots$plots[[5]]
 ```
 
+### Winter 2021
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q20_plots$plots[[6]]
+```
+
 ### Total
 ```{r q20 total, include=TRUE, fig.width=10, fig.height=6}
 total_plot(q20)
@@ -2253,6 +2268,11 @@ q21_plots$plots[[4]]
 ### Fall 2020 1st Years
 ```{r, include=TRUE, fig.width=10, fig.height=6}
 q21_plots$plots[[5]]
+```
+
+### Winter 2021
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q21_plots$plots[[6]]
 ```
 
 ### Total
@@ -2337,6 +2357,10 @@ q22_plots$plots[[4]]
 q22_plots$plots[[5]]
 ```
 
+### Winter 2021
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q22_plots$plots[[6]]
+```
 
 ### Total
 ```{r q22 total, include=TRUE, fig.width=10, fig.height=6}
@@ -2420,6 +2444,10 @@ q23_plots$plots[[4]]
 q23_plots$plots[[5]]
 ```
 
+### Winter 2021
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q23_plots$plots[[6]]
+```
 
 ### Total
 ```{r q23 total, include=TRUE, fig.width=10, fig.height=6}
@@ -2503,6 +2531,10 @@ q24_plots$plots[[4]]
 q24_plots$plots[[5]]
 ```
 
+### Winter 2021
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q24_plots$plots[[6]]
+```
 
 ### Total
 ```{r q24 total, include=TRUE, fig.width=10, fig.height=6}
@@ -2584,6 +2616,11 @@ q25_plots$plots[[4]]
 ### Fall 2020 1st Years
 ```{r, include=TRUE, fig.width=10, fig.height=6}
 q25_plots$plots[[5]]
+```
+
+### Winter 2021
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q25_plots$plots[[6]]
 ```
 
 
@@ -2669,6 +2706,10 @@ q26_plots$plots[[4]]
 q26_plots$plots[[5]]
 ```
 
+### Winter 2021
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q26_plots$plots[[6]]
+```
 
 ### Total
 ```{r q26 total, include=TRUE, fig.width=10, fig.height=6}
@@ -2752,6 +2793,10 @@ q27_plots$plots[[4]]
 q27_plots$plots[[5]]
 ```
 
+### Winter 2021
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q27_plots$plots[[6]]
+```
 
 ### Total
 ```{r q27 total, include=TRUE, fig.width=10, fig.height=6}
