@@ -96,7 +96,8 @@ term_total_plot <- ggplot(term_total, aes(term, n)) +
 group_total <- bricc_demo %>% 
   count(group)
   
-group_order <- c("Winter 2021",
+group_order <- c("Spring 2021",
+                 "Winter 2021",
                  "Fall 2020 2nd Years",
                  "Fall 2020 1st Years",
                  "Summer 2020",
@@ -292,6 +293,11 @@ quiz_plots$plots[[5]]
 quiz_plots$plots[[6]]
 ```
 
+## Spring 2021
+```{r, include=TRUE, fig.width=10, fig.height=6}
+quiz_plots$plots[[7]]
+```
+
 ## Term Average
 ```{r term average plot, include=TRUE, fig.width=10, fig.height=6}
 term_plot
@@ -407,6 +413,7 @@ ggplot(q1, aes(Response)) +
   scale_fill_OkabeIto() +
   coord_flip() +
   facet_wrap(~Survey, ncol = 1) +
+  theme(legend.title = element_blank()) +
     labs(y = "Number of Responses",
          x = "",
          color = NULL,
@@ -421,6 +428,7 @@ total_plot <- function(df) {
   scale_fill_OkabeIto() +
   coord_flip() +
   facet_wrap(~Survey, ncol = 1) +
+  theme(legend.title = element_blank()) +
   labs(y = "Number of Responses",
          x = "")
 }
@@ -457,9 +465,14 @@ q1_plots$plots[[5]]
 q1_plots$plots[[6]]
 ```
 
+### Spring 2021
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q1_plots$plots[[7]]
+```
+
 ### Total
 ```{r q1 total, include=TRUE, fig.width=10, fig.height=6}
-total_plot(q1)
+ggplotly(total_plot(q1))
 ```
 
 ## I am confident in my ability to administer standardized cognitive tests {.tabset .tabset-fade .tabset-pills}
@@ -551,9 +564,14 @@ q2_plots$plots[[5]]
 q2_plots$plots[[6]]
 ```
 
+### Spring 2021
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q2_plots$plots[[7]]
+```
+
 ### Total
 ```{r q2 total, include=TRUE, fig.width=10, fig.height=6}
-total_plot(q2)
+ggplotly(total_plot(q2))
 ```
 
 ## I am confident in my ability to conduct a client-centered clinical interview {.tabset .tabset-fade .tabset-pills}
@@ -645,9 +663,14 @@ q3_plots$plots[[5]]
 q3_plots$plots[[6]]
 ```
 
+### Spring 2021
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q3_plots$plots[[7]]
+```
+
 ### Total
 ```{r q3 total, include=TRUE, fig.width=10, fig.height=6}
-total_plot(q3)
+ggplotly(total_plot(q3))
 ```
 
 ## I am confident in my ability to identify treatment options to assist people with acquired cognitive impairments {.tabset .tabset-fade .tabset-pills}
@@ -740,9 +763,14 @@ q4_plots$plots[[5]]
 q4_plots$plots[[6]]
 ```
 
+### Spring 2021
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q4_plots$plots[[7]]
+```
+
 ### Total
 ```{r q4 total, include=TRUE, fig.width=10, fig.height=6}
-total_plot(q4)
+ggplotly(total_plot(q4))
 ```
 
 ## I am prepared to write cognitive rehabilitation goals {.tabset .tabset-fade .tabset-pills}
@@ -834,9 +862,14 @@ q5_plots$plots[[5]]
 q5_plots$plots[[6]]
 ```
 
+### Spring 2021
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q5_plots$plots[[7]]
+```
+
 ### Total
 ```{r q5 total, include=TRUE, fig.width=10, fig.height=6}
-total_plot(q5)
+ggplotly(total_plot(q5))
 ```
 
 ## I am prepared to administer direct interventions such as attention training or goal management training {.tabset .tabset-fade .tabset-pills}
@@ -925,10 +958,14 @@ q6_plots$plots[[5]]
 q6_plots$plots[[6]]
 ```
 
+### Spring 2021
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q6_plots$plots[[7]]
+```
 
 ### Total
 ```{r q6 total, include=TRUE, fig.width=10, fig.height=6}
-total_plot(q6)
+ggplotly(total_plot(q6))
 ```
 
 ## I am prepared to engage in systematic instruction to support the use of external aids {.tabset .tabset-fade .tabset-pills}
@@ -1017,9 +1054,14 @@ q7_plots$plots[[5]]
 q7_plots$plots[[6]]
 ```
 
+### Spring 2021
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q7_plots$plots[[7]]
+```
+
 ### Total
 ```{r q7 total, include=TRUE, fig.width=10, fig.height=6}
-total_plot(q7)
+ggplotly(total_plot(q7))
 ```
 
 ## I am prepared to engage in a needs assessment to identify cognitive strategies and support learning and use of them {.tabset .tabset-fade .tabset-pills}
@@ -1108,9 +1150,14 @@ q8_plots$plots[[5]]
 q8_plots$plots[[6]]
 ```
 
+### Spring 2021
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q8_plots$plots[[7]]
+```
+
 ### Total
 ```{r q8 total, include=TRUE, fig.width=10, fig.height=6}
-total_plot(q8)
+ggplotly(total_plot(q8))
 ```
 
 ## I am confident in my ability to collect and analyze client session data {.tabset .tabset-fade .tabset-pills}
@@ -1199,9 +1246,14 @@ q9_plots$plots[[5]]
 q9_plots$plots[[6]]
 ```
 
+### Spring 2021
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q9_plots$plots[[7]]
+```
+
 ### Total
 ```{r q9 total, include=TRUE, fig.width=10, fig.height=6}
-total_plot(q9)
+ggplotly(total_plot(q9))
 ```
 
 ## I am prepared to justify my decisions related to assessment and treatment selection {.tabset .tabset-fade .tabset-pills}
@@ -1290,9 +1342,14 @@ q10_plots$plots[[5]]
 q10_plots$plots[[6]]
 ```
 
+### Spring 2021
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q10_plots$plots[[7]]
+```
+
 ### Total
 ```{r q10 total, include=TRUE, fig.width=10, fig.height=6}
-total_plot(q10)
+ggplotly(total_plot(q10))
 ```
 
 ## I am confident in my ability to apply principles of evidence-based practice to my assessment and treatment decisions {.tabset .tabset-fade .tabset-pills}
@@ -1381,9 +1438,14 @@ q11_plots$plots[[5]]
 q11_plots$plots[[6]]
 ```
 
+### Spring 2021
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q11_plots$plots[[7]]
+```
+
 ### Total
 ```{r q11 total, include=TRUE, fig.width=10, fig.height=6}
-total_plot(q11)
+ggplotly(total_plot(q11))
 ```
 
 ## I am confident in my ability to make ‘online’ (in session) changes to my daily plans {.tabset .tabset-fade .tabset-pills}
@@ -1472,9 +1534,14 @@ q12_plots$plots[[5]]
 q12_plots$plots[[6]]
 ```
 
+### Spring 2021
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q12_plots$plots[[7]]
+```
+
 ### Total
 ```{r q12 total, include=TRUE, fig.width=10, fig.height=6}
-total_plot(q12)
+ggplotly(total_plot(q12))
 ```
 
 ## I am knowledgeable about concussion management {.tabset .tabset-fade .tabset-pills}
@@ -1563,9 +1630,14 @@ q13_plots$plots[[5]]
 q13_plots$plots[[6]]
 ```
 
+### Spring 2021
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q13_plots$plots[[7]]
+```
+
 ### Total
 ```{r q13 total, include=TRUE, fig.width=10, fig.height=6}
-total_plot(q13)
+ggplotly(total_plot(q13))
 ```
 
 ## I am comfortable working with clients with brain injuries {.tabset .tabset-fade .tabset-pills}
@@ -1654,9 +1726,14 @@ q14_plots$plots[[5]]
 q14_plots$plots[[6]]
 ```
 
+### Spring 2021
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q14_plots$plots[[7]]
+```
+
 ### Total
 ```{r q14 total, include=TRUE, fig.width=10, fig.height=6, fig.width=10, fig.height=6}
-total_plot(q14)
+ggplotly(total_plot(q14))
 ```
 
 ## I am comfortable working with clients with awareness deficits {.tabset .tabset-fade .tabset-pills}
@@ -1745,9 +1822,14 @@ q15_plots$plots[[5]]
 q15_plots$plots[[6]]
 ```
 
+### Spring 2021
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q15_plots$plots[[7]]
+```
+
 ### Total
-```{r q15 total, include=TRUE, fig.width=10, fig.height=6, fig.width=10, fig.height=6}
-total_plot(q15)
+```{r q15 total, include=TRUE, fig.width=10, fig.height=6}
+ggplotly(total_plot(q15))
 ```
 
 ## I am able to use case history information (e.g., information about etiology) to guide my clinical decision making {.tabset .tabset-fade .tabset-pills}
@@ -1835,9 +1917,14 @@ q16_plots$plots[[5]]
 q16_plots$plots[[6]]
 ```
 
+### Spring 2021
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q16_plots$plots[[7]]
+```
+
 ### Total
 ```{r q16 total, include=TRUE, fig.width=10, fig.height=6}
-total_plot(q16)
+ggplotly(total_plot(q16))
 ```
 
 ## I feel prepared to orally present cases {.tabset .tabset-fade .tabset-pills}
@@ -1926,10 +2013,14 @@ q17_plots$plots[[5]]
 q17_plots$plots[[6]]
 ```
 
+### Spring 2021
+```{r, include=TRUE, fig.width=10, fig.height=6}
+q17_plots$plots[[7]]
+```
 
 ### Total
 ```{r q17 total, include=TRUE, fig.width=10, fig.height=6}
-total_plot(q17)
+ggplotly(total_plot(q17))
 ```
 
 ## Training was systematic and well organized (Post-Survey Only) {.tabset .tabset-fade .tabset-pills}
@@ -2016,7 +2107,7 @@ q18_plots$plots[[6]]
 
 ### Total
 ```{r q18 total, include=TRUE, fig.width=10, fig.height=6}
-total_plot(q18)
+ggplotly(total_plot(q18))
 ```
 
 ## Group meetings enhanced my learning (Post-Survey Only) {.tabset .tabset-fade .tabset-pills}
@@ -2103,7 +2194,7 @@ q19_plots$plots[[6]]
 
 ### Total
 ```{r q19 total, include=TRUE, fig.width=10, fig.height=6}
-total_plot(q19)
+ggplotly(total_plot(q19))
 ```
 
 ## Group meetings were efficient (Post-Survey Only) {.tabset .tabset-fade .tabset-pills}
@@ -2190,7 +2281,7 @@ q20_plots$plots[[6]]
 
 ### Total
 ```{r q20 total, include=TRUE, fig.width=10, fig.height=6}
-total_plot(q20)
+ggplotly(total_plot(q20))
 ```
 
 ## Group meetings exposed me to learning about other client profiles and case management techniques (Post-Survey Only) {.tabset .tabset-fade .tabset-pills}
@@ -2277,7 +2368,7 @@ q21_plots$plots[[6]]
 
 ### Total
 ```{r q21 total, include=TRUE, fig.width=10, fig.height=6}
-total_plot(q21)
+ggplotly(total_plot(q21))
 ```
 
 ## I learned enough about treatment approaches implemented by my peers to be able to implement them with a client even though I never personally delivered the intervention (Post-Survey Only) {.tabset .tabset-fade .tabset-pills}
@@ -2364,7 +2455,7 @@ q22_plots$plots[[6]]
 
 ### Total
 ```{r q22 total, include=TRUE, fig.width=10, fig.height=6}
-total_plot(q22)
+ggplotly(total_plot(q22))
 ```
 
 ## I was exposed to clients with the same disorder/diagnosis with different manifestations or treatment needs (Post-Survey Only) {.tabset .tabset-fade .tabset-pills}
@@ -2451,7 +2542,7 @@ q23_plots$plots[[6]]
 
 ### Total
 ```{r q23 total, include=TRUE, fig.width=10, fig.height=6}
-total_plot(q23)
+ggplotly(total_plot(q23))
 ```
 
 ## My supervisor supported my case management and clinical approach (Post-Survey Only) {.tabset .tabset-fade .tabset-pills}
@@ -2538,7 +2629,7 @@ q24_plots$plots[[6]]
 
 ### Total
 ```{r q24 total, include=TRUE, fig.width=10, fig.height=6}
-total_plot(q24)
+ggplotly(total_plot(q24))
 ```
 
 ## (If you have already taken cognitive rehabilitation course) Because of this clinical experience, I am now able to apply theoretical knowledge and principles in a clinically sound matter (Post-Survey Only) {.tabset .tabset-fade .tabset-pills}
@@ -2626,7 +2717,7 @@ q25_plots$plots[[6]]
 
 ### Total
 ```{r q25 total, include=TRUE, fig.width=10, fig.height=6}
-total_plot(q25)
+ggplotly(total_plot(q25))
 ```
 
 ## (If you have already taken cognitive rehabilitation course) I had the appropriate knowledge of theories and practice from my coursework to apply to this clinical experience (Post-Survey Only) {.tabset .tabset-fade .tabset-pills}
@@ -2713,7 +2804,7 @@ q26_plots$plots[[6]]
 
 ### Total
 ```{r q26 total, include=TRUE, fig.width=10, fig.height=6}
-total_plot(q26)
+ggplotly(total_plot(q26))
 ```
 
 ## (If you have not yet taken cognitive rehabilitation course) I feel more prepared about enrolling in class because of this clinical experience (Post-Survey Only) {.tabset .tabset-fade .tabset-pills}
@@ -2800,5 +2891,5 @@ q27_plots$plots[[6]]
 
 ### Total
 ```{r q27 total, include=TRUE, fig.width=10, fig.height=6}
-total_plot(q27)
+ggplotly(total_plot(q27))
 ```
