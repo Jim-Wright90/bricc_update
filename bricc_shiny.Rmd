@@ -1,0 +1,1235 @@
+---
+title: "BrICC Student Data"
+runtime: shiny
+output:
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    social: menu
+    source_code: embed
+    vertical_layout: scroll
+    theme: united
+resource_files:
+- data/bricc.sav
+---
+
+```{r global, include=FALSE}
+library(shiny)
+library(tidyverse)
+library(here)
+library(janitor)
+library(rio)
+library(colorblindr)
+library(gghighlight)
+library(forcats)
+library(ggrepel)
+library(gt)
+library(knitr)
+library(kableExtra)
+library(reactable)
+library(plotly)
+library(glue)
+library(fs)
+library(prettydoc)
+
+
+theme_set(theme_minimal(15) +
+            theme(legend.position = "bottom",
+                  panel.grid.major.x = element_line(colour = "gray60"),
+                  panel.grid.minor.x = element_blank(),
+                  panel.grid.major.y = element_blank())
+          )
+
+bricc <- import(here("data", "bricc.sav"),
+               setclass = "tbl_df") %>% 
+  characterize() %>% 
+  janitor::clean_names() %>% 
+  mutate(group = as.factor(group),
+         term = as.factor(term)) %>% 
+  rename("Pre-Test Total" = pre_test_total_score,
+         "Post-Test Total" = post_test_total_score,
+         "Pre-Test Knowledge" = pre_test_knowledge_score,
+         "Post-Test Knowledge" = post_test_knowledge_score,
+         "Pre-Test Application" = pre_test_application_score,
+         "Post-Test Application" = post_test_application_score) %>% 
+  pivot_longer(
+    cols = c(`Pre-Test Total`,
+             `Post-Test Total`,
+             `Pre-Test Knowledge`,
+             `Post-Test Knowledge`,
+             `Pre-Test Application`,
+             `Post-Test Application`),
+    names_to = "assessment",
+    values_to = "score")
+
+head(bricc)
+names(bricc)
+
+bricc_demo <- import(here("data", "bricc.sav"),
+               setclass = "tbl_df") %>% 
+  characterize() %>% 
+  janitor::clean_names() %>% 
+  mutate(group = as.factor(group),
+         term = as.factor(term))
+
+head(bricc_demo)
+
+str(bricc)
+
+bricc$group <- factor(bricc$group, levels = c("Winter 2020",
+                                              "Spring 2020",
+                                              "Summer 2020",
+                                              "Fall 2020 1st Years",
+                                              "Fall 2020 2nd Years",
+                                              "Winter 2021",
+                                              "Spring 2021"))
+
+bricc_demo$group <- factor(bricc_demo$group, levels = c("Winter 2020",
+                                              "Spring 2020",
+                                              "Summer 2020",
+                                              "Fall 2020 1st Years",
+                                              "Fall 2020 2nd Years",
+                                              "Winter 2021",
+                                              "Spring 2021"))
+
+```
+
+
+# Student Information 
+
+Row 
+-----------------------------------------------------------------------
+
+### Students Per Term 
+
+```{r, include=FALSE}
+
+term_total <- bricc_demo %>% 
+  count(term)
+
+term_total_plot <- ggplot(term_total, aes(term, n)) +
+  geom_col(fill = "blue",
+           alpha = 0.7) +
+  geom_text(aes(term, n, label = n), 
+            nudge_y = -3,
+            color = "white",
+            size = 5) +
+  theme(plot.title = element_text(color = "black", face = "bold", hjust = 0.5)) +
+  labs(x = "",
+       y = "Total",
+       title = "Number of Students per Term")
+
+group_total <- bricc_demo %>% 
+  count(group)
+  
+group_order <- c("Spring 2021",
+                 "Winter 2021",
+                 "Fall 2020 2nd Years",
+                 "Fall 2020 1st Years",
+                 "Summer 2020",
+                 "Spring 2020",
+                 "Winter 2020")
+
+group_plot <- ggplot(group_total, aes(group, n)) +
+  geom_col(fill = "blue", 
+           alpha = 0.7) +
+  scale_x_discrete(limits = group_order) +
+  scale_y_continuous(limits = c(0,10),
+                     breaks = c(0 ,2, 4, 6, 8, 10)) +
+  coord_flip() +
+  geom_text(aes(group, n, label = n),
+            nudge_y = -0.7,
+            color = "white",
+            size = 5) +
+  theme(plot.title = element_text(color = "black", face = "bold", hjust = 0.5)) +
+  labs(x = "",
+       y = "Total",
+       title = "Number of Students per Group")
+  
+group_plot
+```
+
+```{r, include=TRUE}
+ggplotly(term_total_plot)
+```
+
+Row 
+-----------------------------------------------------------------------
+
+### Students Per Group 
+
+```{r, include=TRUE}
+ggplotly(group_plot)
+```
+
+Row 
+-----------------------------------------------------------------------
+
+### Student List 
+
+```{r, include=FALSE}
+head(bricc_demo)
+
+student_list <- bricc_demo %>% 
+  select(student_name, group, term) 
+  
+student_list_tbl <- student_list %>% 
+  reactable(
+    defaultColDef = colDef(align = "center"),
+    columns = list(
+      student_name = colDef(name = "Student"),
+      group = colDef(name = "Group"),
+      term = colDef(name = "Term")),
+    pagination = TRUE,
+    striped = TRUE,
+    outlined = TRUE,
+    searchable = TRUE,
+    compact = TRUE,
+    highlight = TRUE,
+    bordered = TRUE    
+  )
+```
+
+```{r, include=TRUE}
+student_list_tbl
+```
+
+# Assessment Results 
+
+```{r, include=FALSE}
+term_means <- bricc %>% 
+  select(student_id, student_name, group, term, assessment, score) %>% 
+  group_by(assessment, term) %>% 
+  summarize(average = mean(score)) %>% 
+  mutate_if(is.numeric, ~round(., 2))
+```
+
+```{r, include=TRUE}
+selectInput("groups",
+            "Student Group:",
+            choices = levels(bricc$group))
+
+# group_input <- selectInput("groups",
+#                            "Student Group:",
+#                            choices = levels(bricc$group))
+
+```
+
+```{r, include=FALSE}
+# group_input
+```
+
+Row 
+-----------------------------------------------------------------------
+
+### Group Scores 
+
+```{r, include=FALSE}
+test_order <- c("Post-Test Total",
+                "Pre-Test Total",
+                "Post-Test Application",
+                "Pre-Test Application",
+                "Post-Test Knowledge",
+                "Pre-Test Knowledge")
+```
+
+```{r, include=TRUE}
+
+renderPlotly({
+  bricc %>%
+    filter(group %in% input$groups) %>% 
+    ggplot(aes(assessment, score)) +
+    geom_col(fill = "blue",
+             alpha = 0.7) +
+  scale_x_discrete(limits = test_order) +
+  scale_y_continuous(limits = c(0,10),
+                     breaks = c(0 ,2, 4, 6, 8, 10)) +
+  coord_flip() +
+  geom_text(aes(assessment, score, label = score),
+            nudge_y = -0.5,
+            color = "white") +
+  facet_wrap(~student_name) +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  labs(x = "",
+       y = "Score",
+       title = input$groups)
+})
+
+```
+
+Row 
+-----------------------------------------------------------------------
+
+### Term Scores 
+
+```{r, include=TRUE}
+selectInput("terms",
+            "Term Number",
+            choices = levels(term_means$term))
+
+```
+
+
+```{r, include=TRUE}
+
+renderPlotly({
+  term_means %>% 
+    filter(term %in% input$terms) %>% 
+    ggplot(aes(assessment, average)) +
+      geom_col(fill = "blue", 
+           alpha = 0.7) +
+  scale_x_discrete(limits = test_order) +
+  scale_y_continuous(limits = c(0,10),
+                     breaks = c(0 ,2, 4, 6, 8, 10)) +
+  coord_flip() +
+  geom_text(aes(assessment, average, label = average),
+            nudge_y = -0.7,
+            color = "white") +
+  theme(plot.title = element_text(color = "black", face = "bold", hjust = 0.5)) +
+  labs(x = "",
+       y = "Score",
+       title = paste("Average Scores:", input$terms))
+})
+
+```
+
+# Survey Results 
+
+Sidebar {.sidebar}
+------------
+
+```{r, include=TRUE}
+selectInput("groups2",
+            "Student Group:",
+            choices = levels(bricc_demo$group))
+```
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Question 1: I am confident in my ability to conduct a consultation for the BrICC clinic
+
+```{r, include=FALSE}
+sq_df <- function(df, a, b, c, d, e, f) {
+  df %>% 
+    select({{a}}, {{b}}, {{c}}, {{d}}, {{e}}, {{f}}) 
+}
+
+sq_df2 <- function(df, a, b, c, d, e, f) {
+  df %>% 
+    select({{a}}, {{b}}, {{c}}, {{d}}, {{e}}) 
+}
+
+q1 <- sq_df(bricc_demo, 
+            student_id,
+            student_name,
+            group,
+            term,
+            pre_survey_q1,
+            post_survey_q1) %>% 
+  rename("Pre" = pre_survey_q1,
+         "Post" = post_survey_q1) %>% 
+  pivot_longer(
+    cols = c(5:6),
+    names_to = "Survey",
+    values_to = "Response"
+  )   
+
+survey_resp <- c("Strongly Disagree",
+                 "Disagree",
+                 "Undecided",
+                 "Agree",
+                 "Strongly Agree")
+
+q1$Survey <- factor(q1$Survey, levels = c("Pre", "Post"))
+
+sv_rep <- c("Strongly Agree",
+            "Agree",
+            "Undecided",
+            "Disagree",
+            "Strongly Disagree")
+
+```
+
+```{r, include=FALSE}
+
+survey_plot <- function(df) {
+  renderPlotly({
+  df %>% 
+  filter(group %in% input$groups2) %>% 
+  ggplot(aes(Response, student_name)) +
+  geom_line(aes(group = student_name), color = "gray40") +
+  geom_point(aes(color = Survey)) +
+  scale_color_OkabeIto() +
+  scale_x_discrete(limits = survey_resp) +
+  theme(plot.title = element_text(color = "black", face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "black", face = "bold")) +
+  labs(x = "",
+       y = "",
+       color = NULL,
+    title = input$groups2)    
+})  
+}
+
+total_plot <- function(df) {
+  renderPlotly({
+  df %>% 
+  ggplot(aes(Response)) +
+  geom_bar(aes(fill = term), alpha = 0.9) +
+  scale_x_discrete(limits = sv_rep) +
+  scale_y_continuous(limits = c(0, 20),
+                     breaks = c(0, 5, 10, 15, 20)) +  
+  scale_fill_OkabeIto() +
+  coord_flip() +
+  facet_wrap(~Survey, ncol = 1) +
+  theme(legend.title = element_blank()) +
+  labs(y = "Number of Responses",
+         x = "")
+  })
+}
+
+```
+
+```{r, include=TRUE}
+survey_plot(q1)
+```
+
+### Term Total
+
+```{r, include=TRUE}
+total_plot(q1)
+```
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Question 2: I am confident in my ability to administer standardized cognitive tests
+
+```{r, include=FALSE}
+q2 <- sq_df(bricc_demo, 
+            student_id,
+            student_name,
+            group,
+            term,
+            pre_survey_q2,
+            post_survey_q2) %>% 
+  rename("Pre" = pre_survey_q2,
+         "Post" = post_survey_q2) %>% 
+  pivot_longer(
+    cols = c(5:6),
+    names_to = "Survey",
+    values_to = "Response"
+  )   
+```
+
+```{r, include=TRUE}
+survey_plot(q2)
+```
+
+### Term Total
+
+```{r, include=TRUE}
+total_plot(q2)
+```
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Question 3: I am confident in my ability to conduct a client-centered clinical interview
+
+```{r, include=FALSE}
+q3 <- sq_df(bricc_demo, 
+            student_id,
+            student_name,
+            group,
+            term,
+            pre_survey_q3,
+            post_survey_q3) %>% 
+  rename("Pre" = pre_survey_q3,
+         "Post" = post_survey_q3) %>% 
+  pivot_longer(
+    cols = c(5:6),
+    names_to = "Survey",
+    values_to = "Response"
+  )   
+```
+
+```{r, include=TRUE}
+survey_plot(q3)
+```
+
+### Term Total
+
+```{r, include=TRUE}
+total_plot(q3)
+```
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Question 4: I am confident in my ability to identify treatment options to assist people with acquired conitive impairments
+
+```{r, include=FALSE}
+q4 <- sq_df(bricc_demo, 
+            student_id,
+            student_name,
+            group,
+            term,
+            pre_survey_q4,
+            post_survey_q4) %>% 
+  rename("Pre" = pre_survey_q4,
+         "Post" = post_survey_q4) %>% 
+  pivot_longer(
+    cols = c(5:6),
+    names_to = "Survey",
+    values_to = "Response"
+  )   
+```
+
+```{r, include=TRUE}
+survey_plot(q4)
+```
+
+### Term Total
+
+```{r, include=TRUE}
+total_plot(q4)
+```
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Question 5: I am prepared to write cognitive rehabilitation goals
+
+```{r, include=FALSE}
+q5 <- sq_df(bricc_demo, 
+            student_id,
+            student_name,
+            group,
+            term,
+            pre_survey_q5,
+            post_survey_q5) %>% 
+  rename("Pre" = pre_survey_q5,
+         "Post" = post_survey_q5) %>% 
+  pivot_longer(
+    cols = c(5:6),
+    names_to = "Survey",
+    values_to = "Response"
+  )   
+```
+
+```{r, include=TRUE}
+survey_plot(q5)
+```
+
+### Term Total
+
+```{r, include=TRUE}
+total_plot(q5)
+```
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Question 6: I am prepared to administer direct interventions such as attention training or goal management training
+
+```{r, include=FALSE}
+q6 <- sq_df(bricc_demo, 
+            student_id,
+            student_name,
+            group,
+            term,
+            pre_survey_q6,
+            post_survey_q6) %>% 
+  rename("Pre" = pre_survey_q6,
+         "Post" = post_survey_q6) %>% 
+  pivot_longer(
+    cols = c(5:6),
+    names_to = "Survey",
+    values_to = "Response"
+  )   
+```
+
+```{r, include=TRUE}
+survey_plot(q6)
+```
+
+### Term Total
+
+```{r, include=TRUE}
+total_plot(q6)
+```
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Question 7: I am prepared to engage in systematic instruction to support the use of external aids
+
+```{r, include=FALSE}
+q7 <- sq_df(bricc_demo, 
+            student_id,
+            student_name,
+            group,
+            term,
+            pre_survey_q7,
+            post_survey_q7) %>% 
+  rename("Pre" = pre_survey_q7,
+         "Post" = post_survey_q7) %>% 
+  pivot_longer(
+    cols = c(5:6),
+    names_to = "Survey",
+    values_to = "Response"
+  )   
+```
+
+```{r, include=TRUE}
+survey_plot(q7)
+```
+
+### Term Total
+
+```{r, include=TRUE}
+total_plot(q7)
+```
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Question 8: I am prepared to engage in a needs assessment to identify cognitive strategies and support learning and use of them
+
+```{r, include=FALSE}
+q8 <- sq_df(bricc_demo, 
+            student_id,
+            student_name,
+            group,
+            term,
+            pre_survey_q8,
+            post_survey_q8) %>% 
+  rename("Pre" = pre_survey_q8,
+         "Post" = post_survey_q8) %>% 
+  pivot_longer(
+    cols = c(5:6),
+    names_to = "Survey",
+    values_to = "Response"
+  )   
+```
+
+```{r, include=TRUE}
+survey_plot(q8)
+```
+
+### Term Total
+
+```{r, include=TRUE}
+total_plot(q8)
+```
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Question 9: I am confident in my ability to collect and analyze client session data
+
+```{r, include=FALSE}
+q9 <- sq_df(bricc_demo, 
+            student_id,
+            student_name,
+            group,
+            term,
+            pre_survey_q9,
+            post_survey_q9) %>% 
+  rename("Pre" = pre_survey_q9,
+         "Post" = post_survey_q9) %>% 
+  pivot_longer(
+    cols = c(5:6),
+    names_to = "Survey",
+    values_to = "Response"
+  )   
+```
+
+```{r, include=TRUE}
+survey_plot(q9)
+```
+
+### Term Total
+
+```{r, include=TRUE}
+total_plot(q9)
+```
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Question 10: I am prepared to justify my decisions related to assessment and treatment selection
+
+```{r, include=FALSE}
+q10 <- sq_df(bricc_demo, 
+            student_id,
+            student_name,
+            group,
+            term,
+            pre_survey_q10,
+            post_survey_q10) %>% 
+  rename("Pre" = pre_survey_q10,
+         "Post" = post_survey_q10) %>% 
+  pivot_longer(
+    cols = c(5:6),
+    names_to = "Survey",
+    values_to = "Response"
+  )   
+```
+
+```{r, include=TRUE}
+survey_plot(q10)
+```
+
+### Term Total
+
+```{r, include=TRUE}
+total_plot(q10)
+```
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Question 11: I am confident in my ability to apply principles of evidence-based practice to my assessment and treatment decisions
+
+```{r, include=FALSE}
+q11 <- sq_df(bricc_demo, 
+            student_id,
+            student_name,
+            group,
+            term,
+            pre_survey_q11,
+            post_survey_q11) %>% 
+  rename("Pre" = pre_survey_q11,
+         "Post" = post_survey_q11) %>% 
+  pivot_longer(
+    cols = c(5:6),
+    names_to = "Survey",
+    values_to = "Response"
+  )   
+```
+
+```{r, include=TRUE}
+survey_plot(q11)
+```
+
+### Term Total
+
+```{r, include=TRUE}
+total_plot(q11)
+```
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Question 12: I am confident in my ability to make ‘online’ (in session) changes to my daily plans
+
+```{r, include=FALSE}
+q12 <- sq_df(bricc_demo, 
+            student_id,
+            student_name,
+            group,
+            term,
+            pre_survey_q12,
+            post_survey_q12) %>% 
+  rename("Pre" = pre_survey_q12,
+         "Post" = post_survey_q12) %>% 
+  pivot_longer(
+    cols = c(5:6),
+    names_to = "Survey",
+    values_to = "Response"
+  )   
+```
+
+```{r, include=TRUE}
+survey_plot(q12)
+```
+
+### Term Total
+
+```{r, include=TRUE}
+total_plot(q12)
+```
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Question 13: I am knowledgeable about concussion management
+
+
+```{r, include=FALSE}
+q13 <- sq_df(bricc_demo, 
+            student_id,
+            student_name,
+            group,
+            term,
+            pre_survey_q13,
+            post_survey_q13) %>% 
+  rename("Pre" = pre_survey_q13,
+         "Post" = post_survey_q13) %>% 
+  pivot_longer(
+    cols = c(5:6),
+    names_to = "Survey",
+    values_to = "Response"
+  )   
+```
+
+```{r, include=TRUE}
+survey_plot(q13)
+```
+
+### Term Total
+
+```{r, include=TRUE}
+total_plot(q13)
+```
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Question 14: I am comfortable working with clients with brain injuries
+
+```{r, include=FALSE}
+q14 <- sq_df(bricc_demo, 
+            student_id,
+            student_name,
+            group,
+            term,
+            pre_survey_q14,
+            post_survey_q14) %>% 
+  rename("Pre" = pre_survey_q14,
+         "Post" = post_survey_q14) %>% 
+  pivot_longer(
+    cols = c(5:6),
+    names_to = "Survey",
+    values_to = "Response"
+  )   
+```
+
+```{r, include=TRUE}
+survey_plot(q14)
+```
+
+### Term Total
+
+```{r, include=TRUE}
+total_plot(q14)
+```
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Question 15: I am comfortable working with clients with awareness deficits
+
+```{r, include=FALSE}
+q15 <- sq_df(bricc_demo, 
+            student_id,
+            student_name,
+            group,
+            term,
+            pre_survey_q15,
+            post_survey_q15) %>% 
+  rename("Pre" = pre_survey_q15,
+         "Post" = post_survey_q15) %>% 
+  pivot_longer(
+    cols = c(5:6),
+    names_to = "Survey",
+    values_to = "Response"
+  )   
+```
+
+```{r, include=TRUE}
+survey_plot(q15)
+```
+
+### Term Total
+
+```{r, include=TRUE}
+total_plot(q15)
+```
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Question 16: I am able to use case history information (e.g., information about etiology) to guide my clinical decision making
+
+```{r, include=FALSE}
+q16 <- sq_df(bricc_demo, 
+            student_id,
+            student_name,
+            group,
+            term,
+            pre_survey_q16,
+            post_survey_q16) %>% 
+  rename("Pre" = pre_survey_q16,
+         "Post" = post_survey_q16) %>% 
+  pivot_longer(
+    cols = c(5:6),
+    names_to = "Survey",
+    values_to = "Response"
+  )   
+```
+
+```{r, include=TRUE}
+survey_plot(q16)
+```
+
+### Term Total
+
+```{r, include=TRUE}
+total_plot(q16)
+```
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Question 17: I feel prepared to orally present cases
+
+```{r, include=FALSE}
+q17 <- sq_df(bricc_demo, 
+            student_id,
+            student_name,
+            group,
+            term,
+            pre_survey_q17,
+            post_survey_q17) %>% 
+  rename("Pre" = pre_survey_q17,
+         "Post" = post_survey_q17) %>% 
+  pivot_longer(
+    cols = c(5:6),
+    names_to = "Survey",
+    values_to = "Response"
+  )   
+```
+
+```{r, include=TRUE}
+survey_plot(q17)
+```
+
+### Term Total
+
+```{r, include=TRUE}
+total_plot(q17)
+```
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Question 18: Training was systematic and well organized (Post-Survey Only)
+
+```{r, include=FALSE}
+q18 <- sq_df2(bricc_demo, 
+            student_id,
+            student_name,
+            group,
+            term,
+            post_survey_q18) %>% 
+  rename("Post" = post_survey_q18) %>% 
+  pivot_longer(
+    cols = c(5),
+    names_to = "Survey",
+    values_to = "Response"
+  )   
+```
+
+```{r, include=TRUE}
+survey_plot(q18)
+```
+
+### Term Total
+
+```{r, include=TRUE}
+total_plot(q18)
+```
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Question 19: Group meetings enhanced my learning (Post-Survey Only)
+
+```{r, include=FALSE}
+q19 <- sq_df2(bricc_demo, 
+            student_id,
+            student_name,
+            group,
+            term,
+            post_survey_q19) %>% 
+  rename("Post" = post_survey_q19) %>% 
+  pivot_longer(
+    cols = c(5),
+    names_to = "Survey",
+    values_to = "Response"
+  )   
+```
+
+```{r, include=TRUE}
+survey_plot(q19)
+```
+
+### Term Total
+
+```{r, include=TRUE}
+total_plot(q19)
+```
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Question 20: Group meetings were efficient (Post-Survey Only)
+
+
+```{r, include=FALSE}
+q20 <- sq_df2(bricc_demo, 
+            student_id,
+            student_name,
+            group,
+            term,
+            post_survey_q20) %>% 
+  rename("Post" = post_survey_q20) %>% 
+  pivot_longer(
+    cols = c(5),
+    names_to = "Survey",
+    values_to = "Response"
+  )   
+```
+
+```{r, include=TRUE}
+survey_plot(q20)
+```
+
+### Term Total
+
+```{r, include=TRUE}
+total_plot(q20)
+```
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Question 21: Group meetings exposed me to learning about other client profiles and case management techniques (Post-Survey Only)
+
+```{r, include=FALSE}
+q21 <- sq_df2(bricc_demo, 
+            student_id,
+            student_name,
+            group,
+            term,
+            post_survey_q21) %>% 
+  rename("Post" = post_survey_q21) %>% 
+  pivot_longer(
+    cols = c(5),
+    names_to = "Survey",
+    values_to = "Response"
+  )   
+```
+
+```{r, include=TRUE}
+survey_plot(q21)
+```
+
+### Term Total
+
+```{r, include=TRUE}
+total_plot(q21)
+```
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Question 22: I learned enough about treatment approaches implemented by my peers to be able to implement them with a client even though I never personally delivered the intervention (Post-Survey Only)
+
+```{r, include=FALSE}
+q22 <- sq_df2(bricc_demo, 
+            student_id,
+            student_name,
+            group,
+            term,
+            post_survey_q22) %>% 
+  rename("Post" = post_survey_q22) %>% 
+  pivot_longer(
+    cols = c(5),
+    names_to = "Survey",
+    values_to = "Response"
+  )   
+```
+
+```{r, include=TRUE}
+survey_plot(q22)
+```
+
+### Term Total
+
+```{r, include=TRUE}
+total_plot(q22)
+```
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Question 23: I was exposed to clients with the same disorder/diagnosis with different manifestations or treatment needs (Post-Survey Only)
+
+```{r, include=FALSE}
+q23 <- sq_df2(bricc_demo, 
+            student_id,
+            student_name,
+            group,
+            term,
+            post_survey_q23) %>% 
+  rename("Post" = post_survey_q23) %>% 
+  pivot_longer(
+    cols = c(5),
+    names_to = "Survey",
+    values_to = "Response"
+  )   
+```
+
+```{r, include=TRUE}
+survey_plot(q23)
+```
+
+### Term Total
+
+```{r, include=TRUE}
+total_plot(q23)
+```
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Question 24: My supervisor supported my case management and clinical approach (Post-Survey Only)
+
+```{r, include=FALSE}
+q24 <- sq_df2(bricc_demo, 
+            student_id,
+            student_name,
+            group,
+            term,
+            post_survey_q24) %>% 
+  rename("Post" = post_survey_q24) %>% 
+  pivot_longer(
+    cols = c(5),
+    names_to = "Survey",
+    values_to = "Response"
+  )   
+```
+
+```{r, include=TRUE}
+survey_plot(q24)
+```
+
+### Term Total
+
+```{r, include=TRUE}
+total_plot(q24)
+```
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Question 25: (If you have already taken cognitive rehabilitation course) Because of this clinical experience, I am now able to apply theoretical knowledge and principles in a clinically sound matter (Post-Survey Only)
+
+```{r, include=FALSE}
+q25 <- sq_df2(bricc_demo, 
+            student_id,
+            student_name,
+            group,
+            term,
+            post_survey_q25) %>% 
+  rename("Post" = post_survey_q25) %>% 
+  pivot_longer(
+    cols = c(5),
+    names_to = "Survey",
+    values_to = "Response"
+  )   
+```
+
+```{r, include=TRUE}
+survey_plot(q25)
+```
+
+### Term Total
+
+```{r, include=TRUE}
+total_plot(q25)
+```
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Question 26: (If you have already taken cognitive rehabilitation course) I had the appropriate knowledge of theories and practice from my coursework to apply to this clinical experience (Post-Survey Only)
+
+```{r, include=FALSE}
+q26 <- sq_df2(bricc_demo, 
+            student_id,
+            student_name,
+            group,
+            term,
+            post_survey_q26) %>% 
+  rename("Post" = post_survey_q26) %>% 
+  pivot_longer(
+    cols = c(5),
+    names_to = "Survey",
+    values_to = "Response"
+  )   
+```
+
+```{r, include=TRUE}
+survey_plot(q26)
+```
+
+### Term Total
+
+```{r, include=TRUE}
+total_plot(q26)
+```
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Question 27: (If you have not yet taken cognitive rehabilitation course) I feel more prepared about enrolling in class because of this clinical experience (Post-Survey Only)
+
+```{r, include=FALSE}
+q27 <- sq_df2(bricc_demo, 
+            student_id,
+            student_name,
+            group,
+            term,
+            post_survey_q27) %>% 
+  rename("Post" = post_survey_q27) %>% 
+  pivot_longer(
+    cols = c(5),
+    names_to = "Survey",
+    values_to = "Response"
+  )   
+```
+
+```{r, include=TRUE}
+survey_plot(q27)
+```
+
+### Term Total
+
+```{r, include=TRUE}
+total_plot(q27)
+```
