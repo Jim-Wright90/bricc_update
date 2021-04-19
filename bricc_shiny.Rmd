@@ -96,7 +96,7 @@ bricc_demo$group <- factor(bricc_demo$group, levels = c("Winter 2020",
 
 # Student Information 
 
-Row 
+Row {.tabset}
 -----------------------------------------------------------------------
 
 ### Students Per Term 
@@ -106,17 +106,17 @@ Row
 term_total <- bricc_demo %>% 
   count(term)
 
-term_total_plot <- ggplot(term_total, aes(term, n)) +
-  geom_col(fill = "blue",
-           alpha = 0.7) +
-  geom_text(aes(term, n, label = n), 
-            nudge_y = -3,
-            color = "white",
-            size = 5) +
-  theme(plot.title = element_text(color = "black", face = "bold", hjust = 0.5)) +
-  labs(x = "",
-       y = "Total",
-       title = "Number of Students per Term")
+# term_total_plot <- ggplot(term_total, aes(term, n)) +
+#   geom_col(fill = "#56B4E9",
+#            alpha = 0.7) +
+#   geom_text(aes(term, n, label = n), 
+#             nudge_y = -3,
+#             color = "black",
+#             size = 5) +
+#   theme(plot.title = element_text(color = "black", face = "bold", hjust = 0.5)) +
+#   labs(x = "",
+#        y = "Total",
+#        title = "Number of Students per Term")
 
 group_total <- bricc_demo %>% 
   count(group)
@@ -129,36 +129,63 @@ group_order <- c("Spring 2021",
                  "Spring 2020",
                  "Winter 2020")
 
-group_plot <- ggplot(group_total, aes(group, n)) +
-  geom_col(fill = "blue", 
-           alpha = 0.7) +
-  scale_x_discrete(limits = group_order) +
-  scale_y_continuous(limits = c(0,10),
-                     breaks = c(0 ,2, 4, 6, 8, 10)) +
-  coord_flip() +
-  geom_text(aes(group, n, label = n),
-            nudge_y = -0.7,
-            color = "white",
-            size = 5) +
-  theme(plot.title = element_text(color = "black", face = "bold", hjust = 0.5)) +
-  labs(x = "",
-       y = "Total",
-       title = "Number of Students per Group")
-  
-group_plot
+# group_plot <- ggplot(group_total, aes(group, n)) +
+#   geom_col(fill = "#56B4E9", 
+#            alpha = 0.7) +
+#   scale_x_discrete(limits = group_order) +
+#   scale_y_continuous(limits = c(0,10),
+#                      breaks = c(0 ,2, 4, 6, 8, 10)) +
+#   coord_flip() +
+#   geom_text(aes(group, n, label = n),
+#             nudge_y = -0.7,
+#             color = "black",
+#             size = 5) +
+#   theme(plot.title = element_text(color = "black", face = "bold", hjust = 0.5)) +
+#   labs(x = "",
+#        y = "Total",
+#        title = "Number of Students per Group")
+#   
+# group_plot
+
+term_total_tbl <- term_total %>% 
+  reactable(
+    defaultColDef = colDef(align = "center"),
+    columns = list(
+      term = colDef(name = "Term"),
+      n = colDef(name = "Total")),
+    pagination = TRUE,
+    striped = TRUE,
+    outlined = TRUE,
+    compact = FALSE,
+    highlight = TRUE,
+    bordered = TRUE    
+  )
+
+group_total_tbl <- group_total %>% 
+  reactable(
+    defaultColDef = colDef(align = "center"),
+    columns = list(
+      group = colDef(name = "Group"),
+      n = colDef(name = "Total")),
+    pagination = TRUE,
+    striped = TRUE,
+    outlined = TRUE,
+    searchable = TRUE,
+    compact = FALSE,
+    highlight = TRUE,
+    bordered = TRUE    
+  )
 ```
 
 ```{r, include=TRUE}
-ggplotly(term_total_plot)
+term_total_tbl
 ```
 
-Row 
------------------------------------------------------------------------
 
 ### Students Per Group 
 
 ```{r, include=TRUE}
-ggplotly(group_plot)
+group_total_tbl
 ```
 
 Row 
@@ -238,7 +265,7 @@ renderPlotly({
   bricc %>%
     filter(group %in% input$groups) %>% 
     ggplot(aes(assessment, score)) +
-    geom_col(fill = "blue",
+    geom_col(fill = "#56B4E9",
              alpha = 0.7) +
   scale_x_discrete(limits = test_order) +
   scale_y_continuous(limits = c(0,10),
@@ -246,7 +273,7 @@ renderPlotly({
   coord_flip() +
   geom_text(aes(assessment, score, label = score),
             nudge_y = -0.5,
-            color = "white") +
+            color = "black") +
   facet_wrap(~student_name) +
   theme(plot.title = element_text(hjust = 0.5)) +
   labs(x = "",
@@ -275,7 +302,7 @@ renderPlotly({
   term_means %>% 
     filter(term %in% input$terms) %>% 
     ggplot(aes(assessment, average)) +
-      geom_col(fill = "blue", 
+      geom_col(fill = "#56B4E9", 
            alpha = 0.7) +
   scale_x_discrete(limits = test_order) +
   scale_y_continuous(limits = c(0,10),
@@ -283,7 +310,7 @@ renderPlotly({
   coord_flip() +
   geom_text(aes(assessment, average, label = average),
             nudge_y = -0.7,
-            color = "white") +
+            color = "black") +
   theme(plot.title = element_text(color = "black", face = "bold", hjust = 0.5)) +
   labs(x = "",
        y = "Score",
