@@ -446,6 +446,8 @@ q2 <- sq_df(bricc_demo,
     names_to = "Survey",
     values_to = "Response"
   )   
+
+q2$Survey <- factor(q2$Survey, levels = c("Pre", "Post"))
 ```
 
 ```{r, include=TRUE}
@@ -479,6 +481,8 @@ q3 <- sq_df(bricc_demo,
     names_to = "Survey",
     values_to = "Response"
   )   
+
+q3$Survey <- factor(q3$Survey, levels = c("Pre", "Post"))
 ```
 
 ```{r, include=TRUE}
@@ -512,6 +516,8 @@ q4 <- sq_df(bricc_demo,
     names_to = "Survey",
     values_to = "Response"
   )   
+
+q4$Survey <- factor(q4$Survey, levels = c("Pre", "Post"))
 ```
 
 ```{r, include=TRUE}
@@ -544,6 +550,8 @@ q5 <- sq_df(bricc_demo,
     names_to = "Survey",
     values_to = "Response"
   )   
+
+q5$Survey <- factor(q5$Survey, levels = c("Pre", "Post"))
 ```
 
 ```{r, include=TRUE}
@@ -577,6 +585,8 @@ q6 <- sq_df(bricc_demo,
     names_to = "Survey",
     values_to = "Response"
   )   
+
+q6$Survey <- factor(q6$Survey, levels = c("Pre", "Post"))
 ```
 
 ```{r, include=TRUE}
@@ -609,7 +619,9 @@ q7 <- sq_df(bricc_demo,
     cols = c(5:6),
     names_to = "Survey",
     values_to = "Response"
-  )   
+  )
+
+q7$Survey <- factor(q7$Survey, levels = c("Pre", "Post"))
 ```
 
 ```{r, include=TRUE}
@@ -642,6 +654,8 @@ q8 <- sq_df(bricc_demo,
     names_to = "Survey",
     values_to = "Response"
   )   
+
+q8$Survey <- factor(q8$Survey, levels = c("Pre", "Post"))
 ```
 
 ```{r, include=TRUE}
@@ -675,6 +689,8 @@ q9 <- sq_df(bricc_demo,
     names_to = "Survey",
     values_to = "Response"
   )   
+
+q9$Survey <- factor(q9$Survey, levels = c("Pre", "Post"))
 ```
 
 ```{r, include=TRUE}
@@ -708,6 +724,8 @@ q10 <- sq_df(bricc_demo,
     names_to = "Survey",
     values_to = "Response"
   )   
+
+q10$Survey <- factor(q10$Survey, levels = c("Pre", "Post"))
 ```
 
 ```{r, include=TRUE}
@@ -741,6 +759,8 @@ q11 <- sq_df(bricc_demo,
     names_to = "Survey",
     values_to = "Response"
   )   
+
+q11$Survey <- factor(q11$Survey, levels = c("Pre", "Post"))
 ```
 
 ```{r, include=TRUE}
@@ -774,6 +794,8 @@ q12 <- sq_df(bricc_demo,
     names_to = "Survey",
     values_to = "Response"
   )   
+
+q12$Survey <- factor(q12$Survey, levels = c("Pre", "Post"))
 ```
 
 ```{r, include=TRUE}
@@ -808,6 +830,8 @@ q13 <- sq_df(bricc_demo,
     names_to = "Survey",
     values_to = "Response"
   )   
+
+q13$Survey <- factor(q13$Survey, levels = c("Pre", "Post"))
 ```
 
 ```{r, include=TRUE}
@@ -841,6 +865,8 @@ q14 <- sq_df(bricc_demo,
     names_to = "Survey",
     values_to = "Response"
   )   
+
+q14$Survey <- factor(q14$Survey, levels = c("Pre", "Post"))
 ```
 
 ```{r, include=TRUE}
@@ -874,6 +900,8 @@ q15 <- sq_df(bricc_demo,
     names_to = "Survey",
     values_to = "Response"
   )   
+
+q15$Survey <- factor(q15$Survey, levels = c("Pre", "Post"))
 ```
 
 ```{r, include=TRUE}
@@ -907,6 +935,8 @@ q16 <- sq_df(bricc_demo,
     names_to = "Survey",
     values_to = "Response"
   )   
+
+q16$Survey <- factor(q16$Survey, levels = c("Pre", "Post"))
 ```
 
 ```{r, include=TRUE}
@@ -940,6 +970,8 @@ q17 <- sq_df(bricc_demo,
     names_to = "Survey",
     values_to = "Response"
   )   
+
+q17$Survey <- factor(q17$Survey, levels = c("Pre", "Post"))
 ```
 
 ```{r, include=TRUE}
@@ -1157,6 +1189,7 @@ q24 <- sq_df2(bricc_demo,
     names_to = "Survey",
     values_to = "Response"
   )   
+
 ```
 
 ```{r, include=TRUE}
@@ -1188,6 +1221,7 @@ q25 <- sq_df2(bricc_demo,
     names_to = "Survey",
     values_to = "Response"
   )   
+
 ```
 
 ```{r, include=TRUE}
@@ -1219,6 +1253,7 @@ q26 <- sq_df2(bricc_demo,
     names_to = "Survey",
     values_to = "Response"
   )   
+
 ```
 
 ```{r, include=TRUE}
@@ -1249,6 +1284,7 @@ q27 <- sq_df2(bricc_demo,
     names_to = "Survey",
     values_to = "Response"
   )   
+
 ```
 
 ```{r, include=TRUE}
