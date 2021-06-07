@@ -82,6 +82,22 @@ head(bricc_demo)
 
 str(bricc)
 
+
+# separate BrICC groups 
+
+bricc_1 <- bricc_demo %>% 
+  slice(1:54)
+
+bricc_2 <- bricc_demo %>% 
+  filter(student_id > 54)
+
+bricc_1_a <- bricc %>% 
+  slice(1:324)
+
+bricc_2_a <- bricc %>% 
+  filter(student_id > 54)
+  
+
 bricc$group <- factor(bricc$group, levels = c("Winter 2020",
                                               "Spring 2020",
                                               "Summer 2020",
@@ -90,7 +106,17 @@ bricc$group <- factor(bricc$group, levels = c("Winter 2020",
                                               "Winter 2021",
                                               "Spring 2021"))
 
-bricc_demo$group <- factor(bricc_demo$group, levels = c("Winter 2020",
+bricc_demo$group <- factor(bricc_demo$group, levels = c(
+                                              "Spring 2018",
+                                              "Summer 2018",
+                                              "Fall 2018 1st Years",
+                                              "Fall 2018 2nd Years",
+                                              "Winter 2019",
+                                              "Spring 2019",
+                                              "Summer 2019",
+                                              "Fall 2019 1st Years",
+                                              "Fall 2019 2nd Years",
+                                              "Winter 2020",
                                               "Spring 2020",
                                               "Summer 2020",
                                               "Fall 2020 1st Years",
@@ -98,6 +124,50 @@ bricc_demo$group <- factor(bricc_demo$group, levels = c("Winter 2020",
                                               "Winter 2021",
                                               "Spring 2021"))
 
+bricc_1$group <- factor(bricc_1$group, levels = c("Spring 2018",
+                                              "Summer 2018",
+                                              "Fall 2018 1st Years",
+                                              "Fall 2018 2nd Years",
+                                              "Winter 2019",
+                                              "Spring 2019",
+                                              "Summer 2019",
+                                              "Fall 2019 1st Years",
+                                              "Fall 2019 2nd Years"))
+
+
+bricc_2$group <- factor(bricc_2$group, levels = c("Winter 2020",
+                                              "Spring 2020",
+                                              "Summer 2020",
+                                              "Fall 2020 1st Years",
+                                              "Fall 2020 2nd Years",
+                                              "Winter 2021",
+                                              "Spring 2021"))
+
+
+bricc_1_a$group <- factor(bricc_1_a$group, levels = c("Spring 2018",
+                                              "Summer 2018",
+                                              "Fall 2018 1st Years",
+                                              "Fall 2018 2nd Years",
+                                              "Winter 2019",
+                                              "Spring 2019",
+                                              "Summer 2019",
+                                              "Fall 2019 1st Years",
+                                              "Fall 2019 2nd Years"))
+
+
+bricc_2_a$group <- factor(bricc_2_a$group, levels = c("Winter 2020",
+                                              "Spring 2020",
+                                              "Summer 2020",
+                                              "Fall 2020 1st Years",
+                                              "Fall 2020 2nd Years",
+                                              "Winter 2021",
+                                              "Spring 2021"))
+
+bricc_2_a$term <- factor(bricc_2_a$term, levels = c("Term 1",
+                                                    "Term 2",
+                                                    "Term 3",
+                                                    "Term 4",
+                                                    "Term 5"))
 ```
 
 
@@ -134,7 +204,16 @@ group_order <- c("Spring 2021",
                  "Fall 2020 1st Years",
                  "Summer 2020",
                  "Spring 2020",
-                 "Winter 2020")
+                 "Winter 2020",
+                 "Fall 2019 2nd Years",
+                 "Fall 2019 1st Years",
+                 "Summer 2019",
+                 "Spring 2019",
+                 "Winter 2019",
+                 "Fall 2018 2nd Years",
+                 "Fall 2018 1st Years",
+                 "Summer 2018",
+                 "Spring 2018")
 
 # group_plot <- ggplot(group_total, aes(group, n)) +
 #   geom_col(fill = "#56B4E9", 
@@ -227,10 +306,18 @@ student_list_tbl <- student_list %>%
 student_list_tbl
 ```
 
-# Assessment Results 
+
+# Assessment Results 2018-2019 
+
+Sidebar {.sidebar}
+------------
+
+Assessment results for terms from 2018 to 2019 included the completion of a 5-question pre/post test. 
+
+The 10-question pre/post test was implemented Winter 2020 with five knowledge questions and five application questions. 
 
 ```{r, include=FALSE}
-term_means <- bricc %>% 
+term_means_1 <- bricc_1_a %>% 
   select(student_id, student_name, group, term, assessment, score) %>% 
   group_by(assessment, term) %>% 
   summarize(average = mean(score)) %>% 
@@ -238,9 +325,101 @@ term_means <- bricc %>%
 ```
 
 ```{r, include=TRUE}
-selectInput("groups",
+selectInput("groups1",
             "Student Group:",
-            choices = levels(bricc$group))
+            choices = levels(bricc_1_a$group))
+
+# group_input <- selectInput("groups",
+#                            "Student Group:",
+#                            choices = levels(bricc$group))
+
+```
+
+Row 
+-----------------------------------------------------------------------
+
+### Group Scores 
+
+```{r, include=FALSE}
+test_order_1 <- c("Post-Test Total",
+                "Pre-Test Total")
+```
+
+```{r, include=TRUE}
+
+renderPlotly({
+  bricc_1_a %>%
+    filter(group %in% input$groups1) %>% 
+    ggplot(aes(assessment, score)) +
+    geom_col(fill = "#56B4E9",
+             alpha = 0.7) +
+  scale_x_discrete(limits = test_order_1) +
+  scale_y_continuous(limits = c(0,5),
+                     breaks = c(1, 2, 3, 4, 5)) +
+  coord_flip() +
+  geom_text(aes(assessment, score, label = score),
+            nudge_y = -0.5,
+            color = "black") +
+  facet_wrap(~student_name) +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  labs(x = "",
+       y = "Score",
+       title = input$groups1)
+})
+
+```
+
+Row 
+-----------------------------------------------------------------------
+
+### Term Scores 
+
+```{r, include=TRUE}
+selectInput("terms1",
+            "Term Number:",
+            choices = levels(term_means_1$term))
+
+```
+
+
+```{r, include=TRUE}
+
+renderPlotly({
+  term_means_1 %>% 
+    filter(term %in% input$terms1) %>% 
+    ggplot(aes(assessment, average)) +
+      geom_col(fill = "#56B4E9", 
+           alpha = 0.7) +
+  scale_x_discrete(limits = test_order_1) +
+  scale_y_continuous(limits = c(0,10),
+                     breaks = c(0 ,2, 4, 6, 8, 10)) +
+  coord_flip() +
+  geom_text(aes(assessment, average, label = average),
+            nudge_y = -0.7,
+            color = "black") +
+  theme(plot.title = element_text(color = "black", face = "bold", hjust = 0.5)) +
+  labs(x = "",
+       y = "Score",
+       title = paste("Average Scores:", input$terms1))
+})
+
+```
+
+
+# Assessment Results 2020-Present 
+
+```{r, include=FALSE}
+term_means_2 <- bricc_2_a %>% 
+  select(student_id, student_name, group, term, assessment, score) %>% 
+  group_by(assessment, term) %>% 
+  summarize(average = mean(score)) %>% 
+  mutate_if(is.numeric, ~round(., 2))
+```
+
+```{r, include=TRUE}
+selectInput("groups1b",
+            "Student Group:",
+            choices = levels(bricc_2_a$group))
 
 # group_input <- selectInput("groups",
 #                            "Student Group:",
@@ -258,7 +437,7 @@ Row
 ### Group Scores 
 
 ```{r, include=FALSE}
-test_order <- c("Post-Test Total",
+test_order_2 <- c("Post-Test Total",
                 "Pre-Test Total",
                 "Post-Test Application",
                 "Pre-Test Application",
@@ -269,12 +448,12 @@ test_order <- c("Post-Test Total",
 ```{r, include=TRUE}
 
 renderPlotly({
-  bricc %>%
-    filter(group %in% input$groups) %>% 
+  bricc_2_a %>%
+    filter(group %in% input$groups1b) %>% 
     ggplot(aes(assessment, score)) +
     geom_col(fill = "#56B4E9",
              alpha = 0.7) +
-  scale_x_discrete(limits = test_order) +
+  scale_x_discrete(limits = test_order_2) +
   scale_y_continuous(limits = c(0,10),
                      breaks = c(0 ,2, 4, 6, 8, 10)) +
   coord_flip() +
@@ -285,7 +464,7 @@ renderPlotly({
   theme(plot.title = element_text(hjust = 0.5)) +
   labs(x = "",
        y = "Score",
-       title = input$groups)
+       title = input$groups1b)
 })
 
 ```
@@ -296,9 +475,9 @@ Row
 ### Term Scores 
 
 ```{r, include=TRUE}
-selectInput("terms",
-            "Term Number",
-            choices = levels(term_means$term))
+selectInput("terms2",
+            "Term Number:",
+            choices = levels(term_means_2$term))
 
 ```
 
@@ -306,12 +485,12 @@ selectInput("terms",
 ```{r, include=TRUE}
 
 renderPlotly({
-  term_means %>% 
-    filter(term %in% input$terms) %>% 
+  term_means_2 %>% 
+    filter(term %in% input$terms2) %>% 
     ggplot(aes(assessment, average)) +
       geom_col(fill = "#56B4E9", 
            alpha = 0.7) +
-  scale_x_discrete(limits = test_order) +
+  scale_x_discrete(limits = test_order_2) +
   scale_y_continuous(limits = c(0,10),
                      breaks = c(0 ,2, 4, 6, 8, 10)) +
   coord_flip() +
@@ -321,7 +500,7 @@ renderPlotly({
   theme(plot.title = element_text(color = "black", face = "bold", hjust = 0.5)) +
   labs(x = "",
        y = "Score",
-       title = paste("Average Scores:", input$terms))
+       title = paste("Average Scores:", input$terms2))
 })
 
 ```
