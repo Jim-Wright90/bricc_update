@@ -521,6 +521,18 @@ selectInput("groups2",
             choices = levels(bricc_demo$group))
 ```
 
+Pre-survey results not obtained from:
+
+  * Isabel Butler (Fall 2018 2nd Year)
+
+
+
+Post-survey results not obtained from:
+
+  * Rhianna Stuck (Summer 2018)
+  * Isabel Butler (Fall 2018 2nd Year)
+  * Katrina Viers (Fall 2018 1st Year)
+
 Row {.tabset}
 -----------------------------------------------------------------------
 
