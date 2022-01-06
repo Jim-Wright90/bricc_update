@@ -107,7 +107,8 @@ bricc$group <- factor(bricc$group, levels = c("Winter 2020",
                                               "Spring 2021",
                                               "Summer 2021",
                                               "Fall 2021 1st Years",
-                                              "Fall 2021 2nd Years"))
+                                              "Fall 2021 2nd Years",
+                                              "Winter 2022"))
 
 bricc_demo$group <- factor(bricc_demo$group, levels = c(
                                               "Spring 2018",
@@ -128,7 +129,8 @@ bricc_demo$group <- factor(bricc_demo$group, levels = c(
                                               "Spring 2021",
                                               "Summer 2021",
                                               "Fall 2021 1st Years",
-                                              "Fall 2021 2nd Years"))
+                                              "Fall 2021 2nd Years",
+                                              "Winter 2022"))
 
 bricc_1$group <- factor(bricc_1$group, levels = c("Spring 2018",
                                               "Summer 2018",
@@ -150,7 +152,8 @@ bricc_2$group <- factor(bricc_2$group, levels = c("Winter 2020",
                                               "Spring 2021",
                                               "Summer 2021",
                                               "Fall 2021 1st Years",
-                                              "Fall 2021 2nd Years"))
+                                              "Fall 2021 2nd Years",
+                                              "Winter 2022"))
 
 
 bricc_1_a$group <- factor(bricc_1_a$group, levels = c("Spring 2018",
@@ -173,7 +176,8 @@ bricc_2_a$group <- factor(bricc_2_a$group, levels = c("Winter 2020",
                                               "Spring 2021",
                                               "Summer 2021",
                                               "Fall 2021 1st Years",
-                                              "Fall 2021 2nd Years"))
+                                              "Fall 2021 2nd Years",
+                                              "Winter 2022"))
 
 bricc_2_a$term <- factor(bricc_2_a$term, levels = c("Term 1",
                                                     "Term 2",
@@ -210,7 +214,8 @@ term_total <- bricc_demo %>%
 group_total <- bricc_demo %>% 
   count(group)
   
-group_order <- c("Fall 2021 2nd Years",
+group_order <- c("Winter 2022",
+                 "Fall 2021 2nd Years",
                  "Fall 2021 1st Years",
                  "Summer 2021",
                  "Spring 2021",
