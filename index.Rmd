@@ -96,7 +96,8 @@ term_total_plot <- ggplot(term_total, aes(term, n)) +
 group_total <- bricc_demo %>% 
   count(group)
   
-group_order <- c("Spring 2021",
+group_order <- c("Summer 2021",
+                 "Spring 2021",
                  "Winter 2021",
                  "Fall 2020 2nd Years",
                  "Fall 2020 1st Years",
