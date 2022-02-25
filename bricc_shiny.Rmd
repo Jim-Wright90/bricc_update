@@ -50,7 +50,8 @@ bricc <- import(here("data", "bricc.sav"),
                setclass = "tbl_df") %>% 
   characterize() %>% 
   janitor::clean_names() %>% 
-  mutate(group = as.factor(group),
+  mutate(cohort = as.factor(cohort),
+         group = as.factor(group),
          term = as.factor(term)) %>% 
   rename("Pre-Test Total" = pre_test_total_score,
          "Post-Test Total" = post_test_total_score,
@@ -75,7 +76,8 @@ bricc_demo <- import(here("data", "bricc.sav"),
                setclass = "tbl_df") %>% 
   characterize() %>% 
   janitor::clean_names() %>% 
-  mutate(group = as.factor(group),
+  mutate(cohort = as.factor(cohort),
+         group = as.factor(group),
          term = as.factor(term))
 
 head(bricc_demo)
@@ -98,6 +100,14 @@ bricc_2_a <- bricc %>%
   filter(student_id > 54)
   
 
+bricc$cohort <- factor(bricc$cohort, levels = c("2017-2019",
+                                                "2018-2020",
+                                                "2019-2021",
+                                                "2020-2022",
+                                                "2021-2023"))
+
+
+
 bricc$group <- factor(bricc$group, levels = c("Winter 2020",
                                               "Spring 2020",
                                               "Summer 2020",
@@ -109,6 +119,15 @@ bricc$group <- factor(bricc$group, levels = c("Winter 2020",
                                               "Fall 2021 1st Years",
                                               "Fall 2021 2nd Years",
                                               "Winter 2022"))
+
+
+
+bricc_demo$cohort <- factor(bricc_demo$cohort, levels = c("2017-2019",
+                                                "2018-2020",
+                                                "2019-2021",
+                                                "2020-2022",
+                                                "2021-2023"))
+
 
 bricc_demo$group <- factor(bricc_demo$group, levels = c(
                                               "Spring 2018",
@@ -132,6 +151,12 @@ bricc_demo$group <- factor(bricc_demo$group, levels = c(
                                               "Fall 2021 2nd Years",
                                               "Winter 2022"))
 
+
+bricc_1$cohort <- factor(bricc_1$cohort, levels = c("2017-2019",
+                                                "2018-2020",
+                                                "2019-2021"))
+
+
 bricc_1$group <- factor(bricc_1$group, levels = c("Spring 2018",
                                               "Summer 2018",
                                               "Fall 2018 1st Years",
@@ -141,6 +166,11 @@ bricc_1$group <- factor(bricc_1$group, levels = c("Spring 2018",
                                               "Summer 2019",
                                               "Fall 2019 1st Years",
                                               "Fall 2019 2nd Years"))
+
+
+bricc_2$cohort <- factor(bricc_2$cohort, levels = c("2019-2021",
+                                                "2020-2022",
+                                                "2021-2023"))
 
 
 bricc_2$group <- factor(bricc_2$group, levels = c("Winter 2020",
@@ -156,6 +186,11 @@ bricc_2$group <- factor(bricc_2$group, levels = c("Winter 2020",
                                               "Winter 2022"))
 
 
+bricc_1_a$cohort <- factor(bricc_1_a$cohort, levels = c("2017-2019",
+                                                "2018-2020",
+                                                "2019-2021"))
+
+
 bricc_1_a$group <- factor(bricc_1_a$group, levels = c("Spring 2018",
                                               "Summer 2018",
                                               "Fall 2018 1st Years",
@@ -166,6 +201,10 @@ bricc_1_a$group <- factor(bricc_1_a$group, levels = c("Spring 2018",
                                               "Fall 2019 1st Years",
                                               "Fall 2019 2nd Years"))
 
+
+bricc_2_a$cohort <- factor(bricc_2_a$cohort, levels = c("2019-2021",
+                                                "2020-2022",
+                                                "2021-2023"))
 
 bricc_2_a$group <- factor(bricc_2_a$group, levels = c("Winter 2020",
                                               "Spring 2020",
@@ -213,6 +252,9 @@ term_total <- bricc_demo %>%
 
 group_total <- bricc_demo %>% 
   count(group)
+
+cohort_total <- bricc_demo %>% 
+  count(cohort)
   
 group_order <- c("Winter 2022",
                  "Fall 2021 2nd Years",
@@ -281,6 +323,21 @@ group_total_tbl <- group_total %>%
     highlight = TRUE,
     bordered = TRUE    
   )
+
+cohort_total_tbl <- cohort_total %>% 
+  reactable(
+    defaultColDef = colDef(align = "center"),
+    columns = list(
+      cohort = colDef(name = "Cohort"),
+      n = colDef(name = "Total")),
+    pagination = TRUE,
+    striped = TRUE,
+    outlined = TRUE,
+    searchable = TRUE,
+    compact = FALSE,
+    highlight = TRUE,
+    bordered = TRUE    
+  )
 ```
 
 ```{r, include=TRUE}
@@ -294,6 +351,12 @@ term_total_tbl
 group_total_tbl
 ```
 
+### Students Per Cohort 
+
+```{r, include=TRUE}
+cohort_total_tbl
+```
+
 Row 
 -----------------------------------------------------------------------
 
@@ -303,13 +366,14 @@ Row
 head(bricc_demo)
 
 student_list <- bricc_demo %>% 
-  select(student_name, group, term) 
+  select(student_name, cohort, group, term) 
   
 student_list_tbl <- student_list %>% 
   reactable(
     defaultColDef = colDef(align = "center"),
     columns = list(
       student_name = colDef(name = "Student"),
+      cohort = colDef(name = "Cohort"),
       group = colDef(name = "Group"),
       term = colDef(name = "Term")),
     pagination = TRUE,
@@ -340,6 +404,12 @@ The 10-question pre/post test was implemented Winter 2020 with five knowledge qu
 term_means_1 <- bricc_1_a %>% 
   select(student_id, student_name, group, term, assessment, score) %>% 
   group_by(assessment, term) %>% 
+  summarize(average = mean(score)) %>% 
+  mutate_if(is.numeric, ~round(., 2))
+
+cohort_means_1 <- bricc_1_a %>% 
+  select(student_id, student_name, cohort, group, term, assessment, score) %>% 
+  group_by(assessment, cohort) %>% 
   summarize(average = mean(score)) %>% 
   mutate_if(is.numeric, ~round(., 2))
 ```
@@ -425,6 +495,43 @@ renderPlotly({
 
 ```
 
+Row 
+-----------------------------------------------------------------------
+
+### Cohort Scores 
+
+```{r, include=TRUE}
+selectInput("cohorts1",
+            "Cohort:",
+            choices = levels(cohort_means_1$cohort))
+
+```
+
+
+```{r, include=TRUE}
+
+renderPlotly({
+  cohort_means_1 %>% 
+    filter(cohort %in% input$cohorts1) %>% 
+    ggplot(aes(assessment, average)) +
+      geom_col(fill = "#56B4E9", 
+           alpha = 0.7) +
+  scale_x_discrete(limits = test_order_1) +
+  scale_y_continuous(limits = c(0,10),
+                     breaks = c(0 ,2, 4, 6, 8, 10)) +
+  coord_flip() +
+  geom_text(aes(assessment, average, label = average),
+            nudge_y = -0.7,
+            color = "black") +
+  theme(plot.title = element_text(color = "black", face = "bold", hjust = 0.5)) +
+  labs(x = "",
+       y = "Score",
+       title = paste("Average Scores:", input$cohorts1))
+})
+
+```
+
+
 
 # Assessment Results 2020-Present 
 
@@ -432,6 +539,12 @@ renderPlotly({
 term_means_2 <- bricc_2_a %>% 
   select(student_id, student_name, group, term, assessment, score) %>% 
   group_by(assessment, term) %>% 
+  summarize(average = mean(score)) %>% 
+  mutate_if(is.numeric, ~round(., 2))
+
+cohort_means_2 <- bricc_2_a %>% 
+  select(student_id, student_name, cohort, group, term, assessment, score) %>% 
+  group_by(assessment, cohort) %>% 
   summarize(average = mean(score)) %>% 
   mutate_if(is.numeric, ~round(., 2))
 ```
@@ -525,6 +638,43 @@ renderPlotly({
 
 ```
 
+Row 
+-----------------------------------------------------------------------
+
+### Cohort Scores 
+
+```{r, include=TRUE}
+selectInput("cohorts2",
+            "Cohort:",
+            choices = levels(cohort_means_2$cohort))
+
+```
+
+
+```{r, include=TRUE}
+
+renderPlotly({
+  cohort_means_2 %>% 
+    filter(cohort %in% input$cohorts2) %>% 
+    ggplot(aes(assessment, average)) +
+      geom_col(fill = "#56B4E9", 
+           alpha = 0.7) +
+  scale_x_discrete(limits = test_order_2) +
+  scale_y_continuous(limits = c(0,10),
+                     breaks = c(0 ,2, 4, 6, 8, 10)) +
+  coord_flip() +
+  geom_text(aes(assessment, average, label = average),
+            nudge_y = -0.7,
+            color = "black") +
+  theme(plot.title = element_text(color = "black", face = "bold", hjust = 0.5)) +
+  labs(x = "",
+       y = "Score",
+       title = paste("Average Scores:", input$cohorts2))
+})
+
+```
+
+
 # Survey Results 
 
 Sidebar {.sidebar}
@@ -554,19 +704,20 @@ Row {.tabset}
 ### Question 1: I am confident in my ability to conduct a consultation for the BrICC clinic
 
 ```{r, include=FALSE}
-sq_df <- function(df, a, b, c, d, e, f) {
+sq_df <- function(df, a, b, c, d, e, f, g) {
   df %>% 
-    select({{a}}, {{b}}, {{c}}, {{d}}, {{e}}, {{f}}) 
+    select({{a}}, {{b}}, {{c}}, {{d}}, {{e}}, {{f}}, {{g}}) 
 }
 
 sq_df2 <- function(df, a, b, c, d, e, f) {
   df %>% 
-    select({{a}}, {{b}}, {{c}}, {{d}}, {{e}}) 
+    select({{a}}, {{b}}, {{c}}, {{d}}, {{e}}, {{f}}) 
 }
 
 q1 <- sq_df(bricc_demo, 
             student_id,
             student_name,
+            cohort,
             group,
             term,
             pre_survey_q1,
@@ -574,7 +725,7 @@ q1 <- sq_df(bricc_demo,
   rename("Pre" = pre_survey_q1,
          "Post" = post_survey_q1) %>% 
   pivot_longer(
-    cols = c(5:6),
+    cols = c(6:7),
     names_to = "Survey",
     values_to = "Response"
   )   
@@ -632,6 +783,23 @@ total_plot <- function(df) {
   })
 }
 
+
+cohort_plot <- function(df) {
+  renderPlotly({
+  df %>% 
+  ggplot(aes(Response)) +
+  geom_bar(aes(fill = cohort), alpha = 0.9) +
+  scale_x_discrete(limits = sv_rep) +
+  scale_y_continuous(limits = c(0, 40),
+                     breaks = c(0, 10, 20, 30, 40)) +  
+  scale_fill_OkabeIto() +
+  coord_flip() +
+  facet_wrap(~Survey, ncol = 1) +
+  theme(legend.title = element_blank()) +
+  labs(y = "Number of Responses",
+         x = "")
+  })
+}
 ```
 
 ```{r, include=TRUE}
@@ -644,6 +812,12 @@ survey_plot(q1)
 total_plot(q1)
 ```
 
+### Cohort Total
+
+```{r, include=TRUE}
+cohort_plot(q1)
+```
+
 Row {.tabset}
 -----------------------------------------------------------------------
 
@@ -653,6 +827,7 @@ Row {.tabset}
 q2 <- sq_df(bricc_demo, 
             student_id,
             student_name,
+            cohort,
             group,
             term,
             pre_survey_q2,
@@ -660,7 +835,7 @@ q2 <- sq_df(bricc_demo,
   rename("Pre" = pre_survey_q2,
          "Post" = post_survey_q2) %>% 
   pivot_longer(
-    cols = c(5:6),
+    cols = c(6:7),
     names_to = "Survey",
     values_to = "Response"
   )   
@@ -678,6 +853,11 @@ survey_plot(q2)
 total_plot(q2)
 ```
 
+### Cohort Total
+
+```{r, include=TRUE}
+cohort_plot(q2)
+```
 
 Row {.tabset}
 -----------------------------------------------------------------------
@@ -688,6 +868,7 @@ Row {.tabset}
 q3 <- sq_df(bricc_demo, 
             student_id,
             student_name,
+            cohort,
             group,
             term,
             pre_survey_q3,
@@ -695,7 +876,7 @@ q3 <- sq_df(bricc_demo,
   rename("Pre" = pre_survey_q3,
          "Post" = post_survey_q3) %>% 
   pivot_longer(
-    cols = c(5:6),
+    cols = c(6:7),
     names_to = "Survey",
     values_to = "Response"
   )   
@@ -713,6 +894,11 @@ survey_plot(q3)
 total_plot(q3)
 ```
 
+### Cohort Total
+
+```{r, include=TRUE}
+cohort_plot(q3)
+```
 
 Row {.tabset}
 -----------------------------------------------------------------------
@@ -723,6 +909,7 @@ Row {.tabset}
 q4 <- sq_df(bricc_demo, 
             student_id,
             student_name,
+            cohort,
             group,
             term,
             pre_survey_q4,
@@ -730,7 +917,7 @@ q4 <- sq_df(bricc_demo,
   rename("Pre" = pre_survey_q4,
          "Post" = post_survey_q4) %>% 
   pivot_longer(
-    cols = c(5:6),
+    cols = c(6:7),
     names_to = "Survey",
     values_to = "Response"
   )   
@@ -748,6 +935,13 @@ survey_plot(q4)
 total_plot(q4)
 ```
 
+### Cohort Total
+
+```{r, include=TRUE}
+cohort_plot(q4)
+```
+
+
 Row {.tabset}
 -----------------------------------------------------------------------
 
@@ -757,6 +951,7 @@ Row {.tabset}
 q5 <- sq_df(bricc_demo, 
             student_id,
             student_name,
+            cohort,
             group,
             term,
             pre_survey_q5,
@@ -764,7 +959,7 @@ q5 <- sq_df(bricc_demo,
   rename("Pre" = pre_survey_q5,
          "Post" = post_survey_q5) %>% 
   pivot_longer(
-    cols = c(5:6),
+    cols = c(6:7),
     names_to = "Survey",
     values_to = "Response"
   )   
@@ -782,6 +977,11 @@ survey_plot(q5)
 total_plot(q5)
 ```
 
+### Cohort Total
+
+```{r, include=TRUE}
+cohort_plot(q5)
+```
 
 Row {.tabset}
 -----------------------------------------------------------------------
@@ -792,6 +992,7 @@ Row {.tabset}
 q6 <- sq_df(bricc_demo, 
             student_id,
             student_name,
+            cohort,
             group,
             term,
             pre_survey_q6,
@@ -799,7 +1000,7 @@ q6 <- sq_df(bricc_demo,
   rename("Pre" = pre_survey_q6,
          "Post" = post_survey_q6) %>% 
   pivot_longer(
-    cols = c(5:6),
+    cols = c(6:7),
     names_to = "Survey",
     values_to = "Response"
   )   
@@ -817,6 +1018,11 @@ survey_plot(q6)
 total_plot(q6)
 ```
 
+### Cohort Total
+
+```{r, include=TRUE}
+cohort_plot(q6)
+```
 
 Row {.tabset}
 -----------------------------------------------------------------------
@@ -827,6 +1033,7 @@ Row {.tabset}
 q7 <- sq_df(bricc_demo, 
             student_id,
             student_name,
+            cohort,
             group,
             term,
             pre_survey_q7,
@@ -834,7 +1041,7 @@ q7 <- sq_df(bricc_demo,
   rename("Pre" = pre_survey_q7,
          "Post" = post_survey_q7) %>% 
   pivot_longer(
-    cols = c(5:6),
+    cols = c(6:7),
     names_to = "Survey",
     values_to = "Response"
   )
@@ -852,6 +1059,12 @@ survey_plot(q7)
 total_plot(q7)
 ```
 
+### Cohort Total
+
+```{r, include=TRUE}
+cohort_plot(q7)
+```
+
 Row {.tabset}
 -----------------------------------------------------------------------
 
@@ -861,6 +1074,7 @@ Row {.tabset}
 q8 <- sq_df(bricc_demo, 
             student_id,
             student_name,
+            cohort,
             group,
             term,
             pre_survey_q8,
@@ -868,7 +1082,7 @@ q8 <- sq_df(bricc_demo,
   rename("Pre" = pre_survey_q8,
          "Post" = post_survey_q8) %>% 
   pivot_longer(
-    cols = c(5:6),
+    cols = c(6:7),
     names_to = "Survey",
     values_to = "Response"
   )   
@@ -886,6 +1100,11 @@ survey_plot(q8)
 total_plot(q8)
 ```
 
+### Cohort Total
+
+```{r, include=TRUE}
+cohort_plot(q8)
+```
 
 Row {.tabset}
 -----------------------------------------------------------------------
@@ -896,6 +1115,7 @@ Row {.tabset}
 q9 <- sq_df(bricc_demo, 
             student_id,
             student_name,
+            cohort,
             group,
             term,
             pre_survey_q9,
@@ -903,7 +1123,7 @@ q9 <- sq_df(bricc_demo,
   rename("Pre" = pre_survey_q9,
          "Post" = post_survey_q9) %>% 
   pivot_longer(
-    cols = c(5:6),
+    cols = c(6:7),
     names_to = "Survey",
     values_to = "Response"
   )   
@@ -921,6 +1141,11 @@ survey_plot(q9)
 total_plot(q9)
 ```
 
+### Cohort Total
+
+```{r, include=TRUE}
+cohort_plot(q9)
+```
 
 Row {.tabset}
 -----------------------------------------------------------------------
@@ -931,6 +1156,7 @@ Row {.tabset}
 q10 <- sq_df(bricc_demo, 
             student_id,
             student_name,
+            cohort,
             group,
             term,
             pre_survey_q10,
@@ -938,7 +1164,7 @@ q10 <- sq_df(bricc_demo,
   rename("Pre" = pre_survey_q10,
          "Post" = post_survey_q10) %>% 
   pivot_longer(
-    cols = c(5:6),
+    cols = c(6:7),
     names_to = "Survey",
     values_to = "Response"
   )   
@@ -956,6 +1182,11 @@ survey_plot(q10)
 total_plot(q10)
 ```
 
+### Cohort Total
+
+```{r, include=TRUE}
+cohort_plot(q10)
+```
 
 Row {.tabset}
 -----------------------------------------------------------------------
@@ -966,6 +1197,7 @@ Row {.tabset}
 q11 <- sq_df(bricc_demo, 
             student_id,
             student_name,
+            cohort,
             group,
             term,
             pre_survey_q11,
@@ -973,7 +1205,7 @@ q11 <- sq_df(bricc_demo,
   rename("Pre" = pre_survey_q11,
          "Post" = post_survey_q11) %>% 
   pivot_longer(
-    cols = c(5:6),
+    cols = c(6:7),
     names_to = "Survey",
     values_to = "Response"
   )   
@@ -991,6 +1223,11 @@ survey_plot(q11)
 total_plot(q11)
 ```
 
+### Cohort Total
+
+```{r, include=TRUE}
+cohort_plot(q11)
+```
 
 Row {.tabset}
 -----------------------------------------------------------------------
@@ -1001,6 +1238,7 @@ Row {.tabset}
 q12 <- sq_df(bricc_demo, 
             student_id,
             student_name,
+            cohort,
             group,
             term,
             pre_survey_q12,
@@ -1008,7 +1246,7 @@ q12 <- sq_df(bricc_demo,
   rename("Pre" = pre_survey_q12,
          "Post" = post_survey_q12) %>% 
   pivot_longer(
-    cols = c(5:6),
+    cols = c(6:7),
     names_to = "Survey",
     values_to = "Response"
   )   
@@ -1026,6 +1264,11 @@ survey_plot(q12)
 total_plot(q12)
 ```
 
+### Cohort Total
+
+```{r, include=TRUE}
+cohort_plot(q12)
+```
 
 Row {.tabset}
 -----------------------------------------------------------------------
@@ -1037,6 +1280,7 @@ Row {.tabset}
 q13 <- sq_df(bricc_demo, 
             student_id,
             student_name,
+            cohort,
             group,
             term,
             pre_survey_q13,
@@ -1044,7 +1288,7 @@ q13 <- sq_df(bricc_demo,
   rename("Pre" = pre_survey_q13,
          "Post" = post_survey_q13) %>% 
   pivot_longer(
-    cols = c(5:6),
+    cols = c(6:7),
     names_to = "Survey",
     values_to = "Response"
   )   
@@ -1062,6 +1306,11 @@ survey_plot(q13)
 total_plot(q13)
 ```
 
+### Cohort Total
+
+```{r, include=TRUE}
+cohort_plot(q13)
+```
 
 Row {.tabset}
 -----------------------------------------------------------------------
@@ -1072,6 +1321,7 @@ Row {.tabset}
 q14 <- sq_df(bricc_demo, 
             student_id,
             student_name,
+            cohort,
             group,
             term,
             pre_survey_q14,
@@ -1079,7 +1329,7 @@ q14 <- sq_df(bricc_demo,
   rename("Pre" = pre_survey_q14,
          "Post" = post_survey_q14) %>% 
   pivot_longer(
-    cols = c(5:6),
+    cols = c(6:7),
     names_to = "Survey",
     values_to = "Response"
   )   
@@ -1097,6 +1347,11 @@ survey_plot(q14)
 total_plot(q14)
 ```
 
+### Cohort Total
+
+```{r, include=TRUE}
+cohort_plot(q14)
+```
 
 Row {.tabset}
 -----------------------------------------------------------------------
@@ -1107,6 +1362,7 @@ Row {.tabset}
 q15 <- sq_df(bricc_demo, 
             student_id,
             student_name,
+            cohort,
             group,
             term,
             pre_survey_q15,
@@ -1114,7 +1370,7 @@ q15 <- sq_df(bricc_demo,
   rename("Pre" = pre_survey_q15,
          "Post" = post_survey_q15) %>% 
   pivot_longer(
-    cols = c(5:6),
+    cols = c(6:7),
     names_to = "Survey",
     values_to = "Response"
   )   
@@ -1132,6 +1388,11 @@ survey_plot(q15)
 total_plot(q15)
 ```
 
+### Cohort Total
+
+```{r, include=TRUE}
+cohort_plot(q15)
+```
 
 Row {.tabset}
 -----------------------------------------------------------------------
@@ -1142,6 +1403,7 @@ Row {.tabset}
 q16 <- sq_df(bricc_demo, 
             student_id,
             student_name,
+            cohort,
             group,
             term,
             pre_survey_q16,
@@ -1149,7 +1411,7 @@ q16 <- sq_df(bricc_demo,
   rename("Pre" = pre_survey_q16,
          "Post" = post_survey_q16) %>% 
   pivot_longer(
-    cols = c(5:6),
+    cols = c(6:7),
     names_to = "Survey",
     values_to = "Response"
   )   
@@ -1167,6 +1429,11 @@ survey_plot(q16)
 total_plot(q16)
 ```
 
+### Cohort Total
+
+```{r, include=TRUE}
+cohort_plot(q16)
+```
 
 Row {.tabset}
 -----------------------------------------------------------------------
@@ -1177,6 +1444,7 @@ Row {.tabset}
 q17 <- sq_df(bricc_demo, 
             student_id,
             student_name,
+            cohort,
             group,
             term,
             pre_survey_q17,
@@ -1184,7 +1452,7 @@ q17 <- sq_df(bricc_demo,
   rename("Pre" = pre_survey_q17,
          "Post" = post_survey_q17) %>% 
   pivot_longer(
-    cols = c(5:6),
+    cols = c(6:7),
     names_to = "Survey",
     values_to = "Response"
   )   
@@ -1202,6 +1470,11 @@ survey_plot(q17)
 total_plot(q17)
 ```
 
+### Cohort Total
+
+```{r, include=TRUE}
+cohort_plot(q17)
+```
 
 Row {.tabset}
 -----------------------------------------------------------------------
@@ -1212,12 +1485,13 @@ Row {.tabset}
 q18 <- sq_df2(bricc_demo, 
             student_id,
             student_name,
+            cohort,
             group,
             term,
             post_survey_q18) %>% 
   rename("Post" = post_survey_q18) %>% 
   pivot_longer(
-    cols = c(5),
+    cols = c(6),
     names_to = "Survey",
     values_to = "Response"
   )   
@@ -1233,6 +1507,11 @@ survey_plot(q18)
 total_plot(q18)
 ```
 
+### Cohort Total
+
+```{r, include=TRUE}
+cohort_plot(q18)
+```
 
 Row {.tabset}
 -----------------------------------------------------------------------
@@ -1243,12 +1522,13 @@ Row {.tabset}
 q19 <- sq_df2(bricc_demo, 
             student_id,
             student_name,
+            cohort,
             group,
             term,
             post_survey_q19) %>% 
   rename("Post" = post_survey_q19) %>% 
   pivot_longer(
-    cols = c(5),
+    cols = c(6),
     names_to = "Survey",
     values_to = "Response"
   )   
@@ -1264,6 +1544,11 @@ survey_plot(q19)
 total_plot(q19)
 ```
 
+### Cohort Total
+
+```{r, include=TRUE}
+cohort_plot(q19)
+```
 
 Row {.tabset}
 -----------------------------------------------------------------------
@@ -1275,12 +1560,13 @@ Row {.tabset}
 q20 <- sq_df2(bricc_demo, 
             student_id,
             student_name,
+            cohort,
             group,
             term,
             post_survey_q20) %>% 
   rename("Post" = post_survey_q20) %>% 
   pivot_longer(
-    cols = c(5),
+    cols = c(6),
     names_to = "Survey",
     values_to = "Response"
   )   
@@ -1296,6 +1582,11 @@ survey_plot(q20)
 total_plot(q20)
 ```
 
+### Cohort Total
+
+```{r, include=TRUE}
+cohort_plot(q20)
+```
 
 Row {.tabset}
 -----------------------------------------------------------------------
@@ -1306,12 +1597,13 @@ Row {.tabset}
 q21 <- sq_df2(bricc_demo, 
             student_id,
             student_name,
+            cohort,
             group,
             term,
             post_survey_q21) %>% 
   rename("Post" = post_survey_q21) %>% 
   pivot_longer(
-    cols = c(5),
+    cols = c(6),
     names_to = "Survey",
     values_to = "Response"
   )   
@@ -1327,6 +1619,11 @@ survey_plot(q21)
 total_plot(q21)
 ```
 
+### Cohort Total
+
+```{r, include=TRUE}
+cohort_plot(q21)
+```
 
 Row {.tabset}
 -----------------------------------------------------------------------
@@ -1337,12 +1634,13 @@ Row {.tabset}
 q22 <- sq_df2(bricc_demo, 
             student_id,
             student_name,
+            cohort,
             group,
             term,
             post_survey_q22) %>% 
   rename("Post" = post_survey_q22) %>% 
   pivot_longer(
-    cols = c(5),
+    cols = c(6),
     names_to = "Survey",
     values_to = "Response"
   )   
@@ -1358,6 +1656,12 @@ survey_plot(q22)
 total_plot(q22)
 ```
 
+### Cohort Total
+
+```{r, include=TRUE}
+cohort_plot(q22)
+```
+
 Row {.tabset}
 -----------------------------------------------------------------------
 
@@ -1367,12 +1671,13 @@ Row {.tabset}
 q23 <- sq_df2(bricc_demo, 
             student_id,
             student_name,
+            cohort,
             group,
             term,
             post_survey_q23) %>% 
   rename("Post" = post_survey_q23) %>% 
   pivot_longer(
-    cols = c(5),
+    cols = c(6),
     names_to = "Survey",
     values_to = "Response"
   )   
@@ -1388,6 +1693,11 @@ survey_plot(q23)
 total_plot(q23)
 ```
 
+### Cohort Total
+
+```{r, include=TRUE}
+cohort_plot(q23)
+```
 
 Row {.tabset}
 -----------------------------------------------------------------------
@@ -1398,12 +1708,13 @@ Row {.tabset}
 q24 <- sq_df2(bricc_demo, 
             student_id,
             student_name,
+            cohort,
             group,
             term,
             post_survey_q24) %>% 
   rename("Post" = post_survey_q24) %>% 
   pivot_longer(
-    cols = c(5),
+    cols = c(6),
     names_to = "Survey",
     values_to = "Response"
   )   
@@ -1420,6 +1731,11 @@ survey_plot(q24)
 total_plot(q24)
 ```
 
+### Cohort Total
+
+```{r, include=TRUE}
+cohort_plot(q24)
+```
 
 Row {.tabset}
 -----------------------------------------------------------------------
@@ -1430,12 +1746,13 @@ Row {.tabset}
 q25 <- sq_df2(bricc_demo, 
             student_id,
             student_name,
+            cohort,
             group,
             term,
             post_survey_q25) %>% 
   rename("Post" = post_survey_q25) %>% 
   pivot_longer(
-    cols = c(5),
+    cols = c(6),
     names_to = "Survey",
     values_to = "Response"
   )   
@@ -1452,6 +1769,11 @@ survey_plot(q25)
 total_plot(q25)
 ```
 
+### Cohort Total
+
+```{r, include=TRUE}
+cohort_plot(q25)
+```
 
 Row {.tabset}
 -----------------------------------------------------------------------
@@ -1462,12 +1784,13 @@ Row {.tabset}
 q26 <- sq_df2(bricc_demo, 
             student_id,
             student_name,
+            cohort,
             group,
             term,
             post_survey_q26) %>% 
   rename("Post" = post_survey_q26) %>% 
   pivot_longer(
-    cols = c(5),
+    cols = c(6),
     names_to = "Survey",
     values_to = "Response"
   )   
@@ -1484,6 +1807,12 @@ survey_plot(q26)
 total_plot(q26)
 ```
 
+### Cohort Total
+
+```{r, include=TRUE}
+cohort_plot(q26)
+```
+
 Row {.tabset}
 -----------------------------------------------------------------------
 
@@ -1493,12 +1822,13 @@ Row {.tabset}
 q27 <- sq_df2(bricc_demo, 
             student_id,
             student_name,
+            cohort,
             group,
             term,
             post_survey_q27) %>% 
   rename("Post" = post_survey_q27) %>% 
   pivot_longer(
-    cols = c(5),
+    cols = c(6),
     names_to = "Survey",
     values_to = "Response"
   )   
@@ -1513,4 +1843,10 @@ survey_plot(q27)
 
 ```{r, include=TRUE}
 total_plot(q27)
+```
+
+### Cohort Total
+
+```{r, include=TRUE}
+cohort_plot(q27)
 ```
