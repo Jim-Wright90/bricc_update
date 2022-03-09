@@ -3,10 +3,12 @@ title: "BrICC Student Data"
 runtime: shiny
 output:
   flexdashboard::flex_dashboard:
+    css: style.css
+    logo: green_o_2.png
     orientation: rows
-    social: menu
     source_code: embed
     vertical_layout: scroll
+    navbar:
     theme: united
 resource_files:
 - data/bricc.sav
@@ -226,7 +228,7 @@ bricc_2_a$term <- factor(bricc_2_a$term, levels = c("Term 1",
 ```
 
 
-# Student Information 
+# Students {data-icon="fa-id-card"}
 
 Row {.tabset}
 -----------------------------------------------------------------------
@@ -391,7 +393,7 @@ student_list_tbl
 ```
 
 
-# Assessment Results 2018-2019 
+# Assessment Results 2018-2019 {data-icon="fa-question"}
 
 Sidebar {.sidebar}
 ------------
@@ -533,7 +535,7 @@ renderPlotly({
 
 
 
-# Assessment Results 2020-Present 
+# Assessment Results 2020-Present {data-icon="fa-question"}
 
 ```{r, include=FALSE}
 term_means_2 <- bricc_2_a %>% 
@@ -675,7 +677,7 @@ renderPlotly({
 ```
 
 
-# Survey Results 
+# Survey Results {data-icon="fa-chart-bar"}
 
 Sidebar {.sidebar}
 ------------
