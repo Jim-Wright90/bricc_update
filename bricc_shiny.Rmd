@@ -49,18 +49,18 @@ theme_set(theme_minimal(15) +
           )
 
 bricc <- import(here("data", "bricc.sav"),
-               setclass = "tbl_df") %>% 
-  characterize() %>% 
-  janitor::clean_names() %>% 
+               setclass = "tbl_df") %>%
+  characterize() %>%
+  janitor::clean_names() %>%
   mutate(cohort = as.factor(cohort),
          group = as.factor(group),
-         term = as.factor(term)) %>% 
+         term = as.factor(term)) %>%
   rename("Pre-Test Total" = pre_test_total_score,
          "Post-Test Total" = post_test_total_score,
          "Pre-Test Knowledge" = pre_test_knowledge_score,
          "Post-Test Knowledge" = post_test_knowledge_score,
          "Pre-Test Application" = pre_test_application_score,
-         "Post-Test Application" = post_test_application_score) %>% 
+         "Post-Test Application" = post_test_application_score) %>%
   pivot_longer(
     cols = c(`Pre-Test Total`,
              `Post-Test Total`,
@@ -70,6 +70,8 @@ bricc <- import(here("data", "bricc.sav"),
              `Post-Test Application`),
     names_to = "assessment",
     values_to = "score")
+
+
 
 head(bricc)
 names(bricc)
