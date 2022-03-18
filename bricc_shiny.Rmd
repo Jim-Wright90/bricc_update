@@ -393,7 +393,7 @@ student_list_tbl
 ```
 
 
-# Assessment Results 2018-2019 {data-icon="fa-question"}
+# Assessment Results 2018-2019 
 
 Sidebar {.sidebar}
 ------------
@@ -535,7 +535,7 @@ renderPlotly({
 
 
 
-# Assessment Results 2020-Present {data-icon="fa-question"}
+# Assessment Results 2020-Present 
 
 ```{r, include=FALSE}
 term_means_2 <- bricc_2_a %>% 
