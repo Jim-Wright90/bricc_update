@@ -122,7 +122,8 @@ bricc$group <- factor(bricc$group, levels = c("Winter 2020",
                                               "Summer 2021",
                                               "Fall 2021 1st Years",
                                               "Fall 2021 2nd Years",
-                                              "Winter 2022"))
+                                              "Winter 2022",
+                                              "Spring 2022"))
 
 
 
@@ -153,7 +154,8 @@ bricc_demo$group <- factor(bricc_demo$group, levels = c(
                                               "Summer 2021",
                                               "Fall 2021 1st Years",
                                               "Fall 2021 2nd Years",
-                                              "Winter 2022"))
+                                              "Winter 2022",
+                                              "Spring 2022"))
 
 
 bricc_1$cohort <- factor(bricc_1$cohort, levels = c("2017-2019",
@@ -187,7 +189,8 @@ bricc_2$group <- factor(bricc_2$group, levels = c("Winter 2020",
                                               "Summer 2021",
                                               "Fall 2021 1st Years",
                                               "Fall 2021 2nd Years",
-                                              "Winter 2022"))
+                                              "Winter 2022",
+                                              "Spring 2022"))
 
 
 bricc_1_a$cohort <- factor(bricc_1_a$cohort, levels = c("2017-2019",
@@ -220,7 +223,8 @@ bricc_2_a$group <- factor(bricc_2_a$group, levels = c("Winter 2020",
                                               "Summer 2021",
                                               "Fall 2021 1st Years",
                                               "Fall 2021 2nd Years",
-                                              "Winter 2022"))
+                                              "Winter 2022",
+                                              "Spring 2022"))
 
 bricc_2_a$term <- factor(bricc_2_a$term, levels = c("Term 1",
                                                     "Term 2",
